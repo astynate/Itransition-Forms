@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34024.191
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Itransition-Forms.API", "Intransition-Forms\Itransition-Forms.API.csproj", "{E41FEA67-FCB3-4FF5-8B1A-457FE4754FCA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Itransition-Forms.Database", "Itransition-Forms.Database\Itransition-Forms.Database.csproj", "{73DFFE56-CA80-4D0C-9BD1-3202EBD35B79}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Itransition-Forms.Services", "Itransition-Form.Services\Itransition-Forms.Services.csproj", "{75854B0D-4536-4A2B-BE68-4C9535485A23}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Itransition-Forms.Core", "Itransition-Forms.Core\Itransition-Forms.Core.csproj", "{7D4CB8B3-2163-4574-A486-13F236AA2239}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Itransition-Forms.Dependencies", "Itransition-Forms.Dependencies\Itransition-Forms.Dependencies.csproj", "{4F550606-14F2-46A6-B75C-C77B8C5A5509}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E41FEA67-FCB3-4FF5-8B1A-457FE4754FCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E41FEA67-FCB3-4FF5-8B1A-457FE4754FCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E41FEA67-FCB3-4FF5-8B1A-457FE4754FCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E41FEA67-FCB3-4FF5-8B1A-457FE4754FCA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73DFFE56-CA80-4D0C-9BD1-3202EBD35B79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73DFFE56-CA80-4D0C-9BD1-3202EBD35B79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73DFFE56-CA80-4D0C-9BD1-3202EBD35B79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73DFFE56-CA80-4D0C-9BD1-3202EBD35B79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75854B0D-4536-4A2B-BE68-4C9535485A23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75854B0D-4536-4A2B-BE68-4C9535485A23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75854B0D-4536-4A2B-BE68-4C9535485A23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75854B0D-4536-4A2B-BE68-4C9535485A23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D4CB8B3-2163-4574-A486-13F236AA2239}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D4CB8B3-2163-4574-A486-13F236AA2239}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D4CB8B3-2163-4574-A486-13F236AA2239}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D4CB8B3-2163-4574-A486-13F236AA2239}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F550606-14F2-46A6-B75C-C77B8C5A5509}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F550606-14F2-46A6-B75C-C77B8C5A5509}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F550606-14F2-46A6-B75C-C77B8C5A5509}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F550606-14F2-46A6-B75C-C77B8C5A5509}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D17A3A78-C9D1-4557-A598-7B3C7DE2B1FB}
+	EndGlobalSection
+EndGlobal
