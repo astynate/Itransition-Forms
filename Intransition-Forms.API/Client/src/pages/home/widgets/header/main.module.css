@@ -1,0 +1,124 @@
+.headerWrapper {
+    height: 60px;
+    width: 100%;
+    border-bottom: 1px solid var(--main-border-color);
+    display: flex;
+    user-select: none;
+    position: sticky;
+    justify-content: space-between;
+    top: 0;
+    left: 0;
+    backdrop-filter: blur(10px);
+    z-index: 2;
+    background: var(--main-background-color);
+    align-items: center;
+}
+
+.headerWrapper[type="searchless"] {
+    background: none;
+    border: none;
+}
+
+.header {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.left, .left h1 {
+    display: flex;
+    margin: 0;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 700;
+    grid-gap: 5px;
+    color: var(--main-font-color);
+}
+
+.logo {
+    height: 24px;
+    width: 24px;
+    object-fit: contain;
+}
+
+.product {
+    color: rgb(71, 96, 255);
+}
+
+.search {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 30px;
+    width: 50%;
+    background: var(--main-accent-color);
+    border: 1px solid var(--main-border-color);
+}
+
+.search img {
+    height: 18px;
+    width: 18px;
+    opacity: 0.5;
+}
+
+.search input {
+    border: none;
+    outline: none;
+    font-size: 16px;
+    width: 100%;
+    background: none;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.user {
+    position: relative;
+    cursor: pointer;
+}
+
+.userPopUp {
+    top: 45px;
+    right: 0px;
+    position: absolute;
+    background: var(--main-accent-color);
+    border-radius: 20px;
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+    grid-gap: 2px;
+    box-shadow: 0px 0px 100px rgba(0, 0, 0, 0.05);
+}
+
+.button {
+    height: 50px;
+    width: 300px;
+    display: flex;
+    align-items: center;
+    padding-left: 15px;
+    background: white;
+}
+
+.button:hover {
+    background: rgba(255, 255, 255, 0.674);
+}
+
+.button:active {
+    background: rgba(255, 255, 255, 0.318);
+}
+
+.button span {
+    font-weight: 600;
+}
+
+.button:nth-child(1) {
+    border-radius: 20px 20px 10px 10px;
+}
+
+.button:nth-child(2) {
+    border-radius: 10px 10px 20px 20px;
+}
+
+.header a {
+    text-decoration: none;
+}

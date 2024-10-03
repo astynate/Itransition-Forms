@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Itransition-Forms.API", "Intransition-Forms\Itransition-Forms.API.csproj", "{E41FEA67-FCB3-4FF5-8B1A-457FE4754FCA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Itransition-Forms.API", "Intransition-Forms.API\Itransition-Forms.API.csproj", "{E41FEA67-FCB3-4FF5-8B1A-457FE4754FCA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Itransition-Forms.Database", "Itransition-Forms.Database\Itransition-Forms.Database.csproj", "{73DFFE56-CA80-4D0C-9BD1-3202EBD35B79}"
 EndProject

@@ -1,0 +1,60 @@
+.form {
+    height: auto;
+    width: 400px;
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    grid-gap: 0px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form input {
+    outline: none;
+    border: none;
+    padding: 15px 5px;
+    font-size: 16px;
+    font-family: 'Open Sans', sans-serif;
+    border-bottom: 2px solid var(--main-border-color);
+}
+
+.form input:focus {
+    border-bottom: 2px solid var(--main-blue-color);
+}
+
+.form h1 {
+    font-weight: 600;
+    margin: 0;
+    padding: 0;
+}
+
+.button {
+    background: var(--main-blue-color);
+    border: none;
+    outline: none;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 50px;
+    cursor: pointer;
+}
+
+.colors {
+    display: flex;
+    grid-gap: 10px;
+    margin-top: 20px;
+}
+
+.color {
+    border-radius: 100%;
+    border: 3px solid transparent;
+    cursor: pointer;
+}
+
+.color[state="selected"] {
+    border: 3px solid var(--main-blue-color);
+}
+
+/* selected */

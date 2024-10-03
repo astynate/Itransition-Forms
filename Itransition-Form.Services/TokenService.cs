@@ -1,4 +1,5 @@
-﻿using Itransition_Forms.Dependencies.Services;
+﻿using Itransition_Forms.Core.User;
+using Itransition_Forms.Dependencies.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -19,15 +20,19 @@ namespace Itransition_Form.Services
             _encryptionService = encryptionService;
             _configuration = configuration;
             _secretKey = _configuration.GetValue<string>("SecretKey") ?? "";
+            Console.WriteLine(_configuration);
         }
 
-        public string GenerateAccessToken(string id, int time)
+        public string GenerateAccessToken(UserModel user)
         {
-            var claims = new List<Claim> { new Claim("sub", id) };
+            var claims = new List<Claim> { 
+                new Claim("sub", user.Id.ToString()),
+                new Claim("role", user.IsAdmin ? "Admin" : "User") 
+            };
 
             var jwt = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(time)),
+                expires: DateTime.UtcNow.Add(TimeSpan.FromDays(30)),
                 signingCredentials: new SigningCredentials(_encryptionService.GetSymmetricKey(_secretKey), SecurityAlgorithms.HmacSha256)
             );
 

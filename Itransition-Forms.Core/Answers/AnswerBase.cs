@@ -2,5 +2,7 @@
 {
     public class AnswerBase
     {
+        public Guid Id { get; set; }
+        public Guid QuestionId { get; set; }
     }
 }

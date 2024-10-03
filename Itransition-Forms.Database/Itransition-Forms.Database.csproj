@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CSharpFunctionalExtensions" Version="3.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Itransition-Forms.Core\Itransition-Forms.Core.csproj" />
     <ProjectReference Include="..\Itransition-Forms.Dependencies\Itransition-Forms.Dependencies.csproj" />
   </ItemGroup>
 
