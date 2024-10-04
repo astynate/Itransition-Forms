@@ -25,15 +25,20 @@ namespace Itransition_Form.Services
         public string GenerateAccessToken(UserModel user)
         {
             var claims = new List<Claim> { 
+                new Claim("sub", user.Email),
                 new Claim("id", user.Id.ToString()),
-                new Claim("email", user.Email),
-                new Claim("role", user.IsAdmin ? "Admin" : "User") 
+                new Claim("role", user.IsAdmin ? "Admin" : "User")
             };
 
             var jwt = new JwtSecurityToken(
+                issuer: _configuration.GetValue<string>("Issuer"),
+                audience: _configuration.GetValue<string>("Audience"),
                 claims: claims,
                 expires: DateTime.UtcNow.Add(TimeSpan.FromDays(30)),
-                signingCredentials: new SigningCredentials(_encryptionService.GetSymmetricKey(_secretKey), SecurityAlgorithms.HmacSha256)
+                signingCredentials: new SigningCredentials(
+                    _encryptionService.GetSymmetricKey(_secretKey), 
+                    SecurityAlgorithms.HmacSha256
+                )
             );
 
             return new JwtSecurityTokenHandler().WriteToken(jwt);

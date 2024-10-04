@@ -12,6 +12,9 @@ const App = observer(() => {
         const GetUserDate = async () => {
             await instance
                 .get('/api/users')
+                .then(response => {
+                    console.log(response);
+                })
                 .catch(error => {
                     console.error(error);
                 });

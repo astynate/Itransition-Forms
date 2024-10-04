@@ -1,5 +1,4 @@
-﻿using Itransition_Form.Services;
-using Itransition_Forms.Dependencies.Database;
+﻿using Itransition_Forms.Dependencies.Database;
 using Itransition_Forms.Dependencies.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,21 +19,19 @@ namespace Instend.Server.Controllers
             _tokenService = tokenService;
         }
 
-        [Authorize]
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetUser()
         {
-            var bearer = Request.Headers["Authentication"].FirstOrDefault();
+            var bearer = Request.Headers["Authorization"].FirstOrDefault();
 
-            if (bearer == null || bearer.Split(" ").Length > 1)
+            if (bearer == null || bearer.Split(" ").Length < 2)
                 return Unauthorized();
 
             var email = _tokenService
-                .GetClaimFromToken(bearer.Split(" ")[2], "email");
+                .GetClaimFromToken(bearer.Split(" ")[1], "sub");
 
-            await _userRepository.G
-
-            Ok();
+            return Ok(await _userRepository.GetUserByEmail(email ?? ""));
         }
 
         [HttpPost]
