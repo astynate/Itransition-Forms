@@ -19,14 +19,14 @@ namespace Itransition_Form.Services
         {
             _encryptionService = encryptionService;
             _configuration = configuration;
-            _secretKey = _configuration.GetValue<string>("SecretKey") ?? "";
-            Console.WriteLine(_configuration);
+            _secretKey = _configuration["SecretKey"] ?? "";
         }
 
         public string GenerateAccessToken(UserModel user)
         {
             var claims = new List<Claim> { 
-                new Claim("sub", user.Id.ToString()),
+                new Claim("id", user.Id.ToString()),
+                new Claim("email", user.Email),
                 new Claim("role", user.IsAdmin ? "Admin" : "User") 
             };
 
@@ -39,22 +39,12 @@ namespace Itransition_Form.Services
             return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
 
-        public string GenerateRefreshToken(string id)
-        {
-            Random random = new Random();
-
-            string refreshToken = new string(Enumerable.Range(0, 50)
-                .Select(_ => (char)random.Next(48, 123)).Where(char.IsLetterOrDigit).ToArray());
-
-            return id + refreshToken;
-        }
-
-        public string? GetUserIdFromToken(string token)
+        public string? GetClaimFromToken(string token, string claimName)
         {
             var handler = new JwtSecurityTokenHandler();
             var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
 
-            return jsonToken?.Claims.First(claim => claim.Type == "sub").Value;
+            return jsonToken?.Claims.First(claim => claim.Type == claimName).Value;
         }
 
         private bool ValidateToken(string token, bool validateLifetime)

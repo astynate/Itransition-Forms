@@ -24,6 +24,10 @@ builder.Services.AddSingleton<ITokenService, TokenService>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
 
+builder.Configuration
+    .AddJsonFile("Server/appsettings.json")
+    .Build();
+
 builder.Services.AddAuthorization();
 
 var app = builder.Build();

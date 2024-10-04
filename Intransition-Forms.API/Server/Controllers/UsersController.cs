@@ -1,5 +1,7 @@
-﻿using Itransition_Forms.Dependencies.Database;
+﻿using Itransition_Form.Services;
+using Itransition_Forms.Dependencies.Database;
 using Itransition_Forms.Dependencies.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Instend.Server.Controllers
@@ -18,6 +20,23 @@ namespace Instend.Server.Controllers
             _tokenService = tokenService;
         }
 
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetUser()
+        {
+            var bearer = Request.Headers["Authentication"].FirstOrDefault();
+
+            if (bearer == null || bearer.Split(" ").Length > 1)
+                return Unauthorized();
+
+            var email = _tokenService
+                .GetClaimFromToken(bearer.Split(" ")[2], "email");
+
+            await _userRepository.G
+
+            Ok();
+        }
+
         [HttpPost]
         [Route("/api/users/register")]
         public async Task<IActionResult> Register([FromForm] string email, [FromForm] string password, [FromForm] int color)
@@ -30,7 +49,7 @@ namespace Instend.Server.Controllers
             Response.Headers["Access-Token"] = _tokenService
                 .GenerateAccessToken(result.Value);
 
-            return Ok(result);
+            return Ok(result.Value);
         }
 
         [HttpPost]
@@ -45,7 +64,7 @@ namespace Instend.Server.Controllers
             Response.Headers["Access-Token"] = _tokenService
                 .GenerateAccessToken(result.Value);
 
-            return Ok(result);
+            return Ok(result.Value);
         }
     }
 }

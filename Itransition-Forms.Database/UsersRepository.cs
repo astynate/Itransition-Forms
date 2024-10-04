@@ -18,6 +18,12 @@ namespace Itransition_Forms.Database
             _encryptionService = encryptionService;
         }
 
+        public async Task<UserModel?> GetUserByEmail(string email)
+        {
+            return await _context.Users
+                .FirstOrDefaultAsync(x => x.Email == email);
+        }
+
         public async Task<Result<UserModel>> Register(string email, string password, int color)
         {
             var user = UserModel.Create(email, password, color);
@@ -26,8 +32,15 @@ namespace Itransition_Forms.Database
 
             user.Value.HashPassword(_encryptionService.HashUsingSHA256);
 
-            await _context.AddAsync(user.Value);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.AddAsync(user.Value);
+                await _context.SaveChangesAsync();
+            }
+            catch(DbUpdateException)
+            {
+                return Result.Failure<UserModel>("User with the same email is already exist");
+            }
 
             return user;
         }

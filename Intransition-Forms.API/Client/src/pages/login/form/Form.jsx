@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Avatar from '../../home/elemets/avatar/Avatar';
 import styles from './main.module.css';
+import userState from '../../../state/userState';
 
 const RegistrationForm = ({name, button, inputs=[], action='/api/login', isColorPicker = false}) => {
     const [selectedColor, setSelectedColorState] = useState(0);
@@ -11,6 +12,7 @@ const RegistrationForm = ({name, button, inputs=[], action='/api/login', isColor
 
         if (fields.length !== inputs.length && inputs.length > 0) {
             alert(`${inputs[0].placeholder} is required`);
+            return;
         }
 
         for (let i = 0; i < fields.length; i++) {
@@ -29,6 +31,22 @@ const RegistrationForm = ({name, button, inputs=[], action='/api/login', isColor
         await fetch(action, {
             method: "POST",
             body: form
+        })
+        .then(response => {
+            if (response.ok) {
+                const accessToken = response.headers.get('Access-Token');
+                
+                if (accessToken) {
+                    localStorage.setItem('Access-Token', accessToken);
+                }
+            }
+
+            return response.json();
+        })
+        .then(response => {
+            if (response) {
+                userState.SetUser(response);
+            }
         })
         .catch(error => {
             console.log(error);

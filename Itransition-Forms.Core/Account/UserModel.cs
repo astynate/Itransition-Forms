@@ -32,7 +32,8 @@ namespace Itransition_Forms.Core.User
             return new UserModel()
             {
                 Email = email,
-                Password = password
+                Password = password,
+                Color = color
             };
         }
 
