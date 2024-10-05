@@ -1,5 +1,6 @@
 ﻿using Itransition_Forms.Core.User;
 using Itransition_Forms.Dependencies.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -52,35 +53,23 @@ namespace Itransition_Form.Services
             return jsonToken?.Claims.First(claim => claim.Type == claimName).Value;
         }
 
-        private bool ValidateToken(string token, bool validateLifetime)
+        public string? GetTokenFromRequest(HttpRequest request)
         {
-            try
-            {
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var key = _encryptionService.GetSymmetricKey(_secretKey);
+            var bearer = request.Headers["Authorization"].FirstOrDefault();
 
-                tokenHandler.ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = key,
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ValidateLifetime = validateLifetime,
-                    ClockSkew = TimeSpan.Zero
-                }, out SecurityToken validatedToken);
+            if (bearer == null || bearer.Split(" ").Length < 2)
+                return null;
 
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            return bearer.Split(" ")[1];
         }
 
-        public bool IsTokenValid(string token)
-            => ValidateToken(token, false);
+        public string? GetClaimFromRequest(HttpRequest request, string claimName)
+        {
+            var token = GetTokenFromRequest(request);
 
-        public bool IsTokenAlive(string token)
-            => ValidateToken(token, true);
+            if (token == null) return null;
+
+            return GetClaimFromToken(token, claimName);
+        }
     }
 }

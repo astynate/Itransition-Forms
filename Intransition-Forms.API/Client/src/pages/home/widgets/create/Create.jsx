@@ -6,8 +6,9 @@ import template_1 from './images/template_1.png';
 import template_2 from './images/template_2.png';
 import template_3 from './images/template_3.png';
 import userState from '../../../../state/userState';
+import { observer } from 'mobx-react-lite';
 
-const Create = ({setPresentations}) => {
+const Create = observer(({setPresentations}) => {
     const CreatePresentation = async (type) => {
         if (userState.username == null) {
             alert("Please login your account!");
@@ -43,26 +44,36 @@ const Create = ({setPresentations}) => {
                         image={template_1}
                         name='Simple white'
                         onClick={() => CreatePresentation(1)}
+                        isCreate={!!userState.user}
                     />
                     <PresentationTemplate 
                         image={template_2}
                         name='Simple blue'
                         onClick={() => CreatePresentation(2)}
+                        isCreate={!!userState.user}
                     />
                     <PresentationTemplate 
                         image={template_3}
                         name='Simple black'
                         onClick={() => CreatePresentation(3)}
+                        isCreate={!!userState.user}
                     />
                     <PresentationTemplate 
                         image={template_3}
                         name='Simple black'
                         onClick={() => CreatePresentation(4)}
+                        isCreate={!!userState.user}
+                    />
+                    <PresentationTemplate 
+                        image={template_3}
+                        name='Simple black'
+                        onClick={() => CreatePresentation(4)}
+                        isCreate={!!userState.user}
                     />
                 </List>
             </Wrapper>
         </div>
     );
-}
+});
 
 export default Create;

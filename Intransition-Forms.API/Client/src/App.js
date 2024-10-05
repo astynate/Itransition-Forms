@@ -13,7 +13,9 @@ const App = observer(() => {
             await instance
                 .get('/api/users')
                 .then(response => {
-                    console.log(response);
+                    if (response.data) {
+                        userState.SetUser(response.data);
+                    }
                 })
                 .catch(error => {
                     console.error(error);

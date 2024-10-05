@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from './main.module.css';
 
-const PresentationTemplate = ({name = 'Empty', image, onClick = () => {}}) => {
+const PresentationTemplate = ({name = 'Empty', image, onClick = () => {}, isCreate = true}) => {
     const [isCreateButtonOpen, setCreateButtonState] = useState(!(!!image));
 
     return (
@@ -12,7 +12,7 @@ const PresentationTemplate = ({name = 'Empty', image, onClick = () => {}}) => {
             onClick={onClick}
         >
             <div className={styles.image}>
-                {(isCreateButtonOpen || !(!!image))&& 
+                {(isCreateButtonOpen || !(!!image)) && isCreate && 
                     <div className={styles.create}>
                         <div className={styles.line} />
                         <div className={styles.line} />

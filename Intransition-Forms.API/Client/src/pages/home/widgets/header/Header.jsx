@@ -46,8 +46,8 @@ const Header = observer(({isSearch = true}) => {
                         ref={ref}
                     >
                         <Avatar 
-                            name={userState.username}
-                            color={userState.color}
+                            name={userState.user ? userState.user.email : undefined}
+                            color={userState.user ? userState.user.color : undefined}
                         />
                         {isUserPopUpOpen && <div className={styles.userPopUp}>
                             <Link to={"/login"} className={styles.button}>
