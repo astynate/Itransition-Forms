@@ -74,10 +74,25 @@
     font-weight: 600;
 }
 
+.headerWrapper {
+    z-index: 2;
+    top: 61px;
+    left: 0;
+    position: sticky;
+    margin-bottom: 1px;
+    background-color: var(--main-background-color);
+}
+
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
+    padding-right: 2px;
+}
+
+.headerWrapper[state="sticky"] {
+    border-bottom: 1px solid var(--main-border-color);
 }
 
 .control {

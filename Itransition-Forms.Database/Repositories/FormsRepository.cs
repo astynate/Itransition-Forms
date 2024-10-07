@@ -26,11 +26,6 @@ namespace Itransition_Forms.Database.Repositories
             return form;
         }
 
-        public async Task<FormModel> GetForm(string email)
-        {
-
-        }
-
         private async Task FillFormQuestions(FormModel form, List<QuestionModel> questions)
         {
             form.Questions = questions;

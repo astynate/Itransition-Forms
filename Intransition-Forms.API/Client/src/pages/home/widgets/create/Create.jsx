@@ -1,6 +1,6 @@
 import Wrapper from '../../elemets/wrapper/Wrapper';
 import List from '../../features/list/List';
-import PresentationTemplate from '../../features/presentation-template/PresentationTemplate';
+import FormTemplate from '../../features/form-template/FormTemplate';
 import styles from './main.module.css';
 import notFound from './images/not-found.png';
 import userState from '../../../../state/UserState';
@@ -45,12 +45,12 @@ const Create = observer(({setPresentations}) => {
             :
                 <Wrapper>
                     <List>
-                        {!FormsState.isPopularTemplatesLoading && userState.user && <PresentationTemplate 
+                        {!FormsState.isPopularTemplatesLoading && userState.user && <FormTemplate 
                             onClick={() => CreatePresentation(null)}
                         />}
                         {FormsState.isPopularTemplatesLoading && Array.from({ length: 6 }).map((_, index) => {
                             return (
-                                <PresentationTemplate 
+                                <FormTemplate 
                                     key={index}
                                     image={null}
                                     name='Loading...'
@@ -60,7 +60,7 @@ const Create = observer(({setPresentations}) => {
                         })}
                         {FormsState.popularForms.map(form => {
                             return (
-                                <PresentationTemplate 
+                                <FormTemplate 
                                     key={form.id}
                                     image={null}
                                     name={form.title}

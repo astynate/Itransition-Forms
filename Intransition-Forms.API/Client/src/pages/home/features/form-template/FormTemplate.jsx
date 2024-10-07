@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from './main.module.css';
 
-const PresentationTemplate = ({name = 'Empty', image, onClick = () => {}, isCreate = true}) => {
+const FormTemplate = ({name = 'Empty', image, onClick = () => {}, isCreate = true}) => {
     const [isCreateButtonOpen, setCreateButtonState] = useState(!(!!image));
 
     return (
@@ -24,4 +24,4 @@ const PresentationTemplate = ({name = 'Empty', image, onClick = () => {}, isCrea
     );
 }
 
-export default PresentationTemplate;
+export default FormTemplate;
