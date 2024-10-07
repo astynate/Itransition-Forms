@@ -9,17 +9,17 @@
 
 .image {
     height: 100%;
-    aspect-ratio: 6 / 4;
+    aspect-ratio: 4 / 3;
     width: 100%;
     background: white;
-    border-radius: 10px;
+    border-radius: 3px;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
     position: relative;
     border: 1px solid var(--main-border-color);
-    transition: 0.15s ease;
+    transition: 0.2s ease;
 }
 
 .image img {
@@ -29,7 +29,7 @@
     object-fit: cover;
     left: 0;
     position: absolute;
-    transition: 0.3s ease;
+    outline: 2px solid transparent;
 }
 
 .presentationTemplate:hover {
@@ -37,15 +37,15 @@
 }
 
 .presentationTemplate:hover .image {
-    outline: 4px solid rgba(45, 97, 255, 30);
+    border: 1px solid var(--main-blue-color);
 }
 
 .presentationTemplate:active .image {
-    outline: 2px solid rgba(45, 97, 255, 30);
+    border: 1px solid black;
 }
 
 .presentationTemplate:hover img {
-    opacity: 0.1;
+    opacity: 0.3;
 }
 
 .create {

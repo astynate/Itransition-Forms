@@ -1,10 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
 using Itransition_Forms.Core.User;
+using Itransition_Forms.Database.Contexts;
 using Itransition_Forms.Dependencies.Database;
 using Itransition_Forms.Dependencies.Services;
 using Microsoft.EntityFrameworkCore;
 
-namespace Itransition_Forms.Database
+namespace Itransition_Forms.Database.Repositories
 {
     public class UsersRepository : IUsersRepository
     {
@@ -37,7 +38,7 @@ namespace Itransition_Forms.Database
                 await _context.AddAsync(user.Value);
                 await _context.SaveChangesAsync();
             }
-            catch(DbUpdateException)
+            catch (DbUpdateException)
             {
                 return Result.Failure<UserModel>("User with the same email is already exist");
             }
@@ -48,8 +49,8 @@ namespace Itransition_Forms.Database
         public async Task<Result<UserModel>> Login(string email, string password)
         {
             var user = await _context.Users
-                .FirstOrDefaultAsync(x => 
-                    x.Password == _encryptionService.HashUsingSHA256(password) && 
+                .FirstOrDefaultAsync(x =>
+                    x.Password == _encryptionService.HashUsingSHA256(password) &&
                     x.Email == email);
 
             if (user == null)

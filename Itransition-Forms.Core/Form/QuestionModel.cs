@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Itransition_Forms.Core.Answers;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Itransition_Forms.Core.Form
@@ -7,12 +8,16 @@ namespace Itransition_Forms.Core.Form
     [Table("questions")]
     public class QuestionModel
     {
-        [Column("id")] public Guid Id { get; private set; } = Guid.NewGuid();
+        [Column("id")][Key] public Guid Id { get; private set; } = Guid.NewGuid();
         [Column("question")] public string Question { get; private set; } = string.Empty;
         [Column("index")] public int Index { get; private set; } = 0;
         [Column("form_id")] public Guid FormId { get; private set; } = Guid.NewGuid();
 
-        [NotMapped] public List<AnswerBase> Answers { get; private set; } = [];
+        [NotMapped] 
+        public List<AnswerBase> Answers { 
+            get => Answers; 
+            set => Answers = value ?? []; 
+        }
 
         private QuestionModel() { }
 

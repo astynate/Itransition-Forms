@@ -3,17 +3,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Itransition_Forms.Core.Links.Base
 {
-    public abstract class AnswerLinkBase
+    public abstract class UserToEntityLinkBase
     {
         [Column("id")][Key] public Guid Id { get; private set; } = Guid.NewGuid();
-        [Column("answer_id")] public Guid AnswerId { get; private set; }
+        [Column("user_email")] public string UserEmail { get; private set; } = string.Empty;
 
-        private AnswerLinkBase() { }
+        private UserToEntityLinkBase() { }
 
-        protected AnswerLinkBase(Guid id, Guid answerId)
+        protected UserToEntityLinkBase(Guid id, string userEmail)
         {
             Id = id;
-            AnswerId = answerId;
+            UserEmail = userEmail;
         }
     }
 }

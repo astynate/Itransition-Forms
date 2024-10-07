@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import Avatar from '../../home/elemets/avatar/Avatar';
 import styles from './main.module.css';
-import userState from '../../../state/userState';
+import userState from '../../../state/UserState';
+import { useNavigate } from 'react-router-dom';
 
 const RegistrationForm = ({name, button, inputs=[], action='/api/login', isColorPicker = false}) => {
     const [selectedColor, setSelectedColorState] = useState(0);
     const [fields, setFields] = useState([]);
+    let navigate = useNavigate();
 
     const SendRequest = async () => {
         let form = new FormData();
@@ -46,6 +48,7 @@ const RegistrationForm = ({name, button, inputs=[], action='/api/login', isColor
         .then(response => {
             if (response) {
                 userState.SetUser(response);
+                navigate('/');
             }
         })
         .catch(error => {

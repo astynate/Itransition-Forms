@@ -7,5 +7,6 @@ namespace Itransition_Forms.Database
     {
         Task<Result<FormModel>> CreateForm(string email);
         Task<Result<FormModel?>> GetFormModelById(Guid id);
+        Task<FormModel[]> GetPopularTemplates(int count);
     }
 }

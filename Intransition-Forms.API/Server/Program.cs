@@ -1,11 +1,13 @@
 using Instend.Server.Middleware;
 using Itransition_Form.Services;
 using Itransition_Forms.Database;
+using Itransition_Forms.Database.Contexts;
+using Itransition_Forms.Database.Repositories;
 using Itransition_Forms.Dependencies.Database;
 using Itransition_Forms.Dependencies.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using static CSharpFunctionalExtensions.Result;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,11 +25,11 @@ builder.Configuration
     .AddJsonFile("Server/appsettings.json")
     .Build();
 
-var enctyptionService = new EncryptionService();
+var encryptionService = new EncryptionService();
 var secretKey = builder.Configuration.GetValue<string>("SecretKey");
 var issuer = builder.Configuration.GetValue<string>("Issuer");
 var audience = builder.Configuration.GetValue<string>("Audience");
-var symmetricKey = enctyptionService.GetSymmetricKey(secretKey ?? "");
+var symmetricKey = encryptionService.GetSymmetricKey(secretKey ?? "");
 
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -46,9 +48,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Services.AddDbContext<DatabaseContext>(options =>
+{
+    options.UseMySql(builder.Configuration.GetValue<string>("ConnectionString"),
+        new MySqlServerVersion(new Version(8, 3, 0)),
+        mySqlOptions => mySqlOptions.EnableRetryOnFailure());
+});
+
 builder.Services.AddTransient<LoggingMiddleware>();
-builder.Services.AddDbContext<DatabaseContext>();
 builder.Services.AddSingleton<IEncryptionService, EncryptionService>();
+builder.Services.AddScoped<IFormsRepository, FormsRepository>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddSingleton<ITokenService, TokenService>();
 builder.Services.AddControllersWithViews();

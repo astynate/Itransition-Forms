@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Itransition_Forms.Core.Links.Entities
 {
-    [Table("question_links")]
-    public class FormLinkModel : UserToEnitityLinkBase
+    [Table("form_links")]
+    public class FormLinkModel : UserToEntityLinkBase
     {
         [Column("form_id")] public Guid FormId { get; private set; }
 

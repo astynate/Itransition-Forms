@@ -2,25 +2,20 @@ import Wrapper from '../../elemets/wrapper/Wrapper';
 import List from '../../features/list/List';
 import PresentationTemplate from '../../features/presentation-template/PresentationTemplate';
 import styles from './main.module.css';
-import template_1 from './images/template_1.png';
-import template_2 from './images/template_2.png';
-import template_3 from './images/template_3.png';
-import userState from '../../../../state/userState';
+import notFound from './images/not-found.png';
+import userState from '../../../../state/UserState';
 import { observer } from 'mobx-react-lite';
+import FormsState from '../../../../state/FormsState';
+import { instance } from '../../../../state/Interceptors';
 
 const Create = observer(({setPresentations}) => {
-    const CreatePresentation = async (type) => {
-        if (userState.username == null) {
-            alert("Please login your account!");
-            return;
-        }
-
+    const CreatePresentation = async (id = null) => {
         let form = new FormData();
 
         form.append('username', userState.username);
-        form.append('type', type);
+        form.append('templateReference', id);
 
-        await fetch('/api/presentations', {
+        await instance.post('/api/forms', {
             method: "POST",
             body: form
         })
@@ -29,49 +24,53 @@ const Create = observer(({setPresentations}) => {
         })
         .then(response => {
             setPresentations(prev => [response, ...prev]);
-            window.open(`/presentation/${response.id}`, '_blank');
+            window.open(`/forms/${response.id}`, '_blank');
+        })
+        .catch(_ => {
+            alert('Something went wrong');
         });
     }
 
     return (
         <div className={styles.createWrapper}>
-            <Wrapper>
-                <List>
-                    <PresentationTemplate 
-                        onClick={() => CreatePresentation(0)}
-                    />
-                    <PresentationTemplate 
-                        image={template_1}
-                        name='Simple white'
-                        onClick={() => CreatePresentation(1)}
-                        isCreate={!!userState.user}
-                    />
-                    <PresentationTemplate 
-                        image={template_2}
-                        name='Simple blue'
-                        onClick={() => CreatePresentation(2)}
-                        isCreate={!!userState.user}
-                    />
-                    <PresentationTemplate 
-                        image={template_3}
-                        name='Simple black'
-                        onClick={() => CreatePresentation(3)}
-                        isCreate={!!userState.user}
-                    />
-                    <PresentationTemplate 
-                        image={template_3}
-                        name='Simple black'
-                        onClick={() => CreatePresentation(4)}
-                        isCreate={!!userState.user}
-                    />
-                    <PresentationTemplate 
-                        image={template_3}
-                        name='Simple black'
-                        onClick={() => CreatePresentation(4)}
-                        isCreate={!!userState.user}
-                    />
-                </List>
-            </Wrapper>
+            {FormsState.isPopularTemplatesLoading && <div className={styles.loader}>
+                <div className={styles.line}></div>
+            </div>}
+            {FormsState.isPopularTemplatesLoading === false && FormsState.popularForms.length === 0 && !userState.user ?
+                <img 
+                    src={notFound} 
+                    className={styles.notFound} 
+                    draggable="false"
+                />
+            :
+                <Wrapper>
+                    <List>
+                        {!FormsState.isPopularTemplatesLoading && userState.user && <PresentationTemplate 
+                            onClick={() => CreatePresentation(null)}
+                        />}
+                        {FormsState.isPopularTemplatesLoading && Array.from({ length: 6 }).map((_, index) => {
+                            return (
+                                <PresentationTemplate 
+                                    key={index}
+                                    image={null}
+                                    name='Loading...'
+                                    isCreate={!!userState.user}
+                                />
+                            );
+                        })}
+                        {FormsState.popularForms.map(form => {
+                            return (
+                                <PresentationTemplate 
+                                    key={form.id}
+                                    image={null}
+                                    name={form.title}
+                                    isCreate={false}
+                                />
+                            );
+                        })}
+                    </List>
+                </Wrapper>
+            }
         </div>
     );
 });

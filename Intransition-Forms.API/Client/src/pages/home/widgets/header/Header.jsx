@@ -3,7 +3,7 @@ import logo from './itransition_logo.svg';
 import Wrapper from '../../elemets/wrapper/Wrapper';
 import Avatar from '../../elemets/avatar/Avatar';
 import { observer } from 'mobx-react-lite';
-import userState from '../../../../state/userState';
+import userState from '../../../../state/UserState';
 import search from './search.png';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';

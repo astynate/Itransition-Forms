@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.RegularExpressions;
 
@@ -7,7 +8,7 @@ namespace Itransition_Forms.Core.User
     [Table("users")]
     public class UserModel
     {
-        [Column("id")] public Guid Id { get; private set; } = Guid.Empty;
+        [Column("id")][Key] public Guid Id { get; private set; } = Guid.Empty;
         [Column("email")] public string Email { get; private set; } = string.Empty;
         [Column("password")] public string Password { get; private set; } = string.Empty;
         [Column("color")] public int Color { get; private set; } = 0;
