@@ -4,14 +4,20 @@ import Header from '../widgets/header/Header';
 import Create from '../widgets/create/Create';
 import Wrapper from '../elemets/wrapper/Wrapper';
 import Select from '../elemets/select/Select';
-import './main.css';
 import List from '../features/list/List';
 import FormModel from '../features/form-model/FormModel';
+import FormsState from '../../../state/FormsState';
+import RenamePopup from '../widgets/rename/RenamePopup';
+import { observer } from 'mobx-react-lite';
+import { instance } from '../../../state/Interceptors';
+import './main.css';
 
-const HomePage = () => {
-    const [displayProperty, SetDisplayProperty] = useState([0, 1, 2]);
+const HomePage = observer(() => {
+    const [displayProperty, SetDisplayProperty] = useState([0, 1]);
     const [sortProperty, SetSortProperty] = useState([0]);
     const [headerState, SetHeaderState] = useState(null);
+    const [isRenameWindowOpen, SetRenameOpenState] = useState(false);
+    const [selectedForm, SetSelectedForm] = useState(undefined);
 
     let headerRef = useRef();
     let wrapperRef = useRef();
@@ -23,10 +29,40 @@ const HomePage = () => {
         SetHeaderState(scroll + 62 > header ? 'sticky' : null);
     }
 
+    const GetRecentForms = async () => {
+        await instance
+            .get(`/api/forms/latest?skip=${FormsState.latestForms.length}&take=5`)
+            .then(response => {
+                if (response.data && response.data.length) {
+                    FormsState.setHasMoreState(response.data.length >= 5);
+                    FormsState.setLatestForms([...response.data, ...FormsState.latestForms]);
+                } else {
+                    FormsState.setHasMoreState(false);
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    useEffect(() => {
+        GetRecentForms();
+    }, [FormsState.latestForms.length])
+
     return (
         <div className={styles.wrapper} ref={wrapperRef} onScroll={HandlerScroll}>
             <Header />
-            <Create />
+            {isRenameWindowOpen && 
+                <RenamePopup 
+                    form={selectedForm}
+                    setSelectedForm={SetSelectedForm}
+                    setOpenState={SetRenameOpenState} 
+                />
+            }
+            <Create 
+                setForm={FormsState.setLatestForms} 
+                forms={FormsState.latestForms} 
+            />
             <div className={styles.headerWrapper} ref={headerRef} state={headerState}>
                 <Wrapper>
                     <div className={styles.header}>
@@ -35,8 +71,7 @@ const HomePage = () => {
                             <Select 
                                 title={'Display'}
                                 items={[
-                                    { title: "Owner: I'm" },
-                                    { title: "Owner: Not I'm" },
+                                    { title: "My templates" },
                                     { title: "Completed forms" },
                                 ]}
                                 selected={displayProperty}
@@ -61,34 +96,25 @@ const HomePage = () => {
             </div>
             <Wrapper>
                 <List>
-                    <FormModel />
-                    <FormModel />
-                    <FormModel />
-                    <FormModel />
-                    <FormModel />
-                    <FormModel />
-                    <FormModel />
-                    <FormModel />
-                    <FormModel />
-                    <FormModel />
-                    <FormModel />
-                    <FormModel />
-                    <FormModel />
-                    <FormModel />
-                    <FormModel />
-                    <FormModel />
-                    <FormModel />
-                    <FormModel />
-                    <FormModel />
-                    <FormModel />
-                    <FormModel />
-                    <FormModel />
+                    {FormsState.latestForms.map(form => {
+                        return (
+                            <FormModel 
+                                key={form.id}
+                                title={form.title}
+                                owner={form.ownerEmail}
+                                openRenameForm={() => {
+                                    SetRenameOpenState(true);
+                                    SetSelectedForm(form);
+                                }}
+                            />
+                        );
+                    })}
                 </List>
             </Wrapper>
             <br />
             <br />
         </div>
     );
-}
+});
 
 export default HomePage;

@@ -14,6 +14,7 @@ namespace Itransition_Forms.Core.Form
         [Column("topics")] public Topics Topic { get; private set; } = Topics.Other;
         [Column("owner")] public string OwnerEmail { get; private set; } = string.Empty;
         [Column("number_of_fills")] public int NumberOfFills { get; private set; } = 0;
+        [Column("date")] public DateTime Date { get; private set; } = DateTime.Now;
 
         [NotMapped] public List<QuestionModel> Questions { get; set; } = [];
 
@@ -34,5 +35,13 @@ namespace Itransition_Forms.Core.Form
         }
 
         public void IncrementNumberOfFills() => NumberOfFills++;
+
+        public Result UpdateTitle(string title)
+        {
+            if (string.IsNullOrEmpty(title) || string.IsNullOrWhiteSpace(title))
+                return Result.Failure("Form title is a required field");
+
+            Title = title; return Result.Success();
+        }
     }
 }

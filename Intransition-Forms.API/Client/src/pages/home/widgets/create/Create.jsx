@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite';
 import FormsState from '../../../../state/FormsState';
 import { instance } from '../../../../state/Interceptors';
 
-const Create = observer(({setPresentations}) => {
+const Create = observer(({setForms, forms}) => {
     const CreatePresentation = async (id = null) => {
         let form = new FormData();
 
@@ -20,13 +20,11 @@ const Create = observer(({setPresentations}) => {
             body: form
         })
         .then(response => {
-            return response.json()
-        })
-        .then(response => {
-            setPresentations(prev => [response, ...prev]);
+            FormsState.setLatestForms([response.data, ...forms]);
             window.open(`/forms/${response.id}`, '_blank');
         })
-        .catch(_ => {
+        .catch(error => {
+            console.error(error);
             alert('Something went wrong');
         });
     }

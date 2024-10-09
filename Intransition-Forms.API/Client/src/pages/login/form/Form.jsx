@@ -3,6 +3,8 @@ import Avatar from '../../home/elemets/avatar/Avatar';
 import styles from './main.module.css';
 import userState from '../../../state/UserState';
 import { useNavigate } from 'react-router-dom';
+import SimpleInput from '../../../elements/input/SimpleInput';
+import SimpleButton from '../../../elements/button/SimpleButton';
 
 const RegistrationForm = ({name, button, inputs=[], action='/api/login', isColorPicker = false}) => {
     const [selectedColor, setSelectedColorState] = useState(0);
@@ -62,11 +64,11 @@ const RegistrationForm = ({name, button, inputs=[], action='/api/login', isColor
             <br />
             {inputs.map((input, index) => {
                 return (
-                    <input
+                    <SimpleInput
                         key={index}
-                        required
-                        type={input.type ?? "text"}
+                        type={input.type}
                         placeholder={input.placeholder}
+                        autoFocus={index === 0}
                         onChange={(event) => {setFields(prev => {
                             prev[index] = {
                                 ...inputs[index],
@@ -101,12 +103,12 @@ const RegistrationForm = ({name, button, inputs=[], action='/api/login', isColor
                     <Avatar color={2} />
                 </div>
             </div>}
-            <button 
-                className={styles.button} 
-                onClick={SendRequest}
-            >
-                {button}
-            </button>
+            <br />
+            <br />
+            <SimpleButton 
+                title={button}
+                callback={SendRequest} 
+            />
         </div>
     );
 }

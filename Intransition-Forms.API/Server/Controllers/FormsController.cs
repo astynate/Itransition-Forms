@@ -20,9 +20,24 @@ namespace Instend.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPopularTemplates()
+        public async Task<IActionResult> GetPopularTemplates() 
+            => Ok(await _formsRepository.GetPopularTemplates(5));
+
+        [HttpGet]
+        [Route("/api/forms/latest")]
+        public async Task<IActionResult> GetLatestTemplates(int skip, int take)
         {
-            return Ok(await _formsRepository.GetPopularTemplates(6));
+            var email = _tokenService.GetClaimFromRequest(Request, "sub");
+
+            if (string.IsNullOrEmpty(email) || string.IsNullOrWhiteSpace(email))
+                return Unauthorized("User not found");
+
+            var templates = await _formsRepository.GetUsersTemplates(email, skip, take);
+
+            if (templates.IsFailure)
+                return Conflict(templates.Error);
+
+            return Ok(templates.Value);
         }
 
         [HttpPost]
@@ -40,6 +55,31 @@ namespace Instend.Server.Controllers
                 return Conflict(form.Error);
 
             return Ok(form.Value);
+        }
+
+        [HttpPut]
+        [Authorize]
+        public async Task<IActionResult> Rename([FromForm] Guid id, [FromForm] string title)
+        {
+            var email = _tokenService.GetClaimFromRequest(Request, "sub");
+
+            if (string.IsNullOrEmpty(email) || string.IsNullOrWhiteSpace(email))
+                return Unauthorized();
+
+            var form = await _formsRepository.GetFormModelById(id);
+
+            if (form == null)
+                return Conflict("Form not found");
+
+            if (form.OwnerEmail != email)
+                return Conflict("You don't have permission to perform this operation");
+
+            var result = await _formsRepository.UpdateFormTitle(form, title);
+
+            if (result.IsFailure)
+                return Conflict(result.Error);
+
+            return Ok(form);
         }
     }
 }

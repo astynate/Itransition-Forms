@@ -36,7 +36,7 @@ namespace Itransition_Forms.Database.Migrations
                         .HasColumnType("tinyint(1)")
                         .HasColumnName("default_value");
 
-                    b.Property<Guid>("QuestionId")
+                    b.Property<Guid>("QuestionModelId")
                         .HasColumnType("char(36)")
                         .HasColumnName("question_id");
 
@@ -65,7 +65,7 @@ namespace Itransition_Forms.Database.Migrations
                         .HasColumnType("int unsigned")
                         .HasColumnName("min_value");
 
-                    b.Property<Guid>("QuestionId")
+                    b.Property<Guid>("QuestionModelId")
                         .HasColumnType("char(36)")
                         .HasColumnName("question_id");
 
@@ -85,7 +85,7 @@ namespace Itransition_Forms.Database.Migrations
                         .HasColumnType("tinyint(1)")
                         .HasColumnName("is_multiple");
 
-                    b.Property<Guid>("QuestionId")
+                    b.Property<Guid>("QuestionModelId")
                         .HasColumnType("char(36)")
                         .HasColumnName("question_id");
 
@@ -141,7 +141,7 @@ namespace Itransition_Forms.Database.Migrations
                         .HasColumnType("char(36)")
                         .HasColumnName("id");
 
-                    b.Property<Guid>("FormId")
+                    b.Property<Guid>("FormModelId")
                         .HasColumnType("char(36)")
                         .HasColumnName("form_id");
 
@@ -186,7 +186,7 @@ namespace Itransition_Forms.Database.Migrations
                         .HasColumnType("char(36)")
                         .HasColumnName("id");
 
-                    b.Property<Guid>("FormId")
+                    b.Property<Guid>("FormModelId")
                         .HasColumnType("char(36)")
                         .HasColumnName("form_id");
 
@@ -207,7 +207,7 @@ namespace Itransition_Forms.Database.Migrations
                         .HasColumnType("char(36)")
                         .HasColumnName("id");
 
-                    b.Property<Guid>("QuestionId")
+                    b.Property<Guid>("QuestionModelId")
                         .HasColumnType("char(36)")
                         .HasColumnName("question_id");
 

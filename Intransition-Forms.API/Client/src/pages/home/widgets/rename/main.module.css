@@ -1,0 +1,17 @@
+.rename {
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+    padding: 10px;
+}
+
+.rename h2 {
+    margin: 0;
+    padding: 0;
+}
+
+.buttons {
+    display: flex;
+    justify-content: end;
+    grid-gap: 10px;
+}

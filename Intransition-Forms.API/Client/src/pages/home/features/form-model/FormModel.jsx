@@ -3,7 +3,7 @@ import PopupList from '../../elemets/popup-list/PopupList';
 import styles from './main.module.css';
 import menu from './menu.png';
 
-const FormModel = ({name = "Form", owner = "Unknown"}) => {
+const FormModel = ({title = "Form", owner = "Unknown", openRenameForm = () => {}}) => {
     const [isPropertiesListOpen, SetListOpenState] = useState(false);
     let ref = useRef();
 
@@ -15,7 +15,7 @@ const FormModel = ({name = "Form", owner = "Unknown"}) => {
                 </div>
                 <div className={styles.information}>
                     <div className={styles.left}>
-                        <span className={styles.name}>{name}</span>
+                        <span className={styles.name}>{title}</span>
                         <span className={styles.owner}>{owner}</span>
                     </div>
                     <button className={styles.button} ref={ref} onClick={() => SetListOpenState(true)}>
@@ -28,9 +28,8 @@ const FormModel = ({name = "Form", owner = "Unknown"}) => {
                 setOpenState={SetListOpenState}
                 forwardRef={ref}
                 items={[
-                    { title: "Rename" },
-                    { title: "Remove from lates" },
-                    { title: "Delete" },
+                    { title: "Rename", callback: openRenameForm },
+                    { title: "Delete", callback: openRenameForm },
                 ]}
             />
         </div>

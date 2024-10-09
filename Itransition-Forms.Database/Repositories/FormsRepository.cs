@@ -2,6 +2,7 @@
 using Itransition_Forms.Core.Form;
 using Itransition_Forms.Database.Contexts;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Itransition_Forms.Database.Repositories
 {
@@ -26,72 +27,52 @@ namespace Itransition_Forms.Database.Repositories
             return form;
         }
 
-        private async Task FillFormQuestions(FormModel form, List<QuestionModel> questions)
+        private async Task<FormModel[]> GetFormByExpression
+        (
+            Expression<Func<FormModel, bool>> predicate, 
+            Expression<Func<FormModel, object>> sort, 
+            int skip, 
+            int count
+        )
         {
-            form.Questions = questions;
-
-            foreach (var question in form.Questions)
-            {
-                question.Answers =
-                [
-                    .. await _context.TextBoxes
-                        .Where(x => x.QuestionId == question.Id)
-                        .ToListAsync(),
-
-                    .. await _context.RangeBoxes
-                        .Where(x => x.QuestionId == question.Id)
-                        .ToListAsync(),
-
-                    .. await _context.Checkboxes
-                        .Where(x => x.QuestionId == question.Id)
-                        .ToListAsync(),
-                ];
-            }
+            return await _context.Forms
+                .OrderByDescending(sort)
+                .Where(predicate)
+                .Skip(skip)
+                .Take(count)
+                .Include(x => x.Questions)
+                    .ThenInclude(x => x.Answers)
+                    .AsSplitQuery()
+                    .ToArrayAsync();
         }
 
-        public async Task<Result<FormModel?>> GetFormModelById(Guid id)
-        {
-            var form = await _context.Forms
-                .Where(x => x.Id == id)
-                .GroupJoin(_context.Questions,
-                    (form) => form.Id,
-                    (question) => question.FormId,
-                    (form, questions) => new
-                    {
-                        form,
-                        questions
-                    })
-                .FirstOrDefaultAsync();
-
-            if (form != null && form.form != null)
-            {
-                await FillFormQuestions(form.form, form.questions.ToList());
-            }
-
-            return form?.form;
-        }
+        public async Task<Result<FormModel[]>> GetUsersTemplates(string email, int skip = 0, int count = 5) 
+            => await GetFormByExpression((x) => x.OwnerEmail == email, (x) => x.Date, skip, count);
 
         public async Task<FormModel[]> GetPopularTemplates(int count)
+            => await GetFormByExpression((x) => true, (x) => x.NumberOfFills, 0, count);
+
+        public async Task<FormModel?> GetFormModelById(Guid id)
         {
-            var forms = await _context.Forms
-                .OrderByDescending(x => x.NumberOfFills)
-                .Take(count)
-                .GroupJoin(_context.Questions,
-                    (form) => form.Id,
-                    (question) => question.FormId,
-                    (form, questions) => new
-                    {
-                        form,
-                        questions
-                    })
-                .ToListAsync();
+            var form = await GetFormByExpression((x) => x.Id == id, (x) => x.Date, 0, 1);
 
-            foreach (var form in forms)
-            {
-                await FillFormQuestions(form.form, form.questions.ToList());
-            }
+            if (form.Length == 0) 
+                return null;
 
-            return forms.Select(x => x.form).ToArray();
+            return form[0];
+        }
+
+        public async Task<Result> UpdateFormTitle(FormModel form, string title)
+        {
+            var result = form.UpdateTitle(title);
+
+            if (result.IsFailure)
+                return result;
+
+            _context.Forms.Update(form);
+            await _context.SaveChangesAsync();
+
+            return result;
         }
     }
 }

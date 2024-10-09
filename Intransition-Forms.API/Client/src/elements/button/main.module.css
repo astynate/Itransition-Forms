@@ -1,0 +1,22 @@
+.button {
+    background: var(--main-blue-color);
+    border: none;
+    outline: none;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button[type="sub"] {
+    background: none;
+    outline: 1px solid var(--main-blue-color);
+    outline-offset: -1px;
+    color: var(--main-blue-color);
+}
+
+.button[type="sub"]:hover {
+    background: var(--main-accent-color);
+}

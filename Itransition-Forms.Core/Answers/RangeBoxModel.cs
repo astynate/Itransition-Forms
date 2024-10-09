@@ -9,6 +9,8 @@ namespace Itransition_Forms.Core.Answers
         [Column("max_value")] public uint MaxValue { get; private set; } = uint.MaxValue;
         [Column("min_value")] public uint MinValue { get; private set; } = uint.MinValue;
 
+        private RangeBoxModel() : base() { }
+
         protected RangeBoxModel(Guid id, Guid questionId) : base(id, questionId) { }
 
         public static Result<RangeBoxModel> Create(Guid id, Guid questionId, uint minValue, uint maxValue)

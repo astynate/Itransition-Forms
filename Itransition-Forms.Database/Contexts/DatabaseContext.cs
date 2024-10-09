@@ -19,8 +19,13 @@ namespace Itransition_Forms.Database.Contexts
         public DbSet<TextBoxLinkModel> TextboxLinks { get; set; } = null!;
         public DbSet<FormLinkModel> FormLinks { get; set; } = null!;
         public DbSet<QuestionLinkModel> QuestionLinks { get; set; } = null!;
-        public DbSet<RecentTemplates> RecentTemplates { get; set; } = null!;
 
         public DatabaseContext(DbContextOptions options) : base(options) => Database.EnsureCreated();
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<FormModel>().HasMany(s => s.Questions);
+            modelBuilder.Entity<QuestionModel>().HasMany(s => s.Answers);
+        }
     }
 }

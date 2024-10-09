@@ -9,6 +9,8 @@ namespace Itransition_Forms.Core.Answers
         [Column("title")] public string Title { get; set; } = string.Empty;
         [Column("default_value")] public bool DefaultValue { get; set; } = false;
 
+        private CheckBoxModel() : base() { }
+
         protected CheckBoxModel(Guid id, Guid questionId) : base(id, questionId) { }
 
         public static Result<CheckBoxModel> Create(Guid id, Guid questionId, string title, bool isChecked)

@@ -11,7 +11,7 @@ namespace Itransition_Forms.Core.Form
         [Column("id")][Key] public Guid Id { get; private set; } = Guid.NewGuid();
         [Column("question")] public string Question { get; private set; } = string.Empty;
         [Column("index")] public int Index { get; private set; } = 0;
-        [Column("form_id")] public Guid FormId { get; private set; } = Guid.NewGuid();
+        [Column("form_id")] public Guid FormModelId { get; private set; } = Guid.NewGuid();
 
         [NotMapped] 
         public List<AnswerBase> Answers { 
@@ -44,7 +44,7 @@ namespace Itransition_Forms.Core.Form
                 {
                     if (answers[i].GetType() != answers[k].GetType())
                     {
-                        return Result.Failure<QuestionModel>("All answers shoud have the same type");
+                        return Result.Failure<QuestionModel>("All answers should have the same type");
                     }
                 }
             }

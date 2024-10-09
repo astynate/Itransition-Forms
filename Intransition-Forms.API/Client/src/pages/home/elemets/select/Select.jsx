@@ -22,8 +22,8 @@ const Select = ({title, items = [], selected=[], setSelected = ([]) => {}, isMul
     }, []);
     
     return (
-        <div className={styles.popupListWrapper}>
-            <div ref={ref} className={styles.titleWrapper} onClick={() => setOpenState(prev => !prev)}>
+        <div className={styles.popupListWrapper} ref={ref}>
+            <div className={styles.titleWrapper} onClick={() => setOpenState(prev => !prev)}>
                 <span className={styles.title}>{title}</span>
                 <img src={arrow} draggable="false" className={styles.arrow} state={isListOpen ? 'open' : null} />
             </div>
