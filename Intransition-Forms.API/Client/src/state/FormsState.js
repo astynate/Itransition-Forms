@@ -42,6 +42,11 @@ class FormsState {
                 return element;
             });
     }
+
+    Delete(id) {
+        this.latestForms = this.latestForms
+            .filter(form => form.id !== id);
+    }
 }
 
 export default new FormsState();

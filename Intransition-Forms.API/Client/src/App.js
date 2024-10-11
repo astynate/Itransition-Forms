@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import HomePage from '../src/pages/home/layout/HomePage';
 import { observer } from 'mobx-react-lite';
+import { instance } from './state/Interceptors';
+import HomePage from '../src/pages/home/layout/HomePage';
 import Register from './pages/login/pages/register/Register';
 import LoginPage from './pages/login/pages/login/LoginPage';
 import userState from './state/UserState';
-import { instance } from './state/Interceptors';
 import FormsState from './state/FormsState';
+import FormPage from './pages/form/layout/Form';
 
 const App = observer(() => {
     const GetUserData = async () => {
@@ -54,9 +55,10 @@ const App = observer(() => {
     return (
         <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/form/:id/*" element={<FormPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<Register />} />
-            <Route path="*" element={<h1>404 - Not Found</h1>} />
+            <Route path="*" element={<h1 style={{margin: 'auto'}}>{'Page is not found :)'}</h1>} />
         </Routes>
     );
 });

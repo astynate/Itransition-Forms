@@ -1,0 +1,8 @@
+.block {
+    height: auto;
+    width: auto;
+    background: var(--main-background-color);
+    border-radius: 5px;
+    padding: 10px 20px;
+    border: 1px solid var(--main-border-color);
+}

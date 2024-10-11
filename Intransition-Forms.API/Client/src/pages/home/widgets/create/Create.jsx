@@ -7,6 +7,7 @@ import userState from '../../../../state/UserState';
 import { observer } from 'mobx-react-lite';
 import FormsState from '../../../../state/FormsState';
 import { instance } from '../../../../state/Interceptors';
+import Loading from '../../../../elements/loading/Loading';
 
 const Create = observer(({setForms, forms}) => {
     const CreatePresentation = async (id = null) => {
@@ -21,7 +22,7 @@ const Create = observer(({setForms, forms}) => {
         })
         .then(response => {
             FormsState.setLatestForms([response.data, ...forms]);
-            window.open(`/forms/${response.id}`, '_blank');
+            window.open(`/form/${response.data.id}`, '_blank');
         })
         .catch(error => {
             console.error(error);
@@ -31,9 +32,7 @@ const Create = observer(({setForms, forms}) => {
 
     return (
         <div className={styles.createWrapper}>
-            {FormsState.isPopularTemplatesLoading && <div className={styles.loader}>
-                <div className={styles.line}></div>
-            </div>}
+            {FormsState.isPopularTemplatesLoading && <Loading />}
             {FormsState.isPopularTemplatesLoading === false && FormsState.popularForms.length === 0 && !userState.user ?
                 <img 
                     src={notFound} 

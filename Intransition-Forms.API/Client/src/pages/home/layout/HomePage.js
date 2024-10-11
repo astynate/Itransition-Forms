@@ -100,8 +100,7 @@ const HomePage = observer(() => {
                         return (
                             <FormModel 
                                 key={form.id}
-                                title={form.title}
-                                owner={form.ownerEmail}
+                                form={form}
                                 openRenameForm={() => {
                                     SetRenameOpenState(true);
                                     SetSelectedForm(form);

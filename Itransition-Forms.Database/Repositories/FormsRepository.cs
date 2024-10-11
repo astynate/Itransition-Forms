@@ -17,7 +17,7 @@ namespace Itransition_Forms.Database.Repositories
 
         public async Task<Result<FormModel>> CreateForm(string email)
         {
-            var form = FormModel.Create("Form", "", Topics.Other, email);
+            var form = FormModel.Create("Itransition Form", "", Topics.Other, email);
 
             if (form.IsFailure) return form;
 
@@ -73,6 +73,15 @@ namespace Itransition_Forms.Database.Repositories
             await _context.SaveChangesAsync();
 
             return result;
+        }
+
+        public async Task<bool> Delete(Guid id, string? email, bool checkOwner)
+        {
+            var result = await _context.Forms
+                .Where(x => x.Id == id && (checkOwner ? email == x.OwnerEmail : true))
+                .ExecuteDeleteAsync();
+
+            return result > 0;
         }
     }
 }

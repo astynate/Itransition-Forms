@@ -24,7 +24,7 @@ const PopupList = ({items = [], isOpen = false, setOpenState = () => {}, forward
         <div className={styles.list}>
             {items.map((item, index) => {
                 return (
-                    <div className={styles.item} key={index} onClick={() => item.callback ? item.callback() : null}>
+                    <div className={styles.item} key={index} onClick={(event) => item.callback ? item.callback(event) : null}>
                         <span>{item.title}</span>
                     </div>
                 );

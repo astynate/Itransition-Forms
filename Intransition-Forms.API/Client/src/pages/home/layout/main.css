@@ -1,10 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
 body {
-    --main-border-color: #dddddd;
+    --main-border-color: #c7cede;
     --main-accent-color: #ebf2f7;
     --main-background-color: rgb(255, 255, 255);
-    --main-paragraph-color: #848484;
+    --main-paragraph-color: #6b727d;
     --main-font-color: #303142;
     --main-blue-color: #4c7fff;
 }

@@ -1,0 +1,41 @@
+.inputWrapper {
+    display: flex;
+    grid-gap: 5px;
+    align-items: center;
+}
+
+.button {
+    height: 40px;
+    width: 40px;
+    cursor: pointer;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.3;
+    user-select: none;
+}
+
+.button:hover {
+    opacity: 0.5;
+}
+
+.button img {
+    height: 15px;
+    width: 15px;
+}
+
+.drag {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 3px;
+    cursor: grab;
+}
+
+.point {
+    height: 4px;
+    width: 4px;
+    border-radius: 1px;
+    border: 1px solid var(--main-border-color);
+    background: var(--main-background-color);
+}

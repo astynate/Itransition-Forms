@@ -3,36 +3,13 @@ import SimpleButton from '../../../../elements/button/SimpleButton';
 import SimpleInput from '../../../../elements/input/SimpleInput';
 import PopupWindow from '../../../../features/popup-window/PopupWindow';
 import styles from './main.module.css';
-import { instance } from '../../../../state/Interceptors';
-import FormsState from '../../../../state/FormsState';
+import FormsAPI from '../../../form/api/FormsAPI';
 
 const RenamePopup = ({setOpenState = () => {}, form, SetSelectedForm = () => {}}) => {
     const [formTitle, setFormTitle] = useState(form ? form.title : null);
 
     if (form === undefined) { 
         return null; 
-    }
-
-    const SendRenameRequest = async () => {
-        let formData = new FormData();
-
-        formData.append('id', form.id);
-        formData.append('title', formTitle);
-
-        await instance
-            .put('/api/forms', formData)
-            .then(response => {
-                if (response.data) {
-                    FormsState.UpdateLatestForms(response.data);
-
-                    setOpenState(false);
-                    SetSelectedForm(undefined);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-                alert("Something went wrong");
-            })
     }
 
     return (
@@ -58,7 +35,11 @@ const RenamePopup = ({setOpenState = () => {}, form, SetSelectedForm = () => {}}
                     />
                     <SimpleButton 
                         title={'Save'} 
-                        callback={SendRenameRequest}
+                        callback={() => {
+                            FormsAPI.SendRenameRequest(form.id, formTitle);
+                            setOpenState(false);
+                            SetSelectedForm(undefined);
+                        }}
                     />
                 </div>
             </div>

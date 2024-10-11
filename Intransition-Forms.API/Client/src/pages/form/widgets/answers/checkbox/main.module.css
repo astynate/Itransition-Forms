@@ -1,0 +1,16 @@
+.checkbox {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    grid-gap: 5px;
+}
+
+.checkbox input {
+    height: 22px;
+    width: 22px;
+    cursor: pointer;
+}
+
+.checkbox[state="new"] {
+    opacity: 0.4;
+}

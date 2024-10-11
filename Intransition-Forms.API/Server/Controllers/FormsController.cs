@@ -24,6 +24,11 @@ namespace Instend.Server.Controllers
             => Ok(await _formsRepository.GetPopularTemplates(5));
 
         [HttpGet]
+        [Route("/api/forms/{id}")]
+        public async Task<IActionResult> GetTemplateById(Guid id)
+            => Ok(await _formsRepository.GetFormModelById(id));
+
+        [HttpGet]
         [Route("/api/forms/latest")]
         public async Task<IActionResult> GetLatestTemplates(int skip, int take)
         {
@@ -80,6 +85,23 @@ namespace Instend.Server.Controllers
                 return Conflict(result.Error);
 
             return Ok(form);
+        }
+
+        [HttpDelete]
+        [Authorize]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var email = _tokenService.GetClaimFromRequest(Request, "sub");
+
+            if (string.IsNullOrEmpty(email) || string.IsNullOrWhiteSpace(email))
+                return Unauthorized();
+
+            var result = await _formsRepository.Delete(id, email, true);
+
+            if (result == false)
+                return Conflict("Form not found");
+
+            return Ok();
         }
     }
 }

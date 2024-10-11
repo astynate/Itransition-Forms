@@ -1,0 +1,39 @@
+.loader {
+    top: 0;
+    left: 0;
+    height: 4px;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: visible;
+    position: absolute;
+}
+
+.line {
+    height: 100%;
+    width: 0%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: var(--main-blue-color);
+    animation: loading 1.5s linear infinite;
+}
+
+@keyframes loading {
+    0% {
+        width: 0%;
+    }
+
+    25% {
+        width: 100%;
+    }
+
+    75% {
+        width: 0%;
+        left: 100%;
+    }
+
+    100% {
+        width: 0%;
+        margin-left: 0;
+    }
+}

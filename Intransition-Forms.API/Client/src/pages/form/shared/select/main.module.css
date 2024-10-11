@@ -1,0 +1,18 @@
+.select {
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-family: 'Open Sans', sans-serif;
+    border: 2px solid var(--main-border-color);
+    outline: none;
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--main-blue-color);
+    user-select: none;
+}
+
+.select:hover {
+    /* color: var(--main-font-color); */
+    /* border: 2px solid var(--main-font-color); */
+    background: var(--main-accent-color);
+}

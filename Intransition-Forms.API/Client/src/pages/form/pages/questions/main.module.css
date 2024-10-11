@@ -1,0 +1,38 @@
+.questions {
+    margin-top: 30px;
+    margin-bottom: 120px;
+    display: flex;
+    flex-direction: column;
+    grid-gap: 5px;
+}
+
+.create {
+    height: 60px;
+    width: 60px;
+    border-radius: 100%;
+    outline: none;
+    border: none;
+    background: var(--main-background-color);
+    position: fixed;
+    left: 50%;
+    bottom: 25px;
+    cursor: pointer;
+    font-size: 48px;
+    color: var(--main-blue-color);
+    font-weight: 400;
+    transform: translateX(-50%);
+    transition: 0.15s ease;
+    border: 1px solid var(--main-border-color);
+}
+
+.create:hover {
+    height: 70px;
+    width: 70px;
+    bottom: 20px;
+}
+
+.create:active {
+    height: 60px;
+    width: 60px;
+    bottom: 25px;
+}
