@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Itransition-Forms.API", "In
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Itransition-Forms.Database", "Itransition-Forms.Database\Itransition-Forms.Database.csproj", "{73DFFE56-CA80-4D0C-9BD1-3202EBD35B79}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Itransition-Forms.Services", "Itransition-Form.Services\Itransition-Forms.Services.csproj", "{75854B0D-4536-4A2B-BE68-4C9535485A23}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Itransition-Forms.Services", "Itransition-Forms.Services\Itransition-Forms.Services.csproj", "{75854B0D-4536-4A2B-BE68-4C9535485A23}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Itransition-Forms.Core", "Itransition-Forms.Core\Itransition-Forms.Core.csproj", "{7D4CB8B3-2163-4574-A486-13F236AA2239}"
 EndProject

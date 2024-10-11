@@ -41,7 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Itransition-Form.Services\Itransition-Forms.Services.csproj" />
+    <ProjectReference Include="..\Itransition-Forms.Services\Itransition-Forms.Services.csproj" />
     <ProjectReference Include="..\Itransition-Forms.Core\Itransition-Forms.Core.csproj" />
     <ProjectReference Include="..\Itransition-Forms.Database\Itransition-Forms.Database.csproj" />
     <ProjectReference Include="..\Itransition-Forms.Dependencies\Itransition-Forms.Dependencies.csproj" />
