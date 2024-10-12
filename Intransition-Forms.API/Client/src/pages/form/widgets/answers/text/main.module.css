@@ -1,0 +1,16 @@
+.placeholder {
+    height: 30px;
+    width: 100%;
+    border: 1px solid var(--main-border-color);
+    border-radius: 5px;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    color: var(--main-border-color);
+    cursor: pointer;
+}
+
+.placeholder[type="multiline"] {
+    height: 60px;
+}

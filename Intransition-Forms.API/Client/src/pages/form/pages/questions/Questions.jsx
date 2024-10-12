@@ -1,4 +1,4 @@
-import AnswersAPI from '../../api/AnswerAPI';
+import AnswersAPI from '../../api/AnswersAPI';
 import Question from '../../widgets/question/Question';
 import Title from '../../widgets/title/Title';
 import styles from './main.module.css';
@@ -11,9 +11,9 @@ const Questions = ({form, setForm}) => {
             setForm(prev => {
                 const DefaultQuestion = {
                     id: prev.questions.length,
-                    index: prev.questions.length - 1,
+                    index: prev.questions.length,
                     question: "Question",
-                    answers: [AnswersAPI.ChecboxDefaultValue]
+                    answers: [{...AnswersAPI.CheckboxDefaultValue}]
                 };
 
                 return {...prev, questions: [...prev.questions, DefaultQuestion]};
@@ -24,10 +24,10 @@ const Questions = ({form, setForm}) => {
     return (
         <div className={styles.questions}>
             <Title 
-                form={form} 
-                setForm={setForm} 
+                form={form}
+                setForm={setForm}
             />
-            {form.questions
+            {form.questions && form.questions.sort && form.questions
                 .sort((a, b) => a.index - b.index)
                 .map((question, index) => {
                     return (

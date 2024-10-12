@@ -7,6 +7,7 @@ import Rangebox from '../answers/range/Rangebox';
 import Textbox from '../answers/text/Textbox';
 import styles from './main.module.css';
 import trash from './trash.png';
+import AnswersAPI from '../../api/AnswersAPI';
 
 const Question = ({question, setForm = () => {}}) => {
     const items = [
@@ -16,14 +17,49 @@ const Question = ({question, setForm = () => {}}) => {
         'Text'
     ];
 
+    const itemHandlers = {
+        'Checkbox': AnswersAPI.CheckboxDefaultValue,
+        'Range': AnswersAPI.RangeboxDefaultValue,
+        'String': AnswersAPI.StringDefaultValue,
+        'Text': AnswersAPI.TextDefaultValue
+    };
+
     const [answers, setAnswers] = useState([]);
-    const [answerType, setAnswerType] = useState(items[0]);
+    const [currentHandler, setCurrentHandler] = useState(items[0]);
 
     const GetAnswerHandler = (object) => {
-        const handlers = [[!!object.title, Checkbox], [!!object.maxLength, Rangebox]];
+        if (!object) return Textbox;
+
+        const handlers = [[!!object.title, Checkbox], [!!object.maxValue, Rangebox]];
         const element = handlers.find(e => e[0] === true);
 
         return element ? element[1] : Textbox;
+    }
+
+    const SetQuestions = (func = () => {}) => {
+        setForm(prev => {
+            let updatedQuestions = func(prev.questions);
+            let result = [];
+
+            if (updatedQuestions) {
+                result = [...updatedQuestions];
+            }
+
+            return {...prev, questions: result};
+        });
+    }
+
+    const SetAnswers = (func = () => {}) => {
+        SetQuestions(prev => {
+            let object = prev.find(e => e.id === question.id);
+
+            if (object && object.answers) {
+                const result = func(object.answers);
+                object.answers = result ?  [...result] : [];
+            }
+
+            return [...prev];
+        });
     }
 
     useEffect(() => {
@@ -34,12 +70,30 @@ const Question = ({question, setForm = () => {}}) => {
 
             return (
                 <Handler 
-                    key={index} 
                     object={answer}
+                    key={JSON.stringify(answer)}
+                    setAnswers={SetAnswers}
+                    deleteFunction={() => {
+                        SetAnswers(prev => {
+                            if (prev.length && prev.length > 1) {
+                                return prev
+                                    .filter(x => {
+                                        return x.index !== index;
+                                    })
+                                    .sort((a, b) => a.index - b.index)
+                                    .map((answer, i) => ({
+                                        ...answer,
+                                        index: i
+                                    }));
+                            }
+
+                            return prev;
+                        });
+                    }}
                 />
             );
         }));
-    }, [question]);
+    }, [question, question.answers, question.answers.length]);
 
     if (!question) return null;
 
@@ -70,12 +124,50 @@ const Question = ({question, setForm = () => {}}) => {
                 <div className={styles.content}>
                     {answers}
                     {answers.length < 4 && answers.length > 0 && 
-                        React.cloneElement((answers[answers.length - 1]), { isNew: true })}
+                        React.cloneElement((answers[answers.length - 1]), { 
+                            object: undefined, 
+                            isNew: true,
+                            createNew: () => {
+                                setForm(prev => {
+                                    const updatedQuestions = prev.questions.map(element => {
+                                        if (element.id === question.id) {
+                                            let handler = {...itemHandlers[currentHandler]};
+
+                                            handler.id = answers.length;
+                                            handler.index = answers.length;
+
+                                            return {
+                                                ...element, 
+                                                answers: [...element.answers, {...handler}]
+                                            };
+                                        }
+
+                                        return element;
+                                    });
+
+                                    return { ...prev, questions: updatedQuestions };
+                                });
+                            }
+                        })}
                 </div>
                 <div className={styles.bottom}>
                     <Select
                         items={items}
-                        onChange={setAnswerType}
+                        value={currentHandler}
+                        onChange={(event) => {  
+                            setForm(prev => {
+                                const updatedQuestions = prev.questions.map(element => {
+                                    if (element.id === question.id) {
+                                        return { ...element, answers: [itemHandlers[event.target.value]] };
+                                    }
+                                    return element;
+                                });
+                            
+                                return { ...prev, questions: updatedQuestions };
+                            });
+
+                            setCurrentHandler(event.target.value);
+                        }}
                     />
                     <button 
                         className={styles.button}
