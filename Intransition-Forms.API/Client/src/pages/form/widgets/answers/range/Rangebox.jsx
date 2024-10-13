@@ -1,23 +1,43 @@
 import InputWrapper from '../../../shared/input-wrapper/InputWrapper';
 import TextInput from '../../../shared/text-input/TextInput';
-import styles from './main.module.css';
 
-const Rangebox = ({object, isNew = false, createNew = () => {}, deleteFunction = () => {}}) => {
+const Rangebox = (params) => {
     return (
-        <InputWrapper deleteFunction={deleteFunction}>
+        <InputWrapper 
+            deleteFunction={params.deleteFunction} 
+            setAnswers={params.setAnswers}
+            isDraggAvailable={params.isDraggAvailable}
+            draggingAnswerIndex={params.draggingAnswerIndex}
+            setDraggingAnswerIndex={params.setDraggingAnswerIndex}
+            index={params.object ? params.object.index : 0}
+        >
             <TextInput 
                 placeholder={'Minimum'}
-                text={object ? object.minValue : null} 
+                text={params.object ? params.object.minValue : null} 
                 fontSize={16} 
+                isDigitsOnly={true}
                 fontWeight={500} 
-                onClick={isNew ? createNew : undefined}
+                setText={(text) => {
+                    params.ChangeAnswer(prev => {
+                        prev.minValue = text;
+                        return prev;
+                    });
+                }}
+                onClick={params.isNew ? params.createNew : undefined}
             />
             <TextInput 
                 placeholder={'Maximum'}
-                text={object ? object.maxValue : null} 
+                text={params.object ? params.object.maxValue : null} 
                 fontSize={16} 
                 fontWeight={500} 
-                onClick={isNew ? createNew : undefined}
+                isDigitsOnly={true}
+                setText={(text) => {
+                    params.ChangeAnswer(prev => {
+                        prev.maxValue = text;
+                        return prev;
+                    });
+                }}
+                onClick={params.isNew ? params.createNew : undefined}
             />
         </InputWrapper>
     );

@@ -8,8 +8,17 @@ import Textbox from '../answers/text/Textbox';
 import styles from './main.module.css';
 import trash from './trash.png';
 import AnswersAPI from '../../api/AnswersAPI';
+import Guid from '../../../../utils/Guid';
 
-const Question = ({question, setForm = () => {}}) => {
+const Question = ({
+        question, 
+        setForm = () => {}, 
+        onDragStart = () => {}, 
+        onDrop = () => {},
+        isDraggingQuestion,
+        setDraggingQuestionState
+    }) => {
+
     const items = [
         'Checkbox', 
         'Range', 
@@ -25,12 +34,19 @@ const Question = ({question, setForm = () => {}}) => {
     };
 
     const [answers, setAnswers] = useState([]);
+    const [isDragOver, setDragOverState] = useState(false);
+    const [isDragAvailable, setDragAvailableState] = useState(false);
+    const [draggingAnswerIndex, setDraggingAnswerIndex] = useState(0);
     const [currentHandler, setCurrentHandler] = useState(items[0]);
 
     const GetAnswerHandler = (object) => {
         if (!object) return Textbox;
 
-        const handlers = [[!!object.title, Checkbox], [!!object.maxValue, Rangebox]];
+        const handlers = [
+            [!!object.title || object.title === '', Checkbox], 
+            [!!object.maxValue, Rangebox]
+        ];
+
         const element = handlers.find(e => e[0] === true);
 
         return element ? element[1] : Textbox;
@@ -65,42 +81,92 @@ const Question = ({question, setForm = () => {}}) => {
     useEffect(() => {
         if (!question) return;
 
-        setAnswers(question.answers.map((answer, index) => {
-            const Handler = GetAnswerHandler(answer);
+        setAnswers(question.answers
+            .sort((a, b) => a.index - b.index)
+            .map((answer, index) => {
+                const Handler = GetAnswerHandler(answer);
 
-            return (
-                <Handler 
-                    object={answer}
-                    key={JSON.stringify(answer)}
-                    setAnswers={SetAnswers}
-                    deleteFunction={() => {
-                        SetAnswers(prev => {
-                            if (prev.length && prev.length > 1) {
-                                return prev
-                                    .filter(x => {
-                                        return x.index !== index;
-                                    })
-                                    .sort((a, b) => a.index - b.index)
-                                    .map((answer, i) => ({
-                                        ...answer,
-                                        index: i
-                                    }));
-                            }
+                const ChangeAnswer = (func = () => {}) => {
+                    SetAnswers(prev => {
+                        if (answer && prev && prev.map) {
+                            prev = prev.map(element => {
+                                if (element.id === answer.id) {
+                                    element = func(element);
+                                }
+                                return element;
+                            })
+                        }
+            
+                        return prev;
+                    });
+                }
+                
+                return (
+                    <Handler 
+                        object={answer}
+                        key={answer.id}
+                        setAnswers={SetAnswers}
+                        ChangeAnswer={ChangeAnswer}
+                        draggingAnswerIndex={draggingAnswerIndex}
+                        setDraggingAnswerIndex={setDraggingAnswerIndex}
+                        deleteFunction={() => {
+                            SetAnswers(prev => {
+                                if (prev.length && prev.length > 1) {
+                                    return prev
+                                        .filter(x => x.index !== index)
+                                        .sort((a, b) => a.index - b.index)
+                                        .map((answer, i) => ({
+                                            ...answer,
+                                            index: i
+                                        }));
+                                }
 
-                            return prev;
-                        });
-                    }}
-                />
-            );
+                                return prev;
+                            });
+                        }}
+                    />
+                );
         }));
     }, [question, question.answers, question.answers.length]);
 
     if (!question) return null;
 
     return (
-        <Block>
-            <div className={styles.question}>
-                <div className={styles.top}>
+        <Block 
+            onDragStart={(event) => {
+                if (isDragAvailable) {
+                    onDragStart(event, question.index);
+                }
+            }} 
+            isDragOver={isDragOver}
+            isDragAvailable={isDragAvailable}
+        >
+            <div 
+                className={styles.question}
+                onDrop={(event) => {
+                    onDrop(event, question.index);
+                    setDragOverState(false);
+                    setDraggingQuestionState(false);
+                }}
+                onDragOver={(event) => {
+                    setDragOverState(isDraggingQuestion);
+                    
+                    event.stopPropagation();
+                    event.preventDefault();
+                }}
+                onDragLeave={() => {
+                    setDragOverState(false);
+                }}
+                onDragEnd={() => {
+                    setDragOverState(false);
+                    setDraggingQuestionState(false);
+                }}
+            >
+                <div 
+                    className={styles.top}
+                    onMouseEnter={() => setDragAvailableState(true)}
+                    onMouseLeave={() => setDragAvailableState(false)}
+                >
                     <div className={styles.drag}>
                         {Array.from({ length: 6 }).map((_, index) => {
                             return (
@@ -116,6 +182,18 @@ const Question = ({question, setForm = () => {}}) => {
                     <TextInput
                         isTitle={false}
                         text={question.question}
+                        setText={(text) => {
+                            SetQuestions(prev => {
+                                prev = prev.map(element => {
+                                    if (element.id === question.id) {
+                                        element.question = text;
+                                    }
+
+                                    return element;
+                                });
+                                return prev;
+                            });
+                        }}  
                         maxLength={50}
                         fontSize={18}
                         fontWeight={700}
@@ -127,18 +205,19 @@ const Question = ({question, setForm = () => {}}) => {
                         React.cloneElement((answers[answers.length - 1]), { 
                             object: undefined, 
                             isNew: true,
+                            isDraggAvailable: false,
                             createNew: () => {
                                 setForm(prev => {
                                     const updatedQuestions = prev.questions.map(element => {
                                         if (element.id === question.id) {
                                             let handler = {...itemHandlers[currentHandler]};
 
-                                            handler.id = answers.length;
+                                            handler.id = Guid.NewGuid();
                                             handler.index = answers.length;
 
                                             return {
                                                 ...element, 
-                                                answers: [...element.answers, {...handler}]
+                                                answers: [...element.answers, handler]
                                             };
                                         }
 
@@ -158,7 +237,10 @@ const Question = ({question, setForm = () => {}}) => {
                             setForm(prev => {
                                 const updatedQuestions = prev.questions.map(element => {
                                     if (element.id === question.id) {
-                                        return { ...element, answers: [itemHandlers[event.target.value]] };
+                                        return { ...element, answers: [{
+                                            ...itemHandlers[event.target.value],
+                                            id: Guid.NewGuid()
+                                        }] };
                                     }
                                     return element;
                                 });

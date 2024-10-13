@@ -2,38 +2,38 @@ import InputWrapper from '../../../shared/input-wrapper/InputWrapper';
 import TextInput from '../../../shared/text-input/TextInput';
 import styles from './main.module.css';
 
-const Checkbox = ({
-        isNew = false, 
-        object = {},
-        createNew = () => {}, 
-        deleteFunction = () => {}, 
-        setAnswers = () => {}
-    }) => {
-
+const Checkbox = (params) => {
     return (
-        <InputWrapper deleteFunction={deleteFunction}>
-            <div className={styles.checkbox} state={isNew ? 'new' : null}>
-                <input type="checkbox" />
+        <InputWrapper 
+            deleteFunction={params.deleteFunction} 
+            isDraggAvailable={params.isDraggAvailable}
+            setAnswers={params.setAnswers}
+            draggingAnswerIndex={params.draggingAnswerIndex}
+            setDraggingAnswerIndex={params.setDraggingAnswerIndex}
+            index={params.object ? params.object.index : 0}
+        >
+            <div className={styles.checkbox} state={params.isNew ? 'new' : null}>
+                <input 
+                    type="checkbox" 
+                    onChange={(event) => {
+                        params.ChangeAnswer(prev => {
+                            prev.defaultValue = event.target.value;
+                            return prev;
+                        });
+                    }}
+                />
                 <TextInput 
-                    text={object ? object.title : null} 
+                    text={params.object ? params.object.title : null} 
                     placeholder={"Create"}
                     fontSize={16} 
                     fontWeight={400} 
                     setText={(text) => {
-                        setAnswers(prev => {
-                            if (object && prev && prev.map) {
-                                prev = prev.map(answer => {
-                                    if (answer.id === object.id) {
-                                        answer.title = text;
-                                    }
-                                    return answer;
-                                })
-                            }
-
-                            return prev;
+                        params.ChangeAnswer(prev => {
+                            prev.title = text;
+                            return {...prev};
                         });
                     }}
-                    onClick={isNew ? createNew : () => {}}
+                    onClick={params.isNew ? params.createNew : () => {}}
                 />
             </div>
         </InputWrapper>

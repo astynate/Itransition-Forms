@@ -9,6 +9,7 @@ const TextInput = ({
         fontSize = 25, 
         fontWeight = 700,
         placeholder,
+        isDigitsOnly = false,
         onClick = () => {}
     }) => {
 
@@ -37,10 +38,15 @@ const TextInput = ({
             onClick={onClick}
             maxLength={maxLength}
             onInput={(event) => {
-                if (isMultiple === false) {
+                if (isMultiple === false)
                     event.target.value = event.target.value.replace('\n', '');
-                }
+
+                if (isDigitsOnly === true)
+                    event.target.value = parseInt(event.target.value.replace(/[^0-9]/g, ''));
                 
+                if (isDigitsOnly && (event.target.value.length === 0 || event.target.value === 'NaN'))
+                    event.target.value = 0;
+
                 setText(event.target.value);
             }}
         >

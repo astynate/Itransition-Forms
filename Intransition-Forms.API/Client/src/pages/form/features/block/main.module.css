@@ -6,3 +6,7 @@
     padding: 10px 20px;
     border: 1px solid var(--main-border-color);
 }
+
+.block[state="dragOver"] {
+    outline: 3px solid var(--main-blue-color);
+}

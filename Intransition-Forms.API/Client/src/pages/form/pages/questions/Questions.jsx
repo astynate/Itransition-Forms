@@ -1,24 +1,57 @@
+import { useEffect, useState } from 'react';
+import Guid from '../../../../utils/Guid';
 import AnswersAPI from '../../api/AnswersAPI';
 import Question from '../../widgets/question/Question';
 import Title from '../../widgets/title/Title';
 import styles from './main.module.css';
 
 const Questions = ({form, setForm}) => {
+    const [draggedQuestionIndex, setDraggedQuestionIndex] = useState(0);
+    const [isDraggingQuestion, setDraggingQuestionState] = useState(false);
+
     if (!form || !setForm) return;
 
     const AddQuestion = () => {
         if (setForm) {
             setForm(prev => {
                 const DefaultQuestion = {
-                    id: prev.questions.length,
+                    id: Guid.NewGuid(),
                     index: prev.questions.length,
                     question: "Question",
-                    answers: [{...AnswersAPI.CheckboxDefaultValue}]
+                    answers: [{
+                        ...AnswersAPI.CheckboxDefaultValue,
+                        id: Guid.NewGuid()
+                    }]
                 };
 
                 return {...prev, questions: [...prev.questions, DefaultQuestion]};
             });
         }
+    }
+
+    const onDragStart = (_, question) => {
+        setDraggingQuestionState(true);
+        setDraggedQuestionIndex(question);
+    }
+
+    const onDrop = (event, question) => {
+        event.preventDefault();
+
+        setForm(prev => {
+            if (prev.questions && prev.questions.map) {
+                prev.questions =  prev.questions.map(q => {
+                    if (q.index === draggedQuestionIndex)
+                        q.index = question;
+
+                    else if (q.index === question)
+                        q.index = draggedQuestionIndex;
+                    
+                    return q;
+                })
+            }
+
+            return {...prev};
+        });
     }
 
     return (
@@ -29,12 +62,17 @@ const Questions = ({form, setForm}) => {
             />
             {form.questions && form.questions.sort && form.questions
                 .sort((a, b) => a.index - b.index)
-                .map((question, index) => {
+                .map(question => {
                     return (
                         <Question 
-                            key={index}
+                            key={question.id}
+                            draggable={true}
+                            onDragStart={onDragStart}
+                            onDrop={onDrop}
                             question={question}
                             setForm={setForm}
+                            isDraggingQuestion={isDraggingQuestion}
+                            setDraggingQuestionState={setDraggingQuestionState}
                         />
                     );
             })}
