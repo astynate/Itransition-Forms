@@ -6,37 +6,56 @@ import styles from './main.module.css';
 import Questions from '../pages/questions/Questions';
 import Answers from '../pages/answers/layout/Answers';
 import Loading from '../../../elements/loading/Loading';
+import FormsAPI from '../api/FormsAPI';
 
 const FormPage = () => {
     const [form, setForm] = useState(undefined);
     const [isLoading, setLoadingState] = useState(true);
+    const [timeoutId, setTimeoutId] = useState(undefined);
     const [isSavingChanges, setSavingChangesState] = useState(false);
+    const [isEditting, setIsEditingState] = useState(false);
 
     let params = useParams();
-
-    const GetFormById = async () => {
-        setLoadingState(true);
-
-        await instance
-            .get(`/api/forms/${params.id}`)
-            .then(response => {
-                if (response.data) {
-                    setForm(response.data);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-                alert('Something went wrong');
-            })
-
-        setLoadingState(false);
-    }
     
     useEffect(() => {
-        GetFormById();
+        FormsAPI.GetFormById(
+            params.id, 
+            setForm, 
+            setLoadingState
+        );
     }, [params.id]);
 
     useEffect(() => {
+        const SendSaveRequest = async () => {
+            setSavingChangesState(true);
+
+            await instance
+                .put('/api/forms/save', form, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    setSavingChangesState(false);
+                })
+                .catch(error => {
+                    console.error(error);
+                    setSavingChangesState(false);
+                });
+        }
+
+        if (form && !isEditting) {
+            setIsEditingState(true);
+        }
+
+        if (form && isEditting) {
+            clearTimeout(timeoutId);
+
+            setTimeoutId(setTimeout(() => {
+                SendSaveRequest();
+            }, 700));
+        }
+
         console.log(form);
     }, [form]);
 

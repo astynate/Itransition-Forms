@@ -1,11 +1,12 @@
+import { useEffect, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
+import eye from './images/eye.png';
 import styles from './main.module.css';
 import logo from './images/itransition_logo.svg';
 import Avatar from '../../../home/elemets/avatar/Avatar';
 import Menu from '../../features/menu/Menu';
-import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
 import Wrapper from '../../../home/elemets/wrapper/Wrapper';
-import { observer } from 'mobx-react-lite';
 import UserState from '../../../../state/UserState';
 import SaveChanges from '../../../../elements/save-changes/SaveChanges';
 import FormsAPI from '../../api/FormsAPI';
@@ -66,6 +67,9 @@ const Header = observer(({form, isSavingChanges = false, setSavingChanges = () =
                     </div>
                     <div className={styles.right}>
                         {isSavingChanges && <SaveChanges />}
+                        <Link to={`/filling/${params.id}`} className={styles.show}>
+                            <img src={eye} />
+                        </Link>
                         <Avatar 
                             name={UserState.user ? UserState.user.email : null} 
                             color={UserState.user ? UserState.user.color : null} 

@@ -21,6 +21,24 @@ class FormsAPI {
                 alert("Something went wrong");
             })
     }
+
+    static GetFormById = async (id, setForm, setLoadingState) => {
+        setLoadingState(true);
+
+        await instance
+            .get(`/api/forms/${id}`)
+            .then(response => {
+                if (response.data) {
+                    setForm(response.data);
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                alert('Something went wrong');
+            })
+
+        setLoadingState(false);
+    }
 }
 
 export default FormsAPI;

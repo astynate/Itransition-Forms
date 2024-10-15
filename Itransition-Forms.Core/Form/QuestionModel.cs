@@ -2,24 +2,30 @@
 using Itransition_Forms.Core.Answers;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Itransition_Forms.Core.Form
 {
     [Table("questions")]
-    public class QuestionModel
+    public class QuestionModel : IEquatable<QuestionModel>
     {
         [Column("id")][Key] public Guid Id { get; private set; } = Guid.NewGuid();
         [Column("question")] public string Question { get; private set; } = string.Empty;
         [Column("index")] public int Index { get; private set; } = 0;
         [Column("form_id")] public Guid FormModelId { get; private set; } = Guid.NewGuid();
 
-        [NotMapped] 
-        public List<AnswerBase> Answers { 
-            get => Answers; 
-            set => Answers = value ?? []; 
-        }
+        public List<AnswerBase> Answers { get; set; } = [];
 
         private QuestionModel() { }
+
+        [JsonConstructor]
+        private QuestionModel(Guid id, Guid formModelId, string question, int index)
+        {
+            Id = id;
+            Question = question;
+            Index = index;
+            FormModelId = formModelId;
+        }
 
         public static Result<QuestionModel> Create(string question, int index, Guid formId, List<AnswerBase> answers)
         {
@@ -56,5 +62,21 @@ namespace Itransition_Forms.Core.Form
                 Index = index
             };
         }
+
+        public Result CloneProperties(QuestionModel other)
+        {
+            if (string.IsNullOrEmpty(other.Question) || (string.IsNullOrWhiteSpace(other.Question)))
+                return Result.Failure("Question name is required");
+
+            if (other.Index < 0 || other.Index > 100)
+                return Result.Failure("Invalid index");
+
+            Question = other.Question;
+            Index = other.Index;
+
+            return Result.Success();
+        }
+
+        public bool Equals(QuestionModel? other) => other == null ? false : Id == other.Id;
     }
 }

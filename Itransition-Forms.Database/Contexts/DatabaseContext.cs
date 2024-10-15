@@ -3,6 +3,7 @@ using Itransition_Forms.Core.Form;
 using Itransition_Forms.Core.Links.Entities;
 using Itransition_Forms.Core.User;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace Itransition_Forms.Database.Contexts
 {
@@ -26,6 +27,7 @@ namespace Itransition_Forms.Database.Contexts
         {
             modelBuilder.Entity<FormModel>().HasMany(s => s.Questions);
             modelBuilder.Entity<QuestionModel>().HasMany(s => s.Answers);
+            modelBuilder.Entity<AnswerBase>().UseTpcMappingStrategy();
         }
     }
 }

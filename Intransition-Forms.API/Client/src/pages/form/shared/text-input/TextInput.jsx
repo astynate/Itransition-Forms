@@ -47,7 +47,7 @@ const TextInput = ({
                 if (isDigitsOnly && (event.target.value.length === 0 || event.target.value === 'NaN'))
                     event.target.value = 0;
 
-                setText(event.target.value);
+                setText(isDigitsOnly ? parseInt(event.target.value) : event.target.value);
             }}
         >
         </textarea>

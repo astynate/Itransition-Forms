@@ -62,6 +62,72 @@ namespace Itransition_Forms.Database.Repositories
             return form[0];
         }
 
+        private async Task UpdateQuestion(QuestionModel prev, QuestionModel current)
+        {
+            var answersToAdd = prev.Answers.Except(current.Answers);
+            var answersToRemove = current.Answers.Except(prev.Answers);
+
+            var previousAnswersToUpdate = current.Answers
+                .Intersect(prev.Answers)
+                .ToArray();
+
+            var newAnswersToUpdate = current.Answers
+                .Intersect(prev.Answers)
+                .ToArray();
+
+            for (int i = 0; i < previousAnswersToUpdate.Length; i++)
+            {
+                previousAnswersToUpdate[i].Clone(newAnswersToUpdate[i]);
+            }
+
+            _context.UpdateRange(previousAnswersToUpdate);
+            _context.RemoveRange(answersToRemove);
+
+            await _context.AddRangeAsync(answersToAdd);
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task UpdateQuestions(FormModel form, FormModel updatedForm)
+        {
+            var questionsToAdd = updatedForm.Questions.Except(form.Questions);
+            var questionsToRemove = form.Questions.Except(updatedForm.Questions);
+
+            var previousQuestionsToUpdate = updatedForm.Questions
+                .Intersect(form.Questions)
+                .ToArray();
+
+            var newQuestionsToUpdate = form.Questions
+                .Intersect(updatedForm.Questions)
+                .ToArray();
+
+            for (int i = 0; i < previousQuestionsToUpdate.Count(); i++)
+            {
+                previousQuestionsToUpdate[i].CloneProperties(newQuestionsToUpdate[i]);
+                await UpdateQuestion(previousQuestionsToUpdate[i], newQuestionsToUpdate[i]);
+            }
+
+            _context.UpdateRange(previousQuestionsToUpdate);
+            _context.RemoveRange(questionsToRemove);
+
+            await _context.AddRangeAsync(questionsToAdd);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<Result> UpdateForm(FormModel form, FormModel updatedForm)
+        {
+            var result = form.CopyParams(updatedForm);
+
+            if (result.IsFailure) 
+                return result;
+
+            _context.Forms.Update(form);
+
+            await UpdateQuestions(form, updatedForm);
+            await _context.SaveChangesAsync();
+
+            return Result.Success();
+        }
+
         public async Task<Result> UpdateFormTitle(FormModel form, string title)
         {
             var result = form.UpdateTitle(title);

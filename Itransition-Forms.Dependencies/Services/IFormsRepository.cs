@@ -10,6 +10,7 @@ namespace Itransition_Forms.Database
         Task<FormModel?> GetFormModelById(Guid id);
         Task<FormModel[]> GetPopularTemplates(int count);
         Task<Result<FormModel[]>> GetUsersTemplates(string email, int skip = 0, int count = 5);
+        Task<Result> UpdateForm(FormModel form, FormModel updatedForm);
         Task<Result> UpdateFormTitle(FormModel form, string title);
     }
 }

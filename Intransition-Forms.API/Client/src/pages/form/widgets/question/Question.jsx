@@ -33,18 +33,36 @@ const Question = ({
         'Text': AnswersAPI.TextDefaultValue
     };
 
+    const GetItemIndex = (objects) => {
+        if (objects.length > 0) {
+            const handlers = [
+                objects[0].title !== undefined, 
+                objects[0].maxValue !== undefined,
+                objects[0].isMultiple === false,
+                objects[0].isMultiple === true,
+            ];
+
+            const index = handlers
+                .findIndex(e => e === true);
+
+            return index === -1 ? 0 : index;
+        }
+
+        return 0;
+    }
+
     const [answers, setAnswers] = useState([]);
     const [isDragOver, setDragOverState] = useState(false);
     const [isDragAvailable, setDragAvailableState] = useState(false);
     const [draggingAnswerIndex, setDraggingAnswerIndex] = useState(0);
-    const [currentHandler, setCurrentHandler] = useState(items[0]);
+    const [currentHandler, setCurrentHandler] = useState(items[GetItemIndex(question.answers)]);
 
     const GetAnswerHandler = (object) => {
         if (!object) return Textbox;
 
         const handlers = [
-            [!!object.title || object.title === '', Checkbox], 
-            [!!object.maxValue, Rangebox]
+            [object.title !== undefined, Checkbox], 
+            [object.maxValue !== undefined, Rangebox]
         ];
 
         const element = handlers.find(e => e[0] === true);
@@ -214,6 +232,7 @@ const Question = ({
 
                                             handler.id = Guid.NewGuid();
                                             handler.index = answers.length;
+                                            handler.questionModelId = question.id;
 
                                             return {
                                                 ...element, 
@@ -239,7 +258,8 @@ const Question = ({
                                     if (element.id === question.id) {
                                         return { ...element, answers: [{
                                             ...itemHandlers[event.target.value],
-                                            id: Guid.NewGuid()
+                                            id: Guid.NewGuid(),
+                                            questionModelId: question.id
                                         }] };
                                     }
                                     return element;

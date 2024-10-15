@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Guid from '../../../../utils/Guid';
 import AnswersAPI from '../../api/AnswersAPI';
 import Question from '../../widgets/question/Question';
@@ -14,13 +14,17 @@ const Questions = ({form, setForm}) => {
     const AddQuestion = () => {
         if (setForm) {
             setForm(prev => {
+                const newId = Guid.NewGuid();
+
                 const DefaultQuestion = {
-                    id: Guid.NewGuid(),
+                    id: newId,
                     index: prev.questions.length,
                     question: "Question",
+                    formModelId: form.id,
                     answers: [{
                         ...AnswersAPI.CheckboxDefaultValue,
-                        id: Guid.NewGuid()
+                        id: Guid.NewGuid(),
+                        questionModelId: newId
                     }]
                 };
 

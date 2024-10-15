@@ -1,5 +1,6 @@
 using Instend.Server.Middleware;
 using Itransition_Form.Services;
+using Itransition_Forms.Core.Answers;
 using Itransition_Forms.Database;
 using Itransition_Forms.Database.Contexts;
 using Itransition_Forms.Database.Repositories;
@@ -8,6 +9,8 @@ using Itransition_Forms.Dependencies.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,7 +63,14 @@ builder.Services.AddSingleton<IEncryptionService, EncryptionService>();
 builder.Services.AddScoped<IFormsRepository, FormsRepository>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddSingleton<ITokenService, TokenService>();
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        options.JsonSerializerOptions.IncludeFields = true;
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        options.JsonSerializerOptions.Converters.Add(new AnswerBaseConverter());
+    });
 
 var app = builder.Build();
 

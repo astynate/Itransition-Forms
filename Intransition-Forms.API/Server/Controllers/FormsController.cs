@@ -1,4 +1,5 @@
-﻿using Itransition_Forms.Database;
+﻿using Itransition_Forms.Core.Form;
+using Itransition_Forms.Database;
 using Itransition_Forms.Dependencies.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -85,6 +86,32 @@ namespace Instend.Server.Controllers
                 return Conflict(result.Error);
 
             return Ok(form);
+        }
+
+        [HttpPut]
+        [Authorize]
+        [Route("/api/forms/save")]
+        public async Task<IActionResult> Save([FromBody] FormModel model)
+        {
+            var email = _tokenService.GetClaimFromRequest(Request, "sub");
+
+            if (string.IsNullOrEmpty(email) || string.IsNullOrWhiteSpace(email))
+                return Unauthorized();
+
+            var form = await _formsRepository.GetFormModelById(model.Id);
+
+            if (form == null)
+                return BadRequest("form not found");
+
+            if (form.OwnerEmail != email)
+                return Unauthorized("You don't have permissions to perform this operation");
+
+            var result = await _formsRepository.UpdateForm(form, model);
+
+            if (result.IsFailure)
+                return Conflict(result.Error);
+
+            return Ok();
         }
 
         [HttpDelete]

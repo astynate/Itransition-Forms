@@ -8,6 +8,7 @@ import LoginPage from './pages/login/pages/login/LoginPage';
 import userState from './state/UserState';
 import FormsState from './state/FormsState';
 import FormPage from './pages/form/layout/Form';
+import FillingPage from './pages/filling/layout/Filling';
 
 const App = observer(() => {
     const GetUserData = async () => {
@@ -56,6 +57,7 @@ const App = observer(() => {
         <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/form/:id/*" element={<FormPage />} />
+            <Route path="/filling/:id/*" element={<FillingPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<Register />} />
             <Route path="*" element={<h1 style={{margin: 'auto'}}>{'Page is not found :)'}</h1>} />
