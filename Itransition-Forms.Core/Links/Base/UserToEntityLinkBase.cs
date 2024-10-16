@@ -10,9 +10,8 @@ namespace Itransition_Forms.Core.Links.Base
 
         protected UserToEntityLinkBase() { }
 
-        protected UserToEntityLinkBase(Guid id, Guid userModelId)
+        protected UserToEntityLinkBase(Guid userModelId)
         {
-            Id = id;
             UserModelId = userModelId;
         }
     }

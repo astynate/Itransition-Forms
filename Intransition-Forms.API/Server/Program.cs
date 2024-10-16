@@ -88,7 +88,7 @@ app.UseCors("CorsPolicy");
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller}/{action=Index}/{id?}");
+    pattern: "{controller}/{action=Index}/{Id?}");
 
 app.MapFallbackToFile("index.html");
 

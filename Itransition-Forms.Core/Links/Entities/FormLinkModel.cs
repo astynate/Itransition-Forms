@@ -7,10 +7,11 @@ namespace Itransition_Forms.Core.Links.Entities
     public class FormLinkModel : UserToEntityLinkBase
     {
         [Column("form_id")] public Guid FormModelId { get; private set; }
+        [Column("date")] public DateTime Date { get; private set; } = DateTime.Now;
 
         private FormLinkModel() { }
 
-        public FormLinkModel(Guid id, Guid userId, Guid formId) : base(id, userId)
+        public FormLinkModel(Guid userId, Guid formId) : base(userId)
         {
             FormModelId = formId;
         }

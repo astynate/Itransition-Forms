@@ -45,7 +45,7 @@ const FormPage = () => {
                 });
         }
 
-        if (!form && !isEditting) {
+        if (form && !isEditting) {
             setIsEditingState(true);
         }
 

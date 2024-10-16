@@ -1,7 +1,7 @@
 import { instance } from "../../../state/Interceptors";
 
 class FillingAPI {
-    static SendFillRequest = async (answers, thenHandler = () => {}) => {
+    static SendFillRequest = async (id, answers, thenHandler = () => {}) => {
         let answersAsArray = [];
 
         Object.keys(answers).forEach(key => {
@@ -11,7 +11,7 @@ class FillingAPI {
         });
 
         await instance
-            .post('/api/fillings', JSON.stringify(answersAsArray), {
+            .post(`/api/fillings/${id}`, JSON.stringify(answersAsArray), {
                 headers: {
                     'Content-Type': 'application/json'
                 }

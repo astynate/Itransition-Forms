@@ -112,7 +112,7 @@ const FillingPage = () => {
                         <SimpleButton 
                             title="Send" 
                             callback={() => {
-                                FillingAPI.SendFillRequest();
+                                FillingAPI.SendFillRequest(params.id, answers);
                             }}
                         />
                         <SimpleButton 
