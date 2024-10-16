@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Route, Routes, useParams } from 'react-router-dom';
+import { Route, Routes, useNavigate, useParams } from 'react-router-dom';
 import { instance } from '../../../state/Interceptors';
 import Header from '../widgets/header/Header';
 import styles from './main.module.css';
@@ -16,6 +16,7 @@ const FormPage = () => {
     const [isEditting, setIsEditingState] = useState(false);
 
     let params = useParams();
+    let navigate = useNavigate();
     
     useEffect(() => {
         FormsAPI.GetFormById(
@@ -35,7 +36,7 @@ const FormPage = () => {
                         'Content-Type': 'application/json'
                     }
                 })
-                .then(response => {
+                .then(_ => {
                     setSavingChangesState(false);
                 })
                 .catch(error => {
@@ -44,7 +45,7 @@ const FormPage = () => {
                 });
         }
 
-        if (form && !isEditting) {
+        if (!form && !isEditting) {
             setIsEditingState(true);
         }
 
@@ -55,9 +56,13 @@ const FormPage = () => {
                 SendSaveRequest();
             }, 700));
         }
-
-        console.log(form);
     }, [form]);
+
+    useEffect(() => {
+        if (!form && !isLoading) {
+            navigate('/');
+        }
+    }, [form, isLoading]);
 
     return (
         <div className={styles.form}>
@@ -69,10 +74,11 @@ const FormPage = () => {
                 isSavingChanges={isSavingChanges}
                 setSavingChanges={setSavingChangesState}
             />
-            <Routes>
-                <Route path="/" element={<Questions form={form} setForm={setForm} />} />
-                <Route path="/answers" element={<Answers />} />
-            </Routes>
+            {form && 
+                <Routes>
+                    <Route path="/" element={<Questions form={form} setForm={setForm} />} />
+                    <Route path="/answers" element={<Answers />} />
+                </Routes>}
         </div>
     );
 }

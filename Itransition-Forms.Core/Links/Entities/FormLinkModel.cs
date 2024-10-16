@@ -6,11 +6,13 @@ namespace Itransition_Forms.Core.Links.Entities
     [Table("form_links")]
     public class FormLinkModel : UserToEntityLinkBase
     {
-        [Column("form_id")] public Guid FormId { get; private set; }
+        [Column("form_id")] public Guid FormModelId { get; private set; }
 
-        public FormLinkModel(Guid id, string userEmail, Guid formId) : base(id, userEmail)
+        private FormLinkModel() { }
+
+        public FormLinkModel(Guid id, Guid userId, Guid formId) : base(id, userId)
         {
-            FormId = formId;
+            FormModelId = formId;
         }
     }
 }

@@ -33,12 +33,12 @@ namespace Instend.Server.Controllers
         [Route("/api/forms/latest")]
         public async Task<IActionResult> GetLatestTemplates(int skip, int take)
         {
-            var email = _tokenService.GetClaimFromRequest(Request, "sub");
+            var userId = _tokenService.GetClaimFromRequest(Request, "sub");
 
-            if (string.IsNullOrEmpty(email) || string.IsNullOrWhiteSpace(email))
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrWhiteSpace(userId))
                 return Unauthorized("User not found");
 
-            var templates = await _formsRepository.GetUsersTemplates(email, skip, take);
+            var templates = await _formsRepository.GetUsersTemplates(Guid.Parse(userId), skip, take);
 
             if (templates.IsFailure)
                 return Conflict(templates.Error);
@@ -50,12 +50,12 @@ namespace Instend.Server.Controllers
         [Authorize]
         public async Task<IActionResult> NewForm(Guid? templateReference)
         {
-            var email = _tokenService.GetClaimFromRequest(Request, "sub");
+            var userId = _tokenService.GetClaimFromRequest(Request, "sub");
 
-            if (string.IsNullOrEmpty(email) || string.IsNullOrWhiteSpace(email))
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrWhiteSpace(userId))
                 return Unauthorized();
 
-            var form = await _formsRepository.CreateForm(email);
+            var form = await _formsRepository.CreateForm(Guid.Parse(userId));
 
             if (form.IsFailure)
                 return Conflict(form.Error);
@@ -67,9 +67,9 @@ namespace Instend.Server.Controllers
         [Authorize]
         public async Task<IActionResult> Rename([FromForm] Guid id, [FromForm] string title)
         {
-            var email = _tokenService.GetClaimFromRequest(Request, "sub");
+            var userId = _tokenService.GetClaimFromRequest(Request, "sub");
 
-            if (string.IsNullOrEmpty(email) || string.IsNullOrWhiteSpace(email))
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrWhiteSpace(userId))
                 return Unauthorized();
 
             var form = await _formsRepository.GetFormModelById(id);
@@ -77,7 +77,7 @@ namespace Instend.Server.Controllers
             if (form == null)
                 return Conflict("Form not found");
 
-            if (form.OwnerEmail != email)
+            if (form.OwnerId != Guid.Parse(userId))
                 return Conflict("You don't have permission to perform this operation");
 
             var result = await _formsRepository.UpdateFormTitle(form, title);
@@ -93,9 +93,9 @@ namespace Instend.Server.Controllers
         [Route("/api/forms/save")]
         public async Task<IActionResult> Save([FromBody] FormModel model)
         {
-            var email = _tokenService.GetClaimFromRequest(Request, "sub");
+            var userid = _tokenService.GetClaimFromRequest(Request, "sub");
 
-            if (string.IsNullOrEmpty(email) || string.IsNullOrWhiteSpace(email))
+            if (string.IsNullOrEmpty(userid) || string.IsNullOrWhiteSpace(userid))
                 return Unauthorized();
 
             var form = await _formsRepository.GetFormModelById(model.Id);
@@ -103,7 +103,7 @@ namespace Instend.Server.Controllers
             if (form == null)
                 return BadRequest("form not found");
 
-            if (form.OwnerEmail != email)
+            if (form.OwnerId != Guid.Parse(userid))
                 return Unauthorized("You don't have permissions to perform this operation");
 
             var result = await _formsRepository.UpdateForm(form, model);
@@ -118,12 +118,12 @@ namespace Instend.Server.Controllers
         [Authorize]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var email = _tokenService.GetClaimFromRequest(Request, "sub");
+            var userId = _tokenService.GetClaimFromRequest(Request, "sub");
 
-            if (string.IsNullOrEmpty(email) || string.IsNullOrWhiteSpace(email))
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrWhiteSpace(userId))
                 return Unauthorized();
 
-            var result = await _formsRepository.Delete(id, email, true);
+            var result = await _formsRepository.Delete(id, Guid.Parse(userId), true);
 
             if (result == false)
                 return Conflict("Form not found");

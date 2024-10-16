@@ -23,8 +23,12 @@ namespace Instend.Server.Controllers
         [Authorize]
         public async Task<IActionResult> GetUser()
         {
-            var email = _tokenService.GetClaimFromRequest(Request, "sub");
-            var user = await _userRepository.GetUserByEmail(email ?? "");
+            var userId = _tokenService.GetClaimFromRequest(Request, "sub");
+                
+            if (userId == null)
+                return Unauthorized();
+
+            var user = await _userRepository.GetUserById(Guid.Parse(userId));
 
             if (user == null)
                 return Unauthorized();

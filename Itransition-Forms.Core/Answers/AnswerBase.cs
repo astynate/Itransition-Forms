@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Itransition_Forms.Core.Form;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace Itransition_Forms.Core.Answers
 {
-    public abstract class AnswerBase
+    public abstract class AnswerBase : IEquatable<AnswerBase>
     {
         [Column("id")][JsonPropertyName("id")][Key] public Guid Id { get; private set; } = Guid.NewGuid();
         [Column("index")][JsonPropertyName("index")] public int Index { get; private set; } = 0;
@@ -23,5 +24,8 @@ namespace Itransition_Forms.Core.Answers
         {
             Index = obj.Index;
         }
+
+        public override int GetHashCode() => Id.GetHashCode();
+        public bool Equals(AnswerBase? other) => other == null ? false : Id == other.Id;
     }
 }

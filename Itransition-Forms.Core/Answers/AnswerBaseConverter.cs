@@ -14,7 +14,7 @@ namespace Itransition_Forms.Core.Answers
                 var root = doc.RootElement;
 
                 object? title = root.TryGetProperty("title", out var titleProperty) ? titleProperty.GetString() : null;
-                object? minValue = root.TryGetProperty("minValue", out var minValueProperty) ? minValueProperty.GetInt64() : -1;
+                object? minValue = root.TryGetProperty("minValue", out var minValueProperty) ? minValueProperty.GetInt64() : null;
                 object? isMultiple = root.TryGetProperty("isMultiple", out var isMultipleProperty) ? isMultipleProperty.GetBoolean() : null;
 
                 AnswerBase result = CheckBoxModel.GetDefaultCheckbox();

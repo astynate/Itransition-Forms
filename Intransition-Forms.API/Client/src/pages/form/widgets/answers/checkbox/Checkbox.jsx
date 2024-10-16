@@ -15,9 +15,10 @@ const Checkbox = (params) => {
             <div className={styles.checkbox} state={params.isNew ? 'new' : null}>
                 <input 
                     type="checkbox" 
+                    defaultChecked={params.object ? params.object.defaultValue : 0}
                     onChange={(event) => {
                         params.ChangeAnswer(prev => {
-                            prev.defaultValue = event.target.value;
+                            prev.defaultValue = !!event.target.checked;
                             return prev;
                         });
                     }}

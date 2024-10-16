@@ -3,7 +3,6 @@ using Itransition_Forms.Core.Form;
 using Itransition_Forms.Core.Links.Entities;
 using Itransition_Forms.Core.User;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata;
 
 namespace Itransition_Forms.Database.Contexts
 {
@@ -19,7 +18,6 @@ namespace Itransition_Forms.Database.Contexts
         public DbSet<RangeBoxLinkModel> RangeLinks { get; set; } = null!;
         public DbSet<TextBoxLinkModel> TextboxLinks { get; set; } = null!;
         public DbSet<FormLinkModel> FormLinks { get; set; } = null!;
-        public DbSet<QuestionLinkModel> QuestionLinks { get; set; } = null!;
 
         public DatabaseContext(DbContextOptions options) : base(options) => Database.EnsureCreated();
 
@@ -28,6 +26,8 @@ namespace Itransition_Forms.Database.Contexts
             modelBuilder.Entity<FormModel>().HasMany(s => s.Questions);
             modelBuilder.Entity<QuestionModel>().HasMany(s => s.Answers);
             modelBuilder.Entity<AnswerBase>().UseTpcMappingStrategy();
+
+            //modelBuilder.Entity<CheckBoxLinkModel>().HasKe();
         }
     }
 }

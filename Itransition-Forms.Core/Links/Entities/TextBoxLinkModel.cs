@@ -10,9 +10,9 @@ namespace Itransition_Forms.Core.Links.Entities
     {
         [Column("text")] public string Text { get; set; } = string.Empty;
 
-        protected TextBoxLinkModel(Guid id, Guid answerId) : base(id, answerId) { }
+        protected TextBoxLinkModel(Guid id, Guid answerId, Guid fillingId) : base(id, answerId, fillingId) { }
 
-        public static Result<TextBoxLinkModel> Create(Guid id, Guid answerId, TextBoxModel validationModel, string text)
+        public static Result<TextBoxLinkModel> Create(Guid id, Guid answerId, Guid fillingId, TextBoxModel validationModel, string text)
         {
             int maxLength = validationModel.IsMultiple ? 400: 100;
 
@@ -22,7 +22,7 @@ namespace Itransition_Forms.Core.Links.Entities
             if (text.Length > maxLength)
                 return Result.Failure<TextBoxLinkModel>($"The max length of text is {maxLength}");
 
-            return new TextBoxLinkModel(id, answerId)
+            return new TextBoxLinkModel(id, answerId, fillingId)
             {
                 Text = text
             };

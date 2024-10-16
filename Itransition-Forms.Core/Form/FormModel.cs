@@ -13,7 +13,7 @@ namespace Itransition_Forms.Core.Form
         [Column("description")] public string Description { get; private set; } = string.Empty;
         [Column("image_link")] public string? ImageLink { get; private set; } = null;
         [Column("topics")] public Topics Topic { get; private set; } = Topics.Other;
-        [Column("owner")] public string OwnerEmail { get; private set; } = string.Empty;
+        [Column("owner")] public Guid OwnerId { get; private set; } = Guid.Empty;
         [Column("number_of_fills")] public int NumberOfFills { get; private set; } = 0;
         [Column("date")] public DateTime Date { get; private set; } = DateTime.Now;
 
@@ -29,7 +29,7 @@ namespace Itransition_Forms.Core.Form
             string description,
             string? imageLink,
             Topics topic,
-            string ownerEmail,
+            Guid ownerId,
             int numberOfFills,
             List<QuestionModel> questions,
             DateTime date
@@ -40,13 +40,13 @@ namespace Itransition_Forms.Core.Form
             Description = description;
             ImageLink = imageLink;
             Topic = topic;
-            OwnerEmail = ownerEmail;
+            OwnerId = ownerId;
             NumberOfFills = numberOfFills;
             Questions = questions;
             Date = date;
         }
 
-        public static Result<FormModel> Create(string title, string description, Topics topic, string ownerEmail)
+        public static Result<FormModel> Create(string title, string description, Topics topic, Guid ownerId)
         {
             if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(title))
                 return Result.Failure<FormModel>("Title is required");
@@ -56,7 +56,7 @@ namespace Itransition_Forms.Core.Form
                 Title = title,
                 Description = description,
                 Topic = topic,
-                OwnerEmail = ownerEmail
+                OwnerId = ownerId
             };
         }
 
@@ -87,6 +87,17 @@ namespace Itransition_Forms.Core.Form
             Topic = form.Topic;
 
             return Result.Success();
+        }
+
+        public void SortQuestionsByIndex()
+        {
+            Questions = Questions
+                .OrderBy(x => x.Index).ToList();
+
+            foreach(var question in Questions)
+            {
+                question.SortAnswersByIndex();
+            }
         }
     }
 }

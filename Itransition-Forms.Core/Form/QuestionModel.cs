@@ -77,6 +77,8 @@ namespace Itransition_Forms.Core.Form
             return Result.Success();
         }
 
+        public override int GetHashCode() => Id.GetHashCode();
         public bool Equals(QuestionModel? other) => other == null ? false : Id == other.Id;
+        public void SortAnswersByIndex() => Answers = Answers.OrderBy(x => x.Index).ToList();
     }
 }

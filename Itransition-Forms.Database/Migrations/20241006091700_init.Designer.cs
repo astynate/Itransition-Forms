@@ -115,7 +115,7 @@ namespace Itransition_Forms.Database.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("image_link");
 
-                    b.Property<string>("OwnerEmail")
+                    b.Property<string>("OwnerId")
                         .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("owner");

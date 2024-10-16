@@ -15,9 +15,9 @@ namespace Itransition_Forms.Database.Repositories
             _context = context;
         }
 
-        public async Task<Result<FormModel>> CreateForm(string email)
+        public async Task<Result<FormModel>> CreateForm(Guid userId)
         {
-            var form = FormModel.Create("Itransition Form", "", Topics.Other, email);
+            var form = FormModel.Create("Itransition Form", "", Topics.Other, userId);
 
             if (form.IsFailure) return form;
 
@@ -46,8 +46,8 @@ namespace Itransition_Forms.Database.Repositories
                     .ToArrayAsync();
         }
 
-        public async Task<Result<FormModel[]>> GetUsersTemplates(string email, int skip = 0, int count = 5) 
-            => await GetFormByExpression((x) => x.OwnerEmail == email, (x) => x.Date, skip, count);
+        public async Task<Result<FormModel[]>> GetUsersTemplates(Guid userId, int skip = 0, int count = 5) 
+            => await GetFormByExpression((x) => x.OwnerId == userId, (x) => x.Date, skip, count);
 
         public async Task<FormModel[]> GetPopularTemplates(int count)
             => await GetFormByExpression((x) => true, (x) => x.NumberOfFills, 0, count);
@@ -62,17 +62,19 @@ namespace Itransition_Forms.Database.Repositories
             return form[0];
         }
 
-        private async Task UpdateQuestion(QuestionModel prev, QuestionModel current)
+        private async Task UpdateAnswers(QuestionModel prev, QuestionModel current)
         {
-            var answersToAdd = prev.Answers.Except(current.Answers);
-            var answersToRemove = current.Answers.Except(prev.Answers);
+            var answersToAdd = current.Answers.Except(prev.Answers).ToArray();
+            var answersToRemove = prev.Answers.Except(current.Answers).ToArray();
 
-            var previousAnswersToUpdate = current.Answers
-                .Intersect(prev.Answers)
+            var previousAnswersToUpdate = prev.Answers
+                .Intersect(current.Answers)
+                .OrderBy(x => x.Index)
                 .ToArray();
 
             var newAnswersToUpdate = current.Answers
                 .Intersect(prev.Answers)
+                .OrderBy(x => x.Index)
                 .ToArray();
 
             for (int i = 0; i < previousAnswersToUpdate.Length; i++)
@@ -89,21 +91,26 @@ namespace Itransition_Forms.Database.Repositories
 
         private async Task UpdateQuestions(FormModel form, FormModel updatedForm)
         {
+            form.SortQuestionsByIndex();
+            updatedForm.SortQuestionsByIndex();
+
             var questionsToAdd = updatedForm.Questions.Except(form.Questions);
             var questionsToRemove = form.Questions.Except(updatedForm.Questions);
 
-            var previousQuestionsToUpdate = updatedForm.Questions
-                .Intersect(form.Questions)
+            var previousQuestionsToUpdate = form.Questions
+                .Intersect(updatedForm.Questions)
+                .OrderBy(x => x.Index)
                 .ToArray();
 
-            var newQuestionsToUpdate = form.Questions
-                .Intersect(updatedForm.Questions)
+            var newQuestionsToUpdate = updatedForm.Questions
+                .Intersect(form.Questions)
+                .OrderBy(x => x.Index)
                 .ToArray();
 
             for (int i = 0; i < previousQuestionsToUpdate.Count(); i++)
             {
                 previousQuestionsToUpdate[i].CloneProperties(newQuestionsToUpdate[i]);
-                await UpdateQuestion(previousQuestionsToUpdate[i], newQuestionsToUpdate[i]);
+                await UpdateAnswers(previousQuestionsToUpdate[i], newQuestionsToUpdate[i]);
             }
 
             _context.UpdateRange(previousQuestionsToUpdate);
@@ -141,10 +148,10 @@ namespace Itransition_Forms.Database.Repositories
             return result;
         }
 
-        public async Task<bool> Delete(Guid id, string? email, bool checkOwner)
+        public async Task<bool> Delete(Guid id, Guid userId, bool checkOwner)
         {
             var result = await _context.Forms
-                .Where(x => x.Id == id && (checkOwner ? email == x.OwnerEmail : true))
+                .Where(x => x.Id == id && (checkOwner ? userId == x.OwnerId : true))
                 .ExecuteDeleteAsync();
 
             return result > 0;

@@ -19,10 +19,10 @@ namespace Itransition_Forms.Database.Repositories
             _encryptionService = encryptionService;
         }
 
-        public async Task<UserModel?> GetUserByEmail(string email)
+        public async Task<UserModel?> GetUserById(Guid userId)
         {
             return await _context.Users
-                .FirstOrDefaultAsync(x => x.Email == email);
+                .FirstOrDefaultAsync(x => x.Id == userId);
         }
 
         public async Task<Result<UserModel>> Register(string email, string password, int color)

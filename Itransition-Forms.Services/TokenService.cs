@@ -26,8 +26,8 @@ namespace Itransition_Form.Services
         public string GenerateAccessToken(UserModel user)
         {
             var claims = new List<Claim> { 
-                new Claim("sub", user.Email),
-                new Claim("id", user.Id.ToString()),
+                new Claim("sub", user.Id.ToString()),
+                new Claim("email", user.Email),
                 new Claim("role", user.IsAdmin ? "Admin" : "User")
             };
 

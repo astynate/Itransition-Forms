@@ -6,14 +6,14 @@ namespace Itransition_Forms.Core.Links.Base
     public abstract class UserToEntityLinkBase
     {
         [Column("id")][Key] public Guid Id { get; private set; } = Guid.NewGuid();
-        [Column("user_email")] public string UserEmail { get; private set; } = string.Empty;
+        [Column("user_id")] public Guid UserModelId { get; private set; } = Guid.Empty;
 
-        private UserToEntityLinkBase() { }
+        protected UserToEntityLinkBase() { }
 
-        protected UserToEntityLinkBase(Guid id, string userEmail)
+        protected UserToEntityLinkBase(Guid id, Guid userModelId)
         {
             Id = id;
-            UserEmail = userEmail;
+            UserModelId = userModelId;
         }
     }
 }

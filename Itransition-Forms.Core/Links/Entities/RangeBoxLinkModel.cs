@@ -10,11 +10,11 @@ namespace Itransition_Forms.Core.Links.Entities
     {
         [Column("value")] public uint Value { get; private set; } = 0;
 
-        protected RangeBoxLinkModel(Guid id, Guid answerId) : base(id, answerId) { }
+        protected RangeBoxLinkModel(Guid id, Guid answerId, Guid fillingId) : base(id, answerId, fillingId) { }
 
-        public static Result<RangeBoxLinkModel> Create(RangeBoxModel validationModel, Guid id, Guid answerId, uint value)
+        public static Result<RangeBoxLinkModel> Create(RangeBoxModel validationModel, Guid id, Guid answerId, Guid fillingId, uint value)
         {
-            return new RangeBoxLinkModel(id, answerId)
+            return new RangeBoxLinkModel(id, answerId, fillingId)
             {
                 Value = Math.Max(Math.Min(value, validationModel.MaxValue),
                     validationModel.MinValue)
