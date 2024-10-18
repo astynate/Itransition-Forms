@@ -6,6 +6,7 @@
     overflow-x: hidden;
     overflow-y: visible;
     position: absolute;
+    z-index: 9999;
 }
 
 .line {

@@ -7,16 +7,16 @@ namespace Itransition_Forms.Core.Links.Entities
     [Table("checkbox_links")]
     public class CheckBoxLinkModel : AnswerLinkBase
     {
-        [Column("is_checked")] public bool IsChecked { get; private set; } = false;
+        [Column("value")] public bool Value { get; private set; } = false;
 
-        protected CheckBoxLinkModel(Guid id, Guid answerId, Guid fillingId) : base(id, answerId, fillingId) { }
-
-        public Result<CheckBoxLinkModel> Create(Guid id, Guid answerId, Guid fillingId, bool isChecked)
+        protected CheckBoxLinkModel(bool value, Guid answerId, Guid formLinkModelId) : base(answerId, formLinkModelId) 
         {
-            return new CheckBoxLinkModel(id, answerId, fillingId)
-            {
-                IsChecked = isChecked
-            };
+            Value = value;
+        }
+
+        public static Result<CheckBoxLinkModel> Create(Guid answerId, Guid formLinkModelId, bool isChecked)
+        {
+            return new CheckBoxLinkModel(isChecked, answerId, formLinkModelId);
         }
     }
 }

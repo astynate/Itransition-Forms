@@ -10,6 +10,7 @@ const TextInput = ({
         fontWeight = 700,
         placeholder,
         isDigitsOnly = false,
+        isEditable = true,
         onClick = () => {}
     }) => {
 
@@ -35,16 +36,27 @@ const TextInput = ({
             defaultValue={text}
             style={{fontSize: fontSize, fontWeight: fontWeight}}
             rows={isMultiple ? 5 : 1}
+            onFocus={(event) => {
+                if (isEditable === false) {
+                    event.target.blur();
+                    event.preventDefault();
+                }
+            }}
             onClick={onClick}
             maxLength={maxLength}
             onInput={(event) => {
+                if (isEditable === false) {
+                    event.target.value = text;
+                    return;
+                }
+
                 if (isMultiple === false)
                     event.target.value = event.target.value.replace('\n', '');
 
                 if (isDigitsOnly === true)
                     event.target.value = parseInt(event.target.value.replace(/[^0-9]/g, ''));
                 
-                if (isDigitsOnly && (event.target.value.length === 0 || event.target.value === 'NaN'))
+                if (isDigitsOnly && (event.target.value === 'NaN'))
                     event.target.value = 0;
 
                 setText(isDigitsOnly ? parseInt(event.target.value) : event.target.value);

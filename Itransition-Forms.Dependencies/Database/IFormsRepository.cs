@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Itransition_Forms.Core.Form;
 
-namespace Itransition_Forms.Database
+namespace Itransition_Forms.Dependencies.Database
 {
     public interface IFormsRepository
     {

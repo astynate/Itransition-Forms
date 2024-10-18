@@ -76,8 +76,25 @@ const FormPage = () => {
             />
             {form && 
                 <Routes>
-                    <Route path="/" element={<Questions form={form} setForm={setForm} />} />
-                    <Route path="/answers" element={<Answers />} />
+                    <Route 
+                        path="/" 
+                        element={
+                            <Questions 
+                                form={form} 
+                                setForm={setForm} 
+                            />
+                        }
+                    />
+                    <Route 
+                        path="/answers" 
+                        element={
+                            <Answers 
+                                form={form} 
+                                setForm={setForm} 
+                                setLoadingState={setLoadingState}
+                            />
+                        } 
+                    />
                 </Routes>}
         </div>
     );

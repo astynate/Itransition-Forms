@@ -1,5 +1,6 @@
 ﻿using Itransition_Forms.Core.Answers;
 using Itransition_Forms.Core.Form;
+using Itransition_Forms.Core.Links.Base;
 using Itransition_Forms.Core.Links.Entities;
 using Itransition_Forms.Core.User;
 using Microsoft.EntityFrameworkCore;
@@ -25,9 +26,10 @@ namespace Itransition_Forms.Database.Contexts
         {
             modelBuilder.Entity<FormModel>().HasMany(s => s.Questions);
             modelBuilder.Entity<QuestionModel>().HasMany(s => s.Answers);
+            modelBuilder.Entity<FormLinkModel>().HasMany(x => x.Answers);
+            modelBuilder.Entity<FormLinkModel>().HasOne(x => x.User);
             modelBuilder.Entity<AnswerBase>().UseTpcMappingStrategy();
-
-            //modelBuilder.Entity<CheckBoxLinkModel>().HasKe();
+            modelBuilder.Entity<AnswerLinkBase>().UseTpcMappingStrategy();
         }
     }
 }

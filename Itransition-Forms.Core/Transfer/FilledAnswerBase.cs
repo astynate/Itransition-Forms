@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Itransition_Forms.Core.Transfer
 {
@@ -6,10 +7,10 @@ namespace Itransition_Forms.Core.Transfer
     {
         [JsonPropertyName("id")] public Guid Id { get; set; }
         [JsonPropertyName("answerId")] public Guid AnswerId { get; set; }
-        [JsonPropertyName("value")] public object Value { get; set; } = null!;
+        [JsonPropertyName("value")] public JsonElement Value { get; set; }
 
         [JsonConstructor]
-        public FilledAnswerBase(Guid id, Guid answerId, object value)
+        public FilledAnswerBase(Guid id, Guid answerId, JsonElement value)
         {
             Id = id;
             AnswerId = answerId;

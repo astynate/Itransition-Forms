@@ -1,15 +1,19 @@
 import TextInput from '../../../form/shared/text-input/TextInput';
-import styles from './main.module.css';
 
-const TextBoxAnswer = ({answer, answerValue = {}, setAnswer = () => {}}) => {
+const TextBoxAnswer = ({answer, answerValue = {}, setAnswer = () => {}, isEditable = true}) => {
     return (
         <TextInput 
             isMultiple={answer.isMultiple}
             fontSize={16}
             fontWeight={500}
+            isEditable={isEditable}
             text={answerValue.value ? answerValue.value : answer.defaultValue}
             placeholder={answer.isMultiple ? 'Enter your text here' : 'Enter your string here'}
-            setText={(text) => setAnswer(text)}
+            setText={(text) => {
+                if (isEditable === true) {
+                    setAnswer(text);
+                }
+            }}
         />
     );
 }

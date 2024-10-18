@@ -33,31 +33,7 @@
     grid-gap: 5px;
 }
 
-.question {
-    display: flex;
-    flex-direction: column;
-    grid-gap: 10px;
-    padding-top: 7px;
-    padding-bottom: 7px;
-}
-
-.question h2 {
-    font-size: 18px;
-    font-weight: 700;
-    margin: 0;
-    padding: 0;
-}
-
 .footer {
     display: flex;
     justify-content: space-between;
-}
-
-.answers {
-    display: flex;
-    flex-direction: column;
-    grid-gap: 10px;
-    background: var(--main-accent-color);
-    padding: 15px 10px;
-    border-radius: 5px;
 }

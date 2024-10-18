@@ -1,7 +1,6 @@
 using Instend.Server.Middleware;
 using Itransition_Form.Services;
 using Itransition_Forms.Core.Answers;
-using Itransition_Forms.Database;
 using Itransition_Forms.Database.Contexts;
 using Itransition_Forms.Database.Repositories;
 using Itransition_Forms.Dependencies.Database;
@@ -62,6 +61,8 @@ builder.Services.AddTransient<LoggingMiddleware>();
 builder.Services.AddSingleton<IEncryptionService, EncryptionService>();
 builder.Services.AddScoped<IFormsRepository, FormsRepository>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+builder.Services.AddScoped<IFillingsRepository, FillingsRepository>();
+builder.Services.AddScoped<ISerializationHelper, SerializationHelper>();
 builder.Services.AddSingleton<ITokenService, TokenService>();
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

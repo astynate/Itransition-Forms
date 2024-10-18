@@ -10,15 +10,20 @@ namespace Itransition_Forms.Core.Links.Entities
     {
         [Column("value")] public uint Value { get; private set; } = 0;
 
-        protected RangeBoxLinkModel(Guid id, Guid answerId, Guid fillingId) : base(Guid.NewGuid(), answerId, fillingId) { }
-
-        public static Result<RangeBoxLinkModel> Create(RangeBoxModel validationModel, Guid answerId, Guid fillingId, uint value)
+        protected RangeBoxLinkModel(Guid answerId, Guid formLinkModelId, uint value) : base(answerId, formLinkModelId) 
         {
-            return new RangeBoxLinkModel(Guid.NewGuid(), answerId, fillingId)
-            {
-                Value = Math.Max(Math.Min(value, validationModel.MaxValue),
-                    validationModel.MinValue)
-            };
+            Value = value;
+        }
+
+        public static Result<RangeBoxLinkModel> Create(RangeBoxModel? validationModel, Guid answerId, Guid formLinkModelId, uint value)
+        {
+            if (validationModel == null)
+                return Result.Failure<RangeBoxLinkModel>("Validation model not found");
+
+            value = Math.Max(Math.Min(value, validationModel.MaxValue), 
+                validationModel.MinValue);
+
+            return new RangeBoxLinkModel(answerId, formLinkModelId, value);
         }
     }
 }

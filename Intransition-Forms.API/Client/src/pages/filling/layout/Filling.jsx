@@ -6,11 +6,9 @@ import Loading from "../../../elements/loading/Loading";
 import Block from "../../form/features/block/Block";
 import FormWrapper from "../../form/shared/form-wrapper/FormWrapper";
 import SimpleButton from "../../../elements/button/SimpleButton";
-import CheckboxAnswer from "../widgets/checkbox/CheckboxAnswer";
-import RangeAnswer from "../widgets/range/RangeAnswer";
-import TextBoxAnswer from "../widgets/textbox/TextBoxAnswer";
 import Guid from "../../../utils/Guid";
 import FillingAPI from "../api/FillingAPI";
+import Question from "../widgets/question/Question";
 
 const FillingPage = () => {
     const [form, setForm] = useState(undefined);
@@ -65,7 +63,7 @@ const FillingPage = () => {
     }, [form, isLoading]);
 
     return (
-        <div className={styles.wrapper} key={isClear}>
+        <div className={styles.wrapper}>
             {isLoading && <Loading />}
             {form && <div className={styles.form}>
                 <Block>
@@ -76,34 +74,12 @@ const FillingPage = () => {
                 </Block>
                 {form.questions.sort((a, b) => a.index - b.index).map(question => {
                     return (
-                        <Block key={question.id}>
-                            <div className={styles.question}>
-                                <h2>{question.question}</h2>
-                                <div className={styles.answers}>
-                                    {question.answers.sort((a, b) => a.index- b.index).map(answer => {
-                                        const handlers = [
-                                            [answer.title !== undefined, CheckboxAnswer],
-                                            [answer.maxValue !== undefined, RangeAnswer]
-                                        ];
-                    
-                                        const target = handlers.find(e => e[0] === true);
-                                        const Handler = target ? target[1] : TextBoxAnswer;
-
-                                        return (<Handler 
-                                            key={answer.id} 
-                                            answer={answer} 
-                                            answerValue={answers[answer.id]}
-                                            setAnswer={(value) => {
-                                                setAnswers((prev) => {
-                                                    prev[answer.id].value = value;
-                                                    return {...prev};
-                                                });
-                                            }}
-                                        />);
-                                    })}
-                                </div>
-                            </div>
-                        </Block>
+                        <Question 
+                            key={question.id + isClear}
+                            question={question}
+                            answers={answers}
+                            setAnswers={setAnswers}
+                        />
                     );
                 })}
                 <br />

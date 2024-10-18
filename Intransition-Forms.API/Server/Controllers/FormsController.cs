@@ -1,5 +1,5 @@
 ﻿using Itransition_Forms.Core.Form;
-using Itransition_Forms.Database;
+using Itransition_Forms.Dependencies.Database;
 using Itransition_Forms.Dependencies.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -86,7 +86,7 @@ namespace Itransition_Forms.Database.Migrations
                         .HasColumnType("char(36)")
                         .HasColumnName("question_id");
 
-                    b.Property<string>("Text")
+                    b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("text");
@@ -167,7 +167,7 @@ namespace Itransition_Forms.Database.Migrations
                         .HasColumnType("char(36)")
                         .HasColumnName("answer_id");
 
-                    b.Property<bool>("IsChecked")
+                    b.Property<bool>("Value")
                         .HasColumnType("tinyint(1)")
                         .HasColumnName("is_checked");
 
@@ -249,7 +249,7 @@ namespace Itransition_Forms.Database.Migrations
                         .HasColumnType("char(36)")
                         .HasColumnName("answer_id");
 
-                    b.Property<string>("Text")
+                    b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("text");

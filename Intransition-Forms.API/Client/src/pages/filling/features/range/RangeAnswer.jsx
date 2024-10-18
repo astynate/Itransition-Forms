@@ -1,18 +1,26 @@
 import styles from './main.module.css';
 
-const RangeAnswer = ({answer, answerValue = {}, setAnswer = () => {}}) => {
+const RangeAnswer = ({answer, answerValue = {}, setAnswer = () => {}, isEditable = true}) => {
     return (
         <input 
-            type='number'
+            type={isEditable === false ? 'text' : 'number'}
             min={answer.minValue}
             max={answer.maxValue}
             defaultValue={answerValue.value ? answerValue.value : answer.minValue}
             className={styles.range}
+            onFocus={(event) => {
+                if (isEditable === false) {
+                    event.target.blur();
+                    event.preventDefault();
+                }
+            }}
             onInput={(event) => {
-                event.target.value = parseInt(event.target.value);
+                if (isEditable === false) {
+                    event.preventDefault();
+                    return;
+                }
 
-                if (event.target.value < answer.minValue)
-                    event.target.value = answer.minValue;
+                event.target.value = parseInt(event.target.value);
 
                 if (event.target.value > answer.maxValue)
                     event.target.value = answer.maxValue;
