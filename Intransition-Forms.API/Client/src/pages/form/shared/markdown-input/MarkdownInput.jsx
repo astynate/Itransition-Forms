@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './main.module.css';
-import eye from './images/eye.png';
 import list from './images/list.png';
 import Markdown from 'react-markdown';
 
@@ -16,9 +15,22 @@ const MarkdownInput = ({text, setText, isMultiple = false}) => {
 
     const removeWrapper = (wrapper) => {
         while (wrapper.firstChild) {
-            wrapper.parentNode.insertBefore(wrapper.firstChild, wrapper);
-        }
+            const currentChild = wrapper.firstChild;
+    
+            if (currentChild.tagName === 'LI') {
+                const newDivElement = document.createElement('div');
 
+                newDivElement.innerHTML = currentChild.innerHTML; 
+                wrapper.parentNode.insertBefore(newDivElement, wrapper);
+
+                if (wrapper.firstChild) {
+                    wrapper.firstChild.remove();   
+                }
+            } else {
+                wrapper.parentNode.insertBefore(currentChild, wrapper);
+            }
+        }
+    
         if (wrapper && wrapper.parentElement) {
             wrapper.parentNode.removeChild(wrapper);
         }
@@ -47,27 +59,33 @@ const MarkdownInput = ({text, setText, isMultiple = false}) => {
     
         if (selection.rangeCount > 0) {
             const range = selection.getRangeAt(0);
+            const tempContainer = document.createElement('div'); 
 
-            if (range.endOffset === 0) return;
-
-            const parentTag = range.commonAncestorContainer.tagName;
-            const tempContainer = document.createElement('div');  
+            if (range.endOffset === 0) return; 
 
             setActiveButtons(range.commonAncestorContainer);
 
             const targetTag = parentTags.find(e => e.tagName === tag.toUpperCase());
 
             if (targetTag) {
-                removeWrapper(targetTag);
-                return;
-            }
-
-            if (parentTag === 'DIV') {
-                tempContainer.appendChild(range.cloneContents());
-                const newElement = document.createElement(tag);
+                removeWrapper(targetTag, tag);
+            } else {
+                tempContainer.appendChild(range
+                    .cloneContents());
+                
+                const newElement = document
+                    .createElement(tag);
                 
                 while (tempContainer.firstChild) {
-                    newElement.appendChild(tempContainer.firstChild);
+                    if (tag === 'UL' && tempContainer.firstChild.tagName === 'DIV') {
+                        const newLiElement = document.createElement('li');
+                        
+                        newLiElement.innerHTML = tempContainer.firstChild.innerHTML;
+                        newElement.appendChild(newLiElement);
+                        tempContainer.firstChild.remove();
+                    } else {
+                        newElement.appendChild(tempContainer.firstChild);
+                    }
                 }
         
                 range.deleteContents();
@@ -83,6 +101,7 @@ const MarkdownInput = ({text, setText, isMultiple = false}) => {
             });
 
             selection.removeAllRanges();
+            setText(ref.current.innerHTML);
         }
     };
 
@@ -129,12 +148,12 @@ const MarkdownInput = ({text, setText, isMultiple = false}) => {
                     <button onClick={() => addMarkdown('U')} state={isUnderlined ? 'active' : null}>U</button>
                     <button onClick={() => addMarkdown('UL')}><img src={list} draggable="false" /></button>
                 </div>
-                <div className={styles.preview}>
+                {/* <div className={styles.preview}>
                     <button 
                         state={isPreview ? 'active' : null}
                         onClick={() => {setPreviewState(prev => !prev)}}
                     ><img src={eye} draggable="false" /></button>
-                </div>
+                </div> */}
             </div>
         </div>
     );

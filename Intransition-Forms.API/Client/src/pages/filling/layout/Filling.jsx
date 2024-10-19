@@ -9,6 +9,7 @@ import SimpleButton from "../../../elements/button/SimpleButton";
 import Guid from "../../../utils/Guid";
 import FillingAPI from "../api/FillingAPI";
 import Question from "../widgets/question/Question";
+import UserState from "../../../state/UserState";
 
 const FillingPage = () => {
     const [form, setForm] = useState(undefined);
@@ -78,6 +79,7 @@ const FillingPage = () => {
                             key={question.id + isClear}
                             question={question}
                             answers={answers}
+                            isEditable={!!UserState.user}
                             setAnswers={setAnswers}
                         />
                     );
@@ -85,20 +87,24 @@ const FillingPage = () => {
                 <br />
                 <FormWrapper>
                     <div className={styles.footer}>
-                        <SimpleButton 
-                            title="Send" 
-                            callback={() => {
-                                FillingAPI.SendFillRequest(params.id, answers);
-                            }}
-                        />
-                        <SimpleButton 
-                            title="Clear" 
-                            type={"sub"} 
-                            callback={() => {
-                                setClearState(prev => !prev);
-                                SetDefaultAnswers();
-                            }}
-                        />
+                        {!!UserState.user && 
+                            <>
+                                <SimpleButton 
+                                    title="Send" 
+                                    callback={() => {
+                                        FillingAPI.SendFillRequest(params.id, answers);
+                                    }}
+                                />
+                                <SimpleButton 
+                                    title="Clear" 
+                                    type={"sub"} 
+                                    callback={() => {
+                                        setClearState(prev => !prev);
+                                        SetDefaultAnswers();
+                                    }}
+                                />
+                            </>
+                        }
                     </div>
                 </FormWrapper>
             </div>}

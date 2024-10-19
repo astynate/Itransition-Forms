@@ -7,6 +7,7 @@ import Questions from '../pages/questions/Questions';
 import Answers from '../pages/answers/layout/Answers';
 import Loading from '../../../elements/loading/Loading';
 import FormsAPI from '../api/FormsAPI';
+import UserState from '../../../state/UserState';
 
 const FormPage = () => {
     const [form, setForm] = useState(undefined);
@@ -25,6 +26,12 @@ const FormPage = () => {
             setLoadingState
         );
     }, [params.id]);
+
+    useEffect(() => {
+        if (form && form.userModelId !== UserState.user.id) {
+            navigate('/');
+        }
+    }, [UserState.user, form]);
 
     useEffect(() => {
         const SendSaveRequest = async () => {
