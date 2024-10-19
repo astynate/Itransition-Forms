@@ -96,7 +96,7 @@ namespace Itransition_Forms.Database.Migrations
                     b.ToTable("textboxes");
                 });
 
-            modelBuilder.Entity("Itransition_Forms.Core.Form.FormModel", b =>
+            modelBuilder.Entity("Itransition_Forms.Core.Form.Form", b =>
                 {
                     b.Property<Guid>("id")
                         .ValueGeneratedOnAdd()
@@ -112,7 +112,7 @@ namespace Itransition_Forms.Database.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("image_link");
 
-                    b.Property<string>("OwnerId")
+                    b.Property<string>("UserModelId")
                         .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("owner");
@@ -259,7 +259,7 @@ namespace Itransition_Forms.Database.Migrations
                     b.ToTable("textbox_links");
                 });
 
-            modelBuilder.Entity("Itransition_Forms.Core.User.UserModel", b =>
+            modelBuilder.Entity("Itransition_Forms.Core.Owner.UserModel", b =>
                 {
                     b.Property<Guid>("id")
                         .ValueGeneratedOnAdd()

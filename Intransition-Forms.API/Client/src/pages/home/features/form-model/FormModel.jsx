@@ -6,9 +6,9 @@ import { instance } from '../../../../state/Interceptors';
 import FormsState from '../../../../state/FormsState';
 import { Link } from 'react-router-dom';
 
-const FormModel = ({form = { title: "Form", owner: "Unknown" }, openRenameForm = () => {}}) => {
+const FormModel = ({form = { title: "Form", owner: "Unknown" }, openRenameForm = () => {}, isFilligOut = false}) => {
     const [isPropertiesListOpen, SetListOpenState] = useState(false);
-    let ref = useRef();
+    const ref = useRef();
 
     const SendDeleteRequest = async (event) => {
         event.preventDefault();
@@ -31,7 +31,7 @@ const FormModel = ({form = { title: "Form", owner: "Unknown" }, openRenameForm =
     }
 
     return (
-        <Link to={`/form/${form.id}`} className={styles.formWrapper}>
+        <Link to={`/${isFilligOut ? 'filling' : 'form'}/${form.id}`} className={styles.formWrapper}>
             <div className={styles.form}>
                 <div className={styles.image}>
 
@@ -39,9 +39,11 @@ const FormModel = ({form = { title: "Form", owner: "Unknown" }, openRenameForm =
                 <div className={styles.information}>
                     <div className={styles.left}>
                         <span className={styles.name}>{form.title}</span>
-                        <span className={styles.owner}>{form.ownerEmail}</span>
+                        {isFilligOut ? 
+                                <span className={styles.owner}>Filling out</span>
+                            :   <span className={styles.owner}>{form.owner ? form.owner.email : null}</span>}
                     </div>
-                    <button 
+                    {isFilligOut === false && <button 
                         className={styles.button} 
                         ref={ref} 
                         onClick={(event) => {
@@ -52,7 +54,7 @@ const FormModel = ({form = { title: "Form", owner: "Unknown" }, openRenameForm =
                         }}
                     >
                         <img src={menu} draggable="false" className={styles.menu} />
-                    </button>
+                    </button>}
                 </div>
             </div>
             <PopupList 

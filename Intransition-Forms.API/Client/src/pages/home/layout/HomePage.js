@@ -11,6 +11,8 @@ import RenamePopup from '../widgets/rename/RenamePopup';
 import { observer } from 'mobx-react-lite';
 import { instance } from '../../../state/Interceptors';
 import './main.css';
+import SortTemplates from './scripts/SortTemplates';
+import UserState from '../../../state/UserState';
 
 const HomePage = observer(() => {
     const [displayProperty, SetDisplayProperty] = useState([0, 1]);
@@ -18,9 +20,19 @@ const HomePage = observer(() => {
     const [headerState, SetHeaderState] = useState(null);
     const [isRenameWindowOpen, SetRenameOpenState] = useState(false);
     const [selectedForm, SetSelectedForm] = useState(undefined);
+    const [isViewingTemplates, setIsViewigTemplatesState] = useState(true);
+    const [isViewingFillingOusts, setIsViewigFillingOustsState] = useState(true);
+    const [sortingType, setSortingType] = useState(0);
 
-    let headerRef = useRef();
-    let wrapperRef = useRef();
+    const sortingTypes = [
+        SortTemplates.SortByDateAscending,
+        SortTemplates.SortByDateDescending,
+        SortTemplates.SortByPopularityAscending,
+        SortTemplates.SortByPopularityDescending,
+    ];
+
+    const headerRef = useRef();
+    const wrapperRef = useRef();
 
     const HandlerScroll = () => {
         const scroll = wrapperRef.current.scrollTop;
@@ -29,13 +41,34 @@ const HomePage = observer(() => {
         SetHeaderState(scroll + 62 > header ? 'sticky' : null);
     }
 
+    const GetExistanceState = (element) => {
+        if (!!element === false)
+            return false;
+
+        const isFillingOut = !!element.answers;
+
+        if (!isViewingFillingOusts && isFillingOut)
+            return false;
+
+        if (!isViewingTemplates && !isFillingOut)
+            return false;
+
+        return true;
+    }
+
     const GetRecentForms = async () => {
         await instance
             .get(`/api/forms/latest?skip=${FormsState.latestForms.length}&take=5`)
             .then(response => {
-                if (response.data && response.data.length) {
-                    FormsState.setHasMoreState(response.data.length >= 5);
-                    FormsState.setLatestForms([...response.data, ...FormsState.latestForms]);
+                if (response.data && response.data.templates && response.data.fillingOuts) {
+                    const fillingOuts = response.data.fillingOuts;
+                    const templates = response.data.templates;
+
+                    const isHasMoreTemplates = templates.length >= 5;
+                    const isHasFillingOuts = fillingOuts.length >= 5;
+
+                    FormsState.setHasMoreState(isHasMoreTemplates || isHasFillingOuts);
+                    FormsState.setLatestForms([...templates, ...fillingOuts, ...FormsState.latestForms]);
                 } else {
                     FormsState.setHasMoreState(false);
                 }
@@ -46,8 +79,10 @@ const HomePage = observer(() => {
     }
 
     useEffect(() => {
-        GetRecentForms();
-    }, [FormsState.latestForms.length])
+        if (UserState.user) {
+            GetRecentForms();
+        }
+    }, [FormsState.latestForms.length, UserState.user]);
 
     return (
         <div className={styles.wrapper} ref={wrapperRef} onScroll={HandlerScroll}>
@@ -71,8 +106,8 @@ const HomePage = observer(() => {
                             <Select 
                                 title={'Display'}
                                 items={[
-                                    { title: "My templates" },
-                                    { title: "Completed forms" },
+                                    { title: "My templates", callback: () => setIsViewigTemplatesState(prev => !prev) },
+                                    { title: "Completed forms", callback: () => setIsViewigFillingOustsState(prev => !prev) },
                                 ]}
                                 selected={displayProperty}
                                 setSelected={SetDisplayProperty}
@@ -81,10 +116,10 @@ const HomePage = observer(() => {
                             <Select 
                                 title={'A-Z'}
                                 items={[
-                                    { title: "New first" },
-                                    { title: "Old first" },
-                                    { title: "By date ascending" },
-                                    { title: "By date decending" },
+                                    { title: "New first", callback: () => setSortingType(0) },
+                                    { title: "Old first", callback: () => setSortingType(1) },
+                                    { title: "Popular first", callback: () => setSortingType(2) },
+                                    { title: "Popular last", callback: () => setSortingType(3) },
                                 ]}
                                 selected={sortProperty}
                                 setSelected={SetSortProperty}
@@ -96,17 +131,23 @@ const HomePage = observer(() => {
             </div>
             <Wrapper>
                 <List>
-                    {FormsState.latestForms.map(form => {
-                        return (
-                            <FormModel 
-                                key={form.id}
-                                form={form}
-                                openRenameForm={() => {
-                                    SetRenameOpenState(true);
-                                    SetSelectedForm(form);
-                                }}
-                            />
-                        );
+                    {FormsState.latestForms
+                        .filter(form => GetExistanceState(form))
+                        .sort((a, b) => sortingTypes[sortingType](a, b))
+                        .map(form => {
+                            const isFilligOut = !!form.answers === true;
+
+                            return (
+                                <FormModel 
+                                    key={form.id}
+                                    form={isFilligOut === true ? form.form : form}
+                                    isFilligOut={isFilligOut}
+                                    openRenameForm={() => {
+                                        SetRenameOpenState(true);
+                                        SetSelectedForm(form);
+                                    }}
+                                />
+                            );
                     })}
                 </List>
             </Wrapper>

@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Itransition_Forms.Core.User;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -13,11 +14,12 @@ namespace Itransition_Forms.Core.Form
         [Column("description")] public string Description { get; private set; } = string.Empty;
         [Column("image_link")] public string? ImageLink { get; private set; } = null;
         [Column("topics")] public Topics Topic { get; private set; } = Topics.Other;
-        [Column("owner")] public Guid OwnerId { get; private set; } = Guid.Empty;
+        [Column("owner")] public Guid UserModelId { get; private set; } = Guid.Empty;
         [Column("number_of_fills")] public int NumberOfFills { get; private set; } = 0;
         [Column("date")] public DateTime Date { get; private set; } = DateTime.Now;
 
         public List<QuestionModel> Questions { get; set; } = [];
+        public UserModel? Owner { get; set; }
 
         private FormModel() { }
 
@@ -40,7 +42,7 @@ namespace Itransition_Forms.Core.Form
             Description = description;
             ImageLink = imageLink;
             Topic = topic;
-            OwnerId = ownerId;
+            UserModelId = ownerId;
             NumberOfFills = numberOfFills;
             Questions = questions;
             Date = date;
@@ -56,7 +58,7 @@ namespace Itransition_Forms.Core.Form
                 Title = title,
                 Description = description,
                 Topic = topic,
-                OwnerId = ownerId
+                UserModelId = ownerId
             };
         }
 

@@ -6,6 +6,7 @@ using Itransition_Forms.Core.Transfer;
 using Itransition_Forms.Database.Contexts;
 using Itransition_Forms.Dependencies.Database;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using System.Text.Json;
 
 namespace Itransition_Forms.Database.Repositories
@@ -24,17 +25,30 @@ namespace Itransition_Forms.Database.Repositories
             _formsRepository = formsRepository;
         }
 
-        public async Task<FormLinkModel[]> GetByFormId(Guid formId, int from, int count)
+        private async Task<FormLinkModel[]> GetFilingOutsByExpression
+        (
+            Expression<Func<FormLinkModel, bool>> predicate,
+            Expression<Func<FormLinkModel, object>> sort,
+            int from, 
+            int count
+        )
         {
             return await _context.FormLinks
-                .Where(x => x.FormModelId == formId)
-                .OrderByDescending(x => x.Date)
+                .Where(predicate)
+                .OrderByDescending(sort)
                 .Skip(from)
                 .Take(count)
-                .Include(x => x.Answers)
-                .Include(x => x.User)
-                .ToArrayAsync();
+                    .Include(x => x.Answers)
+                    .Include(x => x.User)
+                    .Include(x => x.Form)
+                    .ToArrayAsync();
         }
+
+        public async Task<FormLinkModel[]> GetUserFillingOuts(Guid userId, int from, int count) 
+            => await GetFilingOutsByExpression(x => x.UserModelId == userId, x => x.Date, from, count);
+
+        public async Task<FormLinkModel[]> GetByFormId(Guid formId, int from, int count)
+            => await GetFilingOutsByExpression(x => x.FormModelId == formId, x => x.Date, from, count);
 
         public async Task<Result> Create(Guid userId, Guid formId, FilledAnswerBase[] answers)
         {

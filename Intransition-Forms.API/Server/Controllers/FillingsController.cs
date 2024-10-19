@@ -48,7 +48,7 @@ namespace Instend.Server.Controllers
             if (form == null) 
                 return Conflict("Form not found");
 
-            if (form.OwnerId != Guid.Parse(userId))
+            if (form.UserModelId != Guid.Parse(userId))
                 return Conflict("You don't have access to filling outs.");
 
             var result = await _fillingRepository

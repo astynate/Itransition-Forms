@@ -40,7 +40,7 @@ namespace Itransition_Forms.Database.Repositories
             }
             catch (DbUpdateException)
             {
-                return Result.Failure<UserModel>("User with the same email is already exist");
+                return Result.Failure<UserModel>("Owner with the same email is already exist");
             }
 
             return user;
@@ -54,7 +54,7 @@ namespace Itransition_Forms.Database.Repositories
                     x.Email == email);
 
             if (user == null)
-                return Result.Failure<UserModel>("User not found");
+                return Result.Failure<UserModel>("Owner not found");
 
             return user;
         }

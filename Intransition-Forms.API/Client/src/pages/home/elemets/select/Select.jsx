@@ -3,9 +3,16 @@ import arrow from './arrow.svg';
 import check from './check.png';
 import { useEffect, useRef, useState } from 'react';
 
-const Select = ({title, items = [], selected=[], setSelected = ([]) => {}, isMultimpleChoiseAvailable}) => {
+const Select = ({
+        title, 
+        items = [], 
+        selected = [], 
+        setSelected = ([]) => {}, 
+        isMultimpleChoiseAvailable
+    }) => {
+
     const [isListOpen, setOpenState] = useState(false);
-    let ref = useRef();
+    const ref = useRef();
     
     useEffect(() => {
         const SetOpenStateFalse = (event) => {
@@ -37,10 +44,13 @@ const Select = ({title, items = [], selected=[], setSelected = ([]) => {}, isMul
                             className={styles.popUpItem}
                             state={isSelected}
                             onClick={() => {
+                                if (item.callback) {
+                                    item.callback();
+                                }
+
                                 setSelected(prev => {
-                                    if (!isMultimpleChoiseAvailable) {
+                                    if (!isMultimpleChoiseAvailable)
                                         return [index];
-                                    }
 
                                     const itemIndex = prev.indexOf(index);
                                 

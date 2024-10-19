@@ -25,9 +25,14 @@ namespace Itransition_Forms.Database.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<FormModel>().HasMany(s => s.Questions);
+            modelBuilder.Entity<FormModel>().HasOne(s => s.Owner);
+
             modelBuilder.Entity<QuestionModel>().HasMany(s => s.Answers);
+
             modelBuilder.Entity<FormLinkModel>().HasMany(x => x.Answers);
             modelBuilder.Entity<FormLinkModel>().HasOne(x => x.User);
+            modelBuilder.Entity<FormLinkModel>().HasOne(x => x.Form);
+
             modelBuilder.Entity<AnswerBase>().UseTpcMappingStrategy();
             modelBuilder.Entity<AnswerLinkBase>().UseTpcMappingStrategy();
         }

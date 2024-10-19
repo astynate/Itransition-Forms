@@ -1,4 +1,5 @@
-﻿using Itransition_Forms.Core.Links.Base;
+﻿using Itransition_Forms.Core.Form;
+using Itransition_Forms.Core.Links.Base;
 using Itransition_Forms.Core.User;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,6 +16,7 @@ namespace Itransition_Forms.Core.Links.Entities
 
         public List<AnswerLinkBase> Answers { get; set; } = [];
         public UserModel? User { get; set; }
+        public FormModel? Form { get; set; }
 
         private FormLinkModel() { }
 

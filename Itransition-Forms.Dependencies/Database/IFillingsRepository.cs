@@ -8,5 +8,6 @@ namespace Itransition_Forms.Database.Repositories
     {
         Task<Result> Create(Guid userId, Guid formId, FilledAnswerBase[] answers);
         Task<FormLinkModel[]> GetByFormId(Guid formId, int from, int count);
+        Task<FormLinkModel[]> GetUserFillingOuts(Guid userId, int from, int count);
     }
 }

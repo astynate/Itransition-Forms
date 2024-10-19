@@ -41,6 +41,7 @@ namespace Itransition_Forms.Database.Repositories
                 .Where(predicate)
                 .Skip(skip)
                 .Take(count)
+                .Include(x => x.Owner)
                 .Include(x => x.Questions)
                     .ThenInclude(x => x.Answers)
                     .AsSplitQuery()
@@ -48,7 +49,7 @@ namespace Itransition_Forms.Database.Repositories
         }
 
         public async Task<Result<FormModel[]>> GetUsersTemplates(Guid userId, int skip = 0, int count = 5) 
-            => await GetFormByExpression((x) => x.OwnerId == userId, (x) => x.Date, skip, count);
+            => await GetFormByExpression((x) => x.UserModelId == userId, (x) => x.Date, skip, count);
 
         public async Task<FormModel[]> GetPopularTemplates(int count)
             => await GetFormByExpression((x) => true, (x) => x.NumberOfFills, 0, count);
@@ -152,7 +153,7 @@ namespace Itransition_Forms.Database.Repositories
         public async Task<bool> Delete(Guid id, Guid userId, bool checkOwner)
         {
             var result = await _context.Forms
-                .Where(x => x.Id == id && (checkOwner ? userId == x.OwnerId : true))
+                .Where(x => x.Id == id && (checkOwner ? userId == x.UserModelId : true))
                 .ExecuteDeleteAsync();
 
             return result > 0;

@@ -1,4 +1,5 @@
 ﻿using Itransition_Forms.Core.Form;
+using Itransition_Forms.Database.Repositories;
 using Itransition_Forms.Dependencies.Database;
 using Itransition_Forms.Dependencies.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -10,14 +11,22 @@ namespace Instend.Server.Controllers
     [Route("/api/forms")]
     public class FormsController : ControllerBase
     {
-        private readonly IFormsRepository _formsRepository;
+        private readonly IFormsRepository _formsRepository = null!;
 
-        private readonly ITokenService _tokenService;
+        private readonly IFillingsRepository _fillingsRepository = null!;
 
-        public FormsController(IFormsRepository formsRepository, ITokenService tokenService) 
+        private readonly ITokenService _tokenService = null!;
+
+        public FormsController
+        (
+            IFormsRepository formsRepository, 
+            ITokenService tokenService, 
+            IFillingsRepository fillingsRepository
+        ) 
         { 
             _formsRepository = formsRepository;
             _tokenService = tokenService;
+            _fillingsRepository = fillingsRepository;
         }
 
         [HttpGet]
@@ -36,14 +45,18 @@ namespace Instend.Server.Controllers
             var userId = _tokenService.GetClaimFromRequest(Request, "sub");
 
             if (string.IsNullOrEmpty(userId) || string.IsNullOrWhiteSpace(userId))
-                return Unauthorized("User not found");
+                return Unauthorized("Owner not found");
 
-            var templates = await _formsRepository.GetUsersTemplates(Guid.Parse(userId), skip, take);
+            var templates = await _formsRepository
+                .GetUsersTemplates(Guid.Parse(userId), skip, take);
+
+            var fillingOuts = await _fillingsRepository
+                .GetUserFillingOuts(Guid.Parse(userId), skip, take);
 
             if (templates.IsFailure)
                 return Conflict(templates.Error);
 
-            return Ok(templates.Value);
+            return Ok(new { templates = templates.Value, fillingOuts = fillingOuts });
         }
 
         [HttpPost]
@@ -77,7 +90,7 @@ namespace Instend.Server.Controllers
             if (form == null)
                 return Conflict("Form not found");
 
-            if (form.OwnerId != Guid.Parse(userId))
+            if (form.UserModelId != Guid.Parse(userId))
                 return Conflict("You don't have permission to perform this operation");
 
             var result = await _formsRepository.UpdateFormTitle(form, title);
@@ -103,7 +116,7 @@ namespace Instend.Server.Controllers
             if (form == null)
                 return BadRequest("form not found");
 
-            if (form.OwnerId != Guid.Parse(userid))
+            if (form.UserModelId != Guid.Parse(userid))
                 return Unauthorized("You don't have permissions to perform this operation");
 
             var result = await _formsRepository.UpdateForm(form, model);

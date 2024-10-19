@@ -28,7 +28,7 @@ namespace Itransition_Form.Services
             var claims = new List<Claim> { 
                 new Claim("sub", user.Id.ToString()),
                 new Claim("email", user.Email),
-                new Claim("role", user.IsAdmin ? "Admin" : "User")
+                new Claim("role", user.IsAdmin ? "Admin" : "Owner")
             };
 
             var jwt = new JwtSecurityToken(
