@@ -1,83 +1,89 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './main.module.css';
+import eye from './images/eye.png';
+import list from './images/list.png';
+import Markdown from 'react-markdown';
 
 const MarkdownInput = ({text, setText, isMultiple = false}) => {
     const [formattedText, setFormattedText] = useState(text);
     const [isBold, setBoldState] = useState(false);
     const [isItalic, setItalicState] = useState(false);
     const [isUnderlined, setUnderlinedState] = useState(false);
+    const [isPreview, setPreviewState] = useState(false);
     const [parentTags, setParentTags] = useState([]);
 
     let ref = useRef();
-
-    const setActiveButtons = (currentTag) => {
-        let newParentTags = [];
-    
-        while (currentTag.tagName !== 'DIV') {
-            newParentTags.push(currentTag);
-            currentTag = currentTag.parentElement;
-        }
-    
-        setParentTags(newParentTags);
-        const parentTagNames = newParentTags.map(e => e.tagName);
-
-        setBoldState(parentTagNames.includes('B'));
-        setItalicState(parentTagNames.includes('I'));
-        setUnderlinedState(parentTagNames.includes('U'));
-    }
 
     const removeWrapper = (wrapper) => {
         while (wrapper.firstChild) {
             wrapper.parentNode.insertBefore(wrapper.firstChild, wrapper);
         }
 
-        wrapper.parentNode.removeChild(wrapper);
+        if (wrapper && wrapper.parentElement) {
+            wrapper.parentNode.removeChild(wrapper);
+        }
     }
 
-    const uniteSeparatedText = (wrapper) => {
-        let htmlContent = wrapper.innerHTML;
+    const setActiveButtons = (currentTag) => {
+        if (!currentTag) return;
 
-        htmlContent = htmlContent.replace(/>(\s+)</g, '><').replace(/ +/g, ' ');
-        wrapper.innerHTML = htmlContent;
+        let newParentTags = [];
+    
+        while (currentTag && (currentTag.tagName !== 'DIV' || currentTag.id !== 'input')) {
+            newParentTags.push(currentTag);
+            currentTag = currentTag.parentElement;
+        }
+
+        setParentTags(newParentTags);
+        const parentTagNames = newParentTags.map(e => e.tagName);
+    
+        setBoldState(parentTagNames.includes('B'));
+        setItalicState(parentTagNames.includes('I'));
+        setUnderlinedState(parentTagNames.includes('U'));
     }
 
     const addMarkdown = (tag) => {
         const selection = window.getSelection();
+    
+        if (selection.rangeCount > 0) {
+            const range = selection.getRangeAt(0);
 
-        if (selection.rangeCount === 0) {
-            setBoldState(false);
-            setUnderlinedState(false);
-            setItalicState(false);
-            return;
-        }
+            if (range.endOffset === 0) return;
 
-        const range = selection.getRangeAt(0);
+            const parentTag = range.commonAncestorContainer.tagName;
+            const tempContainer = document.createElement('div');  
 
-        const innerHTML = range.startContainer.parentElement.innerHTML.toString();
-        const parentTag = range.startContainer.parentElement.tagName;
+            setActiveButtons(range.commonAncestorContainer);
 
-        if (range.endOffset === 0) return;
+            const targetTag = parentTags.find(e => e.tagName === tag.toUpperCase());
 
-        let before = innerHTML.slice(0, range.startOffset);
-        let target = innerHTML.slice(range.startOffset, range.endOffset);
-        let after = innerHTML.slice(range.endOffset, innerHTML.length);
+            if (targetTag) {
+                removeWrapper(targetTag);
+                return;
+            }
 
-        target = target.replace(`<${tag}>`, '').replace(`</${tag}>`, '');
+            if (parentTag === 'DIV') {
+                tempContainer.appendChild(range.cloneContents());
+                const newElement = document.createElement(tag);
+                
+                while (tempContainer.firstChild) {
+                    newElement.appendChild(tempContainer.firstChild);
+                }
         
-        setActiveButtons(range.commonAncestorContainer);
+                range.deleteContents();
+                range.insertNode(newElement);
+            }
 
-        const targetTag = parentTags.find(e => e.tagName === tag.toUpperCase());
-        const isDiv = parentTag === 'DIV';
-        const isParentInput = range.startContainer.parentElement.id === 'input';
+            const divs = ref.current.querySelectorAll('*');
 
-        if (targetTag) {
-            removeWrapper(targetTag);
-        } else if (isDiv === false || (isDiv && isParentInput)) {
-            range.startContainer.parentElement.innerHTML = `${before}<${tag}>${target}</${tag}>${after}`;
+            divs.forEach(div => {
+                if (!div.hasChildNodes() || div.innerHTML.trim() === '') {
+                    div.remove();
+                }
+            });
+
+            selection.removeAllRanges();
         }
-
-        uniteSeparatedText(ref.current);
-        setText(ref.current.innerHTML);
     };
 
     const handleSelection = () => {
@@ -89,34 +95,46 @@ const MarkdownInput = ({text, setText, isMultiple = false}) => {
         }
     }
 
+    useEffect(() => {
+        setFormattedText(text);
+    }, [isPreview]);
+
     return (
         <div>
-            <div
+            {isPreview === false && <div
                 id='input'
                 ref={ref}
-                contentEditable
-                dangerouslySetInnerHTML={{__html: formattedText}}
+                key={isPreview}
                 className={styles.input}
+                contentEditable
+                dangerouslySetInnerHTML={{ __html: formattedText }}
                 onSelect={handleSelection}
                 onBlur={() => {
                     setBoldState(false);
                     setItalicState(false);
                     setUnderlinedState(false);
                 }}
-                onInput={(event) => {
-                    setText(event.target.innerHTML);
-                }}
-                onDragOver={(event) => {
-                    event.preventDefault();
-                }}
-                onDrop={(event) => {
-                    event.preventDefault();
-                }}
-            ></div>
-            <div className={styles.buttons}>
-                <button onClick={() => addMarkdown('b')} state={isBold ? 'active' : null}>B</button>
-                <button onClick={() => addMarkdown('i')} state={isItalic ? 'active' : null}>I</button>
-                <button onClick={() => addMarkdown('u')} state={isUnderlined ? 'active' : null}>U</button>
+                onInput={(event) => setText(event.target.innerHTML)}
+                onDragOver={(event) => event.preventDefault()}
+                onDrop={(event) => event.preventDefault()}
+            ></div>}
+            {isPreview === true &&
+                <div className={styles.markwdownWrapper}>
+                    <Markdown>{text}</Markdown>
+                </div>}
+            <div className={styles.control}>
+                <div className={styles.buttons}>
+                    <button onClick={() => addMarkdown('B')} state={isBold ? 'active' : null}>B</button>
+                    <button onClick={() => addMarkdown('I')} state={isItalic ? 'active' : null}>I</button>
+                    <button onClick={() => addMarkdown('U')} state={isUnderlined ? 'active' : null}>U</button>
+                    <button onClick={() => addMarkdown('UL')}><img src={list} draggable="false" /></button>
+                </div>
+                <div className={styles.preview}>
+                    <button 
+                        state={isPreview ? 'active' : null}
+                        onClick={() => {setPreviewState(prev => !prev)}}
+                    ><img src={eye} draggable="false" /></button>
+                </div>
             </div>
         </div>
     );

@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
 namespace Itransition_Forms.Core.User
@@ -15,6 +16,16 @@ namespace Itransition_Forms.Core.User
         [Column("is_admin")] public bool IsAdmin { get; set; } = false;
 
         private UserModel() { }
+
+        [JsonConstructor]
+        protected UserModel(Guid id, string email, string password, int color, bool isAdmin) 
+        { 
+            Id = id;
+            Email = email;
+            Password = password;
+            Color = color;
+            IsAdmin = isAdmin;
+        }
 
         public static Result<UserModel> Create(string email, string password, int color)
         {

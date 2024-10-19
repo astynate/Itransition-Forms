@@ -1,12 +1,19 @@
 .input {
     outline: none;
     max-height: 200px;
+    width: 100%;
+    outline: none;
+    border: none;
     overflow-y: scroll;
     overflow-x: hidden;
     padding: 10px 0px;
     border-bottom: 2px solid var(--main-border-color);
     transition: 0.25s ease;
     font-family: 'Open Sans', sans-serif;
+}
+
+.input b, .input u, .input i {
+    height: fit-content;
 }
 
 .input::-webkit-scrollbar {
@@ -17,19 +24,25 @@
     border-bottom: 2px solid var(--main-blue-color);
 }
 
-.buttons {
+.control {
     display: flex;
-    grid-gap: 3px;
+    justify-content: space-between;
+    align-items: center;
     margin-top: 10px;
 }
 
-.buttons button {
+.buttons {
+    display: flex;
+    grid-gap: 3px;
+}
+
+.control button {
     border: none;
     outline: none;
     background: none;
     cursor: pointer;
-    height: 30px;
-    width: 30px;
+    height: 32px;
+    width: 32px;
     display: flex;
     user-select: none;
     justify-content: center;
@@ -39,18 +52,28 @@
     border-radius: 3px;
 }
 
-.buttons button[state="active"] {
+.control button img {
+    height: 19px;
+    width: 19px;
+}
+
+.control button[state="active"] {
     background: var(--main-accent-color);
 }
 
-.buttons button:hover {
+.control button:hover {
     background: var(--main-accent-color);
 }
 
-.buttons button:nth-child(2) {
+.control button:nth-child(2) {
     font-style: italic;
 }
 
-.buttons button:nth-child(3) {
+.control button:nth-child(3) {
     text-decoration: underline;
+}
+
+
+.markwdownWrapper {
+    border-bottom: 2px solid var(--main-border-color);
 }

@@ -31,9 +31,10 @@ namespace Itransition_Forms.Core.Form
             string description,
             string? imageLink,
             Topics topic,
-            Guid ownerId,
+            Guid userModelId,
             int numberOfFills,
             List<QuestionModel> questions,
+            UserModel? owner,
             DateTime date
         )
         {
@@ -42,9 +43,10 @@ namespace Itransition_Forms.Core.Form
             Description = description;
             ImageLink = imageLink;
             Topic = topic;
-            UserModelId = ownerId;
+            UserModelId = userModelId;
             NumberOfFills = numberOfFills;
             Questions = questions;
+            Owner = owner;
             Date = date;
         }
 
