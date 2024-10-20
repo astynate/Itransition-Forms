@@ -19,6 +19,7 @@ namespace Itransition_Forms.Core.Form
         [Column("date")] public DateTime Date { get; private set; } = DateTime.Now;
 
         public List<QuestionModel> Questions { get; set; } = [];
+        public List<TagModel> Tags { get; set; } = [];
         public UserModel? Owner { get; set; }
 
         private FormModel() { }

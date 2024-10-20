@@ -1,23 +1,20 @@
-import React, { useEffect, useRef, useState } from 'react';
-import styles from './main.module.css';
-import Header from '../widgets/header/Header';
-import Create from '../widgets/create/Create';
-import Wrapper from '../elemets/wrapper/Wrapper';
-import Select from '../elemets/select/Select';
-import List from '../features/list/List';
-import FormModel from '../features/form-model/FormModel';
-import FormsState from '../../../state/FormsState';
-import RenamePopup from '../widgets/rename/RenamePopup';
+import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { instance } from '../../../state/Interceptors';
-import './main.css';
+import { instance } from '../../../../state/Interceptors';
+import styles from './main.module.css';
 import SortTemplates from './scripts/SortTemplates';
-import UserState from '../../../state/UserState';
+import Create from '../../widgets/create/Create';
+import FormsState from '../../../../state/FormsState';
+import UserState from '../../../../state/UserState';
+import RenamePopup from '../../widgets/rename/RenamePopup';
+import Wrapper from '../../elemets/wrapper/Wrapper';
+import Select from '../../elemets/select/Select';
+import List from '../../features/list/List';
+import FormModel from '../../features/form-model/FormModel';
 
-const HomePage = observer(() => {
+const HomePage = observer(({headerState, headerRef}) => {
     const [displayProperty, SetDisplayProperty] = useState([0, 1]);
     const [sortProperty, SetSortProperty] = useState([0]);
-    const [headerState, SetHeaderState] = useState(null);
     const [isRenameWindowOpen, SetRenameOpenState] = useState(false);
     const [selectedForm, SetSelectedForm] = useState(undefined);
     const [isViewingTemplates, setIsViewigTemplatesState] = useState(true);
@@ -30,16 +27,6 @@ const HomePage = observer(() => {
         SortTemplates.SortByPopularityAscending,
         SortTemplates.SortByPopularityDescending,
     ];
-
-    const headerRef = useRef();
-    const wrapperRef = useRef();
-
-    const HandlerScroll = () => {
-        const scroll = wrapperRef.current.scrollTop;
-        const header = headerRef.current.offsetTop;
-        
-        SetHeaderState(scroll + 62 > header ? 'sticky' : null);
-    }
 
     const GetExistanceState = (element) => {
         if (!!element === false)
@@ -85,16 +72,15 @@ const HomePage = observer(() => {
     }, [FormsState.latestForms.length, UserState.user]);
 
     return (
-        <div className={styles.wrapper} ref={wrapperRef} onScroll={HandlerScroll}>
-            <Header />
+        <>
             {isRenameWindowOpen && 
-                <RenamePopup 
+                <RenamePopup
                     form={selectedForm}
                     setSelectedForm={SetSelectedForm}
                     setOpenState={SetRenameOpenState} 
                 />
             }
-            <Create 
+            <Create
                 setForm={FormsState.setLatestForms} 
                 forms={FormsState.latestForms} 
             />
@@ -103,7 +89,7 @@ const HomePage = observer(() => {
                     <div className={styles.header}>
                         <h3>Latest templates</h3>
                         <div className={styles.control}>
-                            <Select 
+                            <Select
                                 title={'Display'}
                                 items={[
                                     { title: "My templates", callback: () => setIsViewigTemplatesState(prev => !prev) },
@@ -138,7 +124,7 @@ const HomePage = observer(() => {
                             const isFilligOut = !!form.answers === true;
 
                             return (
-                                <FormModel 
+                                <FormModel
                                     key={form.id}
                                     form={isFilligOut === true ? form.form : form}
                                     isFilligOut={isFilligOut}
@@ -153,7 +139,7 @@ const HomePage = observer(() => {
             </Wrapper>
             <br />
             <br />
-        </div>
+        </>
     );
 });
 

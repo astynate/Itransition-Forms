@@ -34,7 +34,7 @@ namespace Instend.Server.Controllers
             => Ok(await _formsRepository.GetPopularTemplates(5));
 
         [HttpGet]
-        [Route("/api/forms/{Id}")]
+        [Route("/api/forms/{id}")]
         public async Task<IActionResult> GetTemplateById(Guid id)
             => Ok(await _formsRepository.GetFormModelById(id));
 

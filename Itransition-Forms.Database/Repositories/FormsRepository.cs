@@ -42,6 +42,7 @@ namespace Itransition_Forms.Database.Repositories
                 .Skip(skip)
                 .Take(count)
                 .Include(x => x.Owner)
+                .Include(x => x.Tags)
                 .Include(x => x.Questions)
                     .ThenInclude(x => x.Answers)
                     .AsSplitQuery()
@@ -122,6 +123,17 @@ namespace Itransition_Forms.Database.Repositories
             await _context.SaveChangesAsync();
         }
 
+        private async Task UpdateTags(FormModel form, FormModel updatedForm)
+        {
+            var tagsToAdd = updatedForm.Tags.Except(form.Tags);
+            var tagsToRemove = form.Tags.Except(updatedForm.Tags);
+
+            _context.RemoveRange(tagsToRemove);
+
+            await _context.AddRangeAsync(tagsToAdd);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<Result> UpdateForm(FormModel form, FormModel updatedForm)
         {
             var result = form.CopyParams(updatedForm);
@@ -131,7 +143,9 @@ namespace Itransition_Forms.Database.Repositories
 
             _context.Forms.Update(form);
 
+            await UpdateTags(form, updatedForm);
             await UpdateQuestions(form, updatedForm);
+
             await _context.SaveChangesAsync();
 
             return Result.Success();

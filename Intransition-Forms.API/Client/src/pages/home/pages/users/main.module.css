@@ -1,0 +1,43 @@
+.wrapper {
+    height: 100%;
+    width: 100%;
+    background: var(--main-accent-color);
+}
+
+.header {
+    width: 100%;
+    padding-top: 70px;
+    padding-bottom: 10px;
+    display: flex;
+    position: sticky;
+    top: 60px;
+    left: 0;
+    background: var(--main-accent-color);
+    justify-content: space-between;
+}
+
+.right {
+    display: flex;
+    grid-gap: 10px;
+}
+
+.users {
+    display: flex;
+    flex-direction: column;
+    grid-gap: 2px;
+}
+
+.buttonWrapper {
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    background: var(--main-background-color);
+}
+
+.buttonWrapper input {
+    height: 23px;
+    width: 23px;
+    cursor: pointer;
+}

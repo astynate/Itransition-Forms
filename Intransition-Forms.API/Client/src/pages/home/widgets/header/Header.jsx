@@ -2,14 +2,20 @@ import styles from './main.module.css';
 import logo from './itransition_logo.svg';
 import Wrapper from '../../elemets/wrapper/Wrapper';
 import Avatar from '../../elemets/avatar/Avatar';
-import { observer } from 'mobx-react-lite';
 import userState from '../../../../state/UserState';
 import search from './search.png';
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
+import UserState from '../../../../state/UserState';
 
 const Header = observer(({isSearch = true}) => {
     const [isUserPopUpOpen, setPopUpOpenState] = useState(false);
+    const [currentPath, setCurrentPath] = useState(0);
+    
+    const paths = ['', 'users'];
+
+    let params = useParams();
     let ref = useRef();
 
     useEffect(() => {
@@ -25,6 +31,11 @@ const Header = observer(({isSearch = true}) => {
             document.removeEventListener('click', clickHandler);
         };
     }, []);
+
+    useEffect(() => {
+        const path = paths.findIndex(p => p === params['*']);
+        setCurrentPath(path);
+    }, [params]);
 
     return (
         <div className={styles.headerWrapper} type={isSearch === false ? 'searchless' : null}>
@@ -60,6 +71,14 @@ const Header = observer(({isSearch = true}) => {
                     </div>
                 </div>
             </Wrapper>
+            {UserState.user && UserState.user.isAdmin && <div className={styles.menuWrapper}>
+                <Wrapper>
+                    <div className={styles.menu}>
+                        <Link to={'/'} id={currentPath === 0 ? 'active' : null}>Templates</Link>
+                        <Link to={'/users'} id={currentPath === 1 ? 'active' : null}>Admin panel</Link>
+                    </div>
+                </Wrapper>
+            </div>}
         </div>
     );
 });

@@ -28,7 +28,11 @@ const FormPage = () => {
     }, [params.id]);
 
     useEffect(() => {
-        if (form && form.userModelId !== UserState.user.id) {
+        if (form && !UserState.user) {
+            navigate('/');
+        }
+
+        if (form && UserState.user && form.userModelId !== UserState.user.id) {
             navigate('/');
         }
     }, [UserState.user, form]);

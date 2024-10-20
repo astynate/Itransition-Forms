@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { instance } from './state/Interceptors';
-import HomePage from '../src/pages/home/layout/HomePage';
+import HomePage from '../src/pages/home/layout/HomeLayout';
 import Register from './pages/login/pages/register/Register';
 import LoginPage from './pages/login/pages/login/LoginPage';
 import userState from './state/UserState';
@@ -55,7 +55,7 @@ const App = observer(() => {
 
     return (
         <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/*" element={<HomePage />} />
             <Route path="/form/:id/*" element={<FormPage />} />
             <Route path="/filling/:id/*" element={<FillingPage />} />
             <Route path="/login" element={<LoginPage />} />

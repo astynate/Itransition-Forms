@@ -30,7 +30,7 @@ namespace Itransition_Forms.Core.Form
         public static Result<QuestionModel> Create(string question, int index, Guid formId, List<AnswerBase> answers)
         {
             if (string.IsNullOrEmpty(question) || string.IsNullOrEmpty(question))
-                return Result.Failure<QuestionModel>("Name is required");
+                return Result.Failure<QuestionModel>("Tag is required");
 
             if (formId == Guid.Empty)
                 return Result.Failure<QuestionModel>("Form not found");

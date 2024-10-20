@@ -12,6 +12,7 @@ namespace Itransition_Forms.Database.Contexts
         public DbSet<UserModel> Users { get; set; } = null!;
         public DbSet<FormModel> Forms { get; set; } = null!;
         public DbSet<QuestionModel> Questions { get; set; } = null!;
+        public DbSet<TagModel> Tags { get; set; } = null!;
         public DbSet<CheckBoxModel> Checkboxes { get; set; } = null!;
         public DbSet<RangeBoxModel> RangeBoxes { get; set; } = null!;
         public DbSet<TextBoxModel> TextBoxes { get; set; } = null!;
@@ -25,6 +26,7 @@ namespace Itransition_Forms.Database.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<FormModel>().HasMany(s => s.Questions);
+            modelBuilder.Entity<FormModel>().HasMany(s => s.Tags);
             modelBuilder.Entity<FormModel>().HasOne(s => s.Owner);
 
             modelBuilder.Entity<QuestionModel>().HasMany(s => s.Answers);
