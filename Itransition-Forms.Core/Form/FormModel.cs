@@ -104,5 +104,22 @@ namespace Itransition_Forms.Core.Form
                 question.SortAnswersByIndex();
             }
         }
+
+        public FormModel Clone()
+        {
+            return new FormModel
+            {
+                Id = Guid.NewGuid(),
+                Title = Title,
+                Description = Description,
+                ImageLink = ImageLink,
+                Topic = Topic,
+                UserModelId = UserModelId,
+                NumberOfFills = NumberOfFills,
+                Questions = Questions.Select(e => e.Clone()).ToList(),
+                Owner = Owner,
+                Date = Date
+            };
+        }
     }
 }

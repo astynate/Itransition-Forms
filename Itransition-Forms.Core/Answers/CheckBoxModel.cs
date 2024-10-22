@@ -57,5 +57,14 @@ namespace Itransition_Forms.Core.Answers
                 DefaultValue = false
             };
         }
+
+        public override AnswerBase Clone(Guid questionId)
+        {
+            return new CheckBoxModel(Guid.NewGuid(), questionId, Index)
+            {
+                Title = Title,
+                DefaultValue = DefaultValue
+            };
+        }
     }
 }

@@ -14,17 +14,19 @@ namespace Itransition_Forms.Core.User
         [Column("password")] public string Password { get; private set; } = string.Empty;
         [Column("color")] public int Color { get; private set; } = 0;
         [Column("is_admin")] public bool IsAdmin { get; set; } = false;
+        [Column("is_blocked")] public bool IsBlocked { get; set; } = false;
 
         private UserModel() { }
 
         [JsonConstructor]
-        protected UserModel(Guid id, string email, string password, int color, bool isAdmin) 
+        protected UserModel(Guid id, string email, string password, int color, bool isAdmin, bool isBlocked) 
         { 
             Id = id;
             Email = email;
             Password = password;
             Color = color;
             IsAdmin = isAdmin;
+            IsBlocked = isBlocked;
         }
 
         public static Result<UserModel> Create(string email, string password, int color)

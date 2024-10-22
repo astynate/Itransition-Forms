@@ -10,13 +10,10 @@ import { instance } from '../../../../state/Interceptors';
 import Loading from '../../../../elements/loading/Loading';
 
 const Create = observer(({setForms, forms}) => {
-    const CreatePresentation = async (id = null) => {
+    const CreatePresentation = async (id) => {
         let form = new FormData();
 
-        form.append('username', userState.username);
-        form.append('templateReference', id);
-
-        await instance.post('/api/forms', {
+        await instance.post(`/api/forms?templateReference=${id ? id : ''}`, {
             method: "POST",
             body: form
         })
@@ -29,7 +26,7 @@ const Create = observer(({setForms, forms}) => {
             alert('Something went wrong');
         });
     }
-
+    
     return (
         <div className={styles.createWrapper}>
             {FormsState.isPopularTemplatesLoading && <Loading />}
@@ -60,8 +57,10 @@ const Create = observer(({setForms, forms}) => {
                                 <FormTemplate 
                                     key={form.id}
                                     image={null}
+                                    id={form.id}
                                     name={form.title}
                                     isCreate={false}
+                                    onClick={() => CreatePresentation(form.id)}
                                 />
                             );
                         })}

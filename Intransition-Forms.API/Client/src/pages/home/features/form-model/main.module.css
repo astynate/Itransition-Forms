@@ -79,4 +79,5 @@
 .menu {
     height: 22px;
     width: 22px;
+    filter: var(--main-filter);
 }

@@ -19,7 +19,7 @@ const TextInput = ({
     useEffect(() => {
         const adjustHeight = () => {
             const value = textareaRef.current.value;
-            const newHeight = value.split('\n').length * fontSize + 5;
+            const newHeight = value.split('\n').length * fontSize + 17;
 
             textareaRef.current.style.height = 'auto';
             textareaRef.current.style.height = `${newHeight}px`;

@@ -11,19 +11,60 @@ namespace Itransition_Forms.Database.Repositories
     {
         private readonly DatabaseContext _context;
 
-        public FormsRepository(DatabaseContext context)
+        private readonly IUsersRepository _usersRepository;
+
+        public FormsRepository(DatabaseContext context, IUsersRepository usersRepository)
         {
             _context = context;
+            _usersRepository = usersRepository;
         }
 
-        public async Task<Result<FormModel>> CreateForm(Guid userId)
+        public async Task<FormModel[]> GetFormModelsByPrefix(string prefix)
         {
-            var form = FormModel.Create("Itransition Form", "", Topics.Other, userId);
+            return await _context.Forms
+                .Include(x => x.Owner)
+                .Include(x => x.Tags)
+                .Include(x => x.Questions)
+                .ThenInclude(q => q.Answers)
+                .Where(x => EF.Functions.IsMatch(x.Title, prefix, MySqlMatchSearchMode.Boolean) ||
+                            EF.Functions.IsMatch(x.Description, prefix, MySqlMatchSearchMode.Boolean) ||
+                            x.Questions.Any(q => EF.Functions.IsMatch(q.Question, prefix, MySqlMatchSearchMode.Boolean)))
+                .AsSplitQuery()
+                .ToArrayAsync();
+        }
+
+        private async Task<Result<FormModel>> CreateFormByCondition(Guid userId, Guid? templateReference)
+        {
+            if (templateReference != null)
+            {
+                var reference = await GetFormModelById(templateReference ?? Guid.Empty);
+
+                if (reference == null)
+                {
+                    return Result.Failure<FormModel>("Reference not found");
+                }
+
+                return Result.Success(reference.Clone());
+            }
+
+            return FormModel.Create("Itransition Form", "", Topics.Other, userId);
+        }
+
+        public async Task<Result<FormModel>> CreateForm(Guid userId, Guid? templateReference)
+        {
+            var user = await _usersRepository.GetUserById(userId);
+
+            if (user == null) 
+                return Result.Failure<FormModel>("User not found");
+
+            Result<FormModel> form = await CreateFormByCondition(userId, templateReference);
 
             if (form.IsFailure) return form;
 
             await _context.AddAsync(form.Value);
             await _context.SaveChangesAsync();
+
+            form.Value.Owner = user; 
 
             return form;
         }

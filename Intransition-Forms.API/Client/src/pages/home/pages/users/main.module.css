@@ -33,6 +33,9 @@
     align-items: center;
     justify-content: center;
     border-radius: 20px;
+    grid-gap: 5px;
+    cursor: pointer;
+    user-select: none;
     background: var(--main-background-color);
 }
 
@@ -41,3 +44,28 @@
     width: 23px;
     cursor: pointer;
 }
+
+.buttonWrapper img {
+    height: 18px;
+    width: 18px;
+}
+
+.buttonWrapper span {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.buttonWrapper:nth-child(1) span { color: #4BDC0D; }
+.buttonWrapper:nth-child(2) span { color: #FFBB00; }
+.buttonWrapper:nth-child(3) span { color: #FF2828; }
+
+.buttonWrapper:nth-child(1):hover { outline: 4px solid #4bdc0d50; }
+.buttonWrapper:nth-child(2):hover { outline: 4px solid #ffbb0050; }
+.buttonWrapper:nth-child(3):hover { outline: 4px solid #ff282850; }
+
+.buttonWrapper:nth-child(1):active { outline: 2px solid #4BDC0D; }
+.buttonWrapper:nth-child(2):active { outline: 2px solid #FFBB00; }
+.buttonWrapper:nth-child(3):active { outline: 2px solid #FF2828; }
+
+.buttonWrapper[effects="none"]:hover { outline: none !important; }
+.buttonWrapper[effects="none"]:active { outline: none !important; }

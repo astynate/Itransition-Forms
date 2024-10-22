@@ -19,7 +19,9 @@ const Rangebox = (params) => {
                 fontWeight={500} 
                 setText={(text) => {
                     params.ChangeAnswer(prev => {
-                        prev.minValue = text;
+                        if (text < prev.maxValue) {
+                            prev.minValue = text;
+                        }
                         return prev;
                     });
                 }}
@@ -33,7 +35,9 @@ const Rangebox = (params) => {
                 isDigitsOnly={true}
                 setText={(text) => {
                     params.ChangeAnswer(prev => {
-                        prev.maxValue = text;
+                        if (text > prev.minValue) {
+                            prev.maxValue = text;
+                        }
                         return prev;
                     });
                 }}

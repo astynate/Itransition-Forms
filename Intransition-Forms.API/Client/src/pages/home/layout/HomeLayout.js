@@ -5,7 +5,6 @@ import { observer } from 'mobx-react-lite';
 import { Route, Routes } from 'react-router-dom';
 import HomePage from '../pages/home/HomePage';
 import Users from '../pages/users/Users';
-import './main.css';
 
 const HomeLayout = observer(() => {
     const [headerState, SetHeaderState] = useState(null);

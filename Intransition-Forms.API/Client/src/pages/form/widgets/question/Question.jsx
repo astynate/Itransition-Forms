@@ -249,28 +249,30 @@ const Question = ({
                         })}
                 </div>
                 <div className={styles.bottom}>
-                    <Select
-                        items={items}
-                        value={currentHandler}
-                        onChange={(event) => {  
-                            setForm(prev => {
-                                const updatedQuestions = prev.questions.map(element => {
-                                    if (element.id === question.id) {
-                                        return { ...element, answers: [{
-                                            ...itemHandlers[event.target.value],
-                                            id: Guid.NewGuid(),
-                                            questionModelId: question.id
-                                        }] };
-                                    }
-                                    return element;
+                    <div className={styles.selectWrapper}>
+                        <Select
+                            items={items}
+                            value={currentHandler}
+                            onChange={(event) => {  
+                                setForm(prev => {
+                                    const updatedQuestions = prev.questions.map(element => {
+                                        if (element.id === question.id) {
+                                            return { ...element, answers: [{
+                                                ...itemHandlers[event.target.value],
+                                                id: Guid.NewGuid(),
+                                                questionModelId: question.id
+                                            }] };
+                                        }
+                                        return element;
+                                    });
+                                
+                                    return { ...prev, questions: updatedQuestions };
                                 });
-                            
-                                return { ...prev, questions: updatedQuestions };
-                            });
 
-                            setCurrentHandler(event.target.value);
-                        }}
-                    />
+                                setCurrentHandler(event.target.value);
+                            }}
+                        />
+                    </div>
                     <button 
                         className={styles.button}
                         onClick={() => {

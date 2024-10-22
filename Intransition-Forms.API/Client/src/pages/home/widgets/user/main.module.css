@@ -26,3 +26,10 @@
     font-weight: 700;
     font-size: 16px;
 }
+
+.right {
+    display: flex;
+    grid-gap: 30px;
+    align-items: center;
+    font-weight: 600;
+}

@@ -1,12 +1,16 @@
 .form {
     height: auto;
     width: 400px;
-    background: white;
+    background: var(--main-background-color);
     border-radius: 20px;
     padding: 30px;
     grid-gap: 0px;
     display: flex;
     flex-direction: column;
+}
+
+.form input {
+    background: none;
 }
 
 .form input:focus {

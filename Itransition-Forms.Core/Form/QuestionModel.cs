@@ -80,5 +80,18 @@ namespace Itransition_Forms.Core.Form
         public override int GetHashCode() => Id.GetHashCode();
         public bool Equals(QuestionModel? other) => other == null ? false : Id == other.Id;
         public void SortAnswersByIndex() => Answers = Answers.OrderBy(x => x.Index).ToList();
+
+        public QuestionModel Clone()
+        {
+            Guid newId = Guid.NewGuid();
+
+            return new QuestionModel()
+            {
+                Id = newId,
+                Question = Question,
+                Index = Index,
+                Answers = Answers.Select(x => x.Clone(newId)).ToList()
+            };
+        }
     }
 }

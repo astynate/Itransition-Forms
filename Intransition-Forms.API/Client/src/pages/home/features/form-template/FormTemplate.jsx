@@ -5,7 +5,7 @@ const FormTemplate = ({name = 'Empty', image, onClick = () => {}, isCreate = tru
     const [isCreateButtonOpen, setCreateButtonState] = useState(!(!!image));
 
     return (
-        <div 
+        <div
             className={styles.presentationTemplate} 
             onMouseEnter={() => setCreateButtonState(true)}
             onMouseLeave={() => setCreateButtonState(false)}

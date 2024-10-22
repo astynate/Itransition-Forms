@@ -9,6 +9,9 @@ import userState from './state/UserState';
 import FormsState from './state/FormsState';
 import FormPage from './pages/form/layout/Form';
 import FillingPage from './pages/filling/layout/Filling';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './pages/home/layout/main.css';
+import ApplicationState from './state/ApplicationState';
 
 const App = observer(() => {
     const GetUserData = async () => {
@@ -52,6 +55,14 @@ const App = observer(() => {
     useEffect(() => {
         GetPopularTemplates();
     }, []);
+
+    useEffect(() => {
+        const root = document.querySelector('#root');
+
+        if (!!root === true) {
+            root.setAttribute('theme', ApplicationState.isDarkMode ? 'dark' : 'light');
+        }
+    }, [ApplicationState.isDarkMode]);
 
     return (
         <Routes>

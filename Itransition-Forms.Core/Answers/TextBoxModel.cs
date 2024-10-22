@@ -40,5 +40,13 @@ namespace Itransition_Forms.Core.Answers
                 IsMultiple = textBoxModel.IsMultiple;
             }
         }
+
+        public override AnswerBase Clone(Guid questionId)
+        {
+            return new TextBoxModel(Guid.NewGuid(), questionId, Index)
+            {
+                IsMultiple = IsMultiple
+            };
+        }
     }
 }

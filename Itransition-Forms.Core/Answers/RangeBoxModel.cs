@@ -45,5 +45,14 @@ namespace Itransition_Forms.Core.Answers
                 MinValue = rangeBoxModel.MinValue;
             }
         }
+
+        public override AnswerBase Clone(Guid questionId)
+        {
+            return new RangeBoxModel(Guid.NewGuid(), questionId, Index)
+            {
+                MaxValue = MaxValue, 
+                MinValue = MinValue
+            };
+        }
     }
 }

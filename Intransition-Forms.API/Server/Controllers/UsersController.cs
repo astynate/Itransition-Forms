@@ -1,4 +1,5 @@
-﻿using Itransition_Forms.Dependencies.Database;
+﻿using CSharpFunctionalExtensions;
+using Itransition_Forms.Dependencies.Database;
 using Itransition_Forms.Dependencies.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,8 @@ namespace Instend.Server.Controllers
         private readonly IUsersRepository _userRepository;
 
         private readonly ITokenService _tokenService;
+
+        private delegate Task<Result> UpdateUsersDelegate(Guid[] users);
 
         public UsersController(IUsersRepository usersRepository, ITokenService tokenService)
         {
@@ -37,6 +40,25 @@ namespace Instend.Server.Controllers
                 .GenerateAccessToken(user);
 
             return Ok(user);
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("/api/users/all")]
+        public async Task<IActionResult> GetAllUsers(int from, int count)
+        {
+            var userId = _tokenService.GetClaimFromRequest(Request, "sub");
+            var role = _tokenService.GetClaimFromRequest(Request, "role");
+
+            if (userId == null)
+                return Unauthorized();
+
+            if (role == null || role != "Admin")
+                return Unauthorized();
+
+            var users = await _userRepository.GetUsers(from, count);
+
+            return Ok(users);
         }
 
         [HttpPost]
@@ -67,6 +89,50 @@ namespace Instend.Server.Controllers
                 .GenerateAccessToken(result.Value);
 
             return Ok(result.Value);
+        }
+
+        public enum UpdateUserOperations
+        {
+            Unblock,
+            Block,
+            Delete,
+            AddAdminRights,
+            RemoveAdminRights,
+        }
+
+        [HttpPut]
+        [Authorize]
+        public async Task<IActionResult> UpdateUsers([FromForm] Guid[] users, [FromForm] UpdateUserOperations operation)
+        {
+            var userId = _tokenService.GetClaimFromRequest(Request, "sub");
+            var role = _tokenService.GetClaimFromRequest(Request, "role");
+
+            if (userId == null)
+                return Unauthorized();
+
+            if (role == null || role != "Admin")
+                return Unauthorized();
+
+            var operations = new Dictionary<UpdateUserOperations, UpdateUsersDelegate>()
+            {
+                { UpdateUserOperations.Unblock, _userRepository.UnblockUsers },
+                { UpdateUserOperations.Block, _userRepository.BlockUsers },
+                { UpdateUserOperations.Delete, _userRepository.DeleteUsers },
+                { UpdateUserOperations.AddAdminRights, (Guid[] users) => _userRepository.UpdateAdminState(users, true) },
+                { UpdateUserOperations.RemoveAdminRights, (Guid[] users) => _userRepository.UpdateAdminState(users, false) },
+            };
+
+            operations.TryGetValue(operation, out UpdateUsersDelegate? handler);
+
+            if (handler == null)
+                return BadRequest("Invalid operation type");
+
+            var result = await handler(users);
+
+            if (result.IsFailure)
+                return Conflict(result.Error);
+
+            return Ok();
         }
     }
 }

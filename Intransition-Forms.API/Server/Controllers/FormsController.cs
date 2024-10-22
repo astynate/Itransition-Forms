@@ -39,6 +39,11 @@ namespace Instend.Server.Controllers
             => Ok(await _formsRepository.GetFormModelById(id));
 
         [HttpGet]
+        [Route("/api/forms/prefix/{prefix}")]
+        public async Task<IActionResult> GetTemplateByPrefix(string prefix)
+            => Ok(await _formsRepository.GetFormModelsByPrefix(prefix));
+
+        [HttpGet]
         [Route("/api/forms/latest")]
         public async Task<IActionResult> GetLatestTemplates(int skip, int take)
         {
@@ -56,7 +61,7 @@ namespace Instend.Server.Controllers
             if (templates.IsFailure)
                 return Conflict(templates.Error);
 
-            return Ok(new { templates = templates.Value, fillingOuts = fillingOuts });
+            return Ok(new { templates = templates.Value, fillingOuts });
         }
 
         [HttpPost]
@@ -68,7 +73,7 @@ namespace Instend.Server.Controllers
             if (string.IsNullOrEmpty(userId) || string.IsNullOrWhiteSpace(userId))
                 return Unauthorized();
 
-            var form = await _formsRepository.CreateForm(Guid.Parse(userId));
+            var form = await _formsRepository.CreateForm(Guid.Parse(userId), templateReference);
 
             if (form.IsFailure)
                 return Conflict(form.Error);
