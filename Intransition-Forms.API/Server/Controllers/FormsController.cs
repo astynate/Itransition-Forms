@@ -50,7 +50,7 @@ namespace Instend.Server.Controllers
             var userId = _tokenService.GetClaimFromRequest(Request, "sub");
 
             if (string.IsNullOrEmpty(userId) || string.IsNullOrWhiteSpace(userId))
-                return Unauthorized("Owner not found");
+                return Conflict("Owner not found");
 
             var templates = await _formsRepository
                 .GetUsersTemplates(Guid.Parse(userId), skip, take);
@@ -71,7 +71,7 @@ namespace Instend.Server.Controllers
             var userId = _tokenService.GetClaimFromRequest(Request, "sub");
 
             if (string.IsNullOrEmpty(userId) || string.IsNullOrWhiteSpace(userId))
-                return Unauthorized();
+                return Conflict();
 
             var form = await _formsRepository.CreateForm(Guid.Parse(userId), templateReference);
 
@@ -88,7 +88,7 @@ namespace Instend.Server.Controllers
             var userId = _tokenService.GetClaimFromRequest(Request, "sub");
 
             if (string.IsNullOrEmpty(userId) || string.IsNullOrWhiteSpace(userId))
-                return Unauthorized();
+                return Conflict();
 
             var form = await _formsRepository.GetFormModelById(id);
 
@@ -114,7 +114,7 @@ namespace Instend.Server.Controllers
             var userid = _tokenService.GetClaimFromRequest(Request, "sub");
 
             if (string.IsNullOrEmpty(userid) || string.IsNullOrWhiteSpace(userid))
-                return Unauthorized();
+                return Conflict();
 
             var form = await _formsRepository.GetFormModelById(model.Id);
 
@@ -122,7 +122,7 @@ namespace Instend.Server.Controllers
                 return BadRequest("form not found");
 
             if (form.UserModelId != Guid.Parse(userid))
-                return Unauthorized("You don't have permissions to perform this operation");
+                return Conflict("You don't have permissions to perform this operation");
 
             var result = await _formsRepository.UpdateForm(form, model);
 
@@ -139,7 +139,7 @@ namespace Instend.Server.Controllers
             var userId = _tokenService.GetClaimFromRequest(Request, "sub");
 
             if (string.IsNullOrEmpty(userId) || string.IsNullOrWhiteSpace(userId))
-                return Unauthorized();
+                return Conflict();
 
             var result = await _formsRepository.Delete(id, Guid.Parse(userId), true);
 

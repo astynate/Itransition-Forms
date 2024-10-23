@@ -41,7 +41,7 @@ namespace Instend.Server.Controllers
             var userId = _tokenService.GetClaimFromRequest(Request, "sub");
 
             if (userId == null)
-                return Unauthorized();
+                return Conflict();
 
             var form = await _formsRepository.GetFormModelById(id);
 
@@ -65,7 +65,7 @@ namespace Instend.Server.Controllers
             var userId = _tokenService.GetClaimFromRequest(Request, "sub");
 
             if (userId == null)
-                return Unauthorized();
+                return Conflict();
 
             var result = await _fillingRepository.Create(Guid.Parse(userId), id, answers);
 
