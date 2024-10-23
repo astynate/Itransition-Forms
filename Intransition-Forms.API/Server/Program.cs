@@ -23,14 +23,14 @@ builder.Services.AddCors(options =>
         .AllowCredentials());
 });
 
-builder.Configuration
-    .AddJsonFile("Server/appsettings.json")
-    .Build();
+//builder.Configuration
+//    .AddJsonFile("Server/appsettings.json")
+//    .Build();
 
 var encryptionService = new EncryptionService();
-var secretKey = builder.Configuration.GetValue<string>("SecretKey");
-var issuer = builder.Configuration.GetValue<string>("Issuer");
-var audience = builder.Configuration.GetValue<string>("Audience");
+var secretKey = "nongkeger-gu5453rsfhty65e-egrtbr-trtggewet-dfhtretsgbrttyr-je-regdnrhegbrr-gbtrdrgbtdh-asdadqwe-trhree";
+var issuer = "Itransition";
+var audience = "User";
 var symmetricKey = encryptionService.GetSymmetricKey(secretKey ?? "");
 
 builder.Services.AddAuthorization();
@@ -52,7 +52,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
-    options.UseMySql(builder.Configuration.GetValue<string>("ConnectionString"),
+    options.UseMySql("Server=MYSQL8003.site4now.net;Database=db_aae8db_storage;Uid=aae8db_storage;Pwd=123123aB",
         new MySqlServerVersion(new Version(8, 3, 0)),
         mySqlOptions => mySqlOptions.EnableRetryOnFailure());
 });

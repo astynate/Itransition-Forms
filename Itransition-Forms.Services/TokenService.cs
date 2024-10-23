@@ -20,7 +20,7 @@ namespace Itransition_Form.Services
         {
             _encryptionService = encryptionService;
             _configuration = configuration;
-            _secretKey = _configuration["SecretKey"] ?? "";
+            _secretKey = "nongkeger-gu5453rsfhty65e-egrtbr-trtggewet-dfhtretsgbrttyr-je-regdnrhegbrr-gbtrdrgbtdh-asdadqwe-trhree";
         }
 
         public string GenerateAccessToken(UserModel user)
@@ -32,8 +32,8 @@ namespace Itransition_Form.Services
             };
 
             var jwt = new JwtSecurityToken(
-                issuer: _configuration.GetValue<string>("Issuer"),
-                audience: _configuration.GetValue<string>("Audience"),
+                issuer: "Itransition",
+                audience: "User",
                 claims: claims,
                 expires: DateTime.UtcNow.Add(TimeSpan.FromDays(30)),
                 signingCredentials: new SigningCredentials(
