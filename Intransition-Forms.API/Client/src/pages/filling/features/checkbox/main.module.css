@@ -3,8 +3,9 @@
     align-items: center;
     font-size: 16px;
     font-weight: 500;
-    grid-gap: 5px;
+    grid-gap: 10px;
     user-select: none;
+    color: var(--main-font-color);
 }
 
 .checkbox input {

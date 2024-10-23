@@ -198,7 +198,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-right: 10px;
+    padding-right: 8px;
     padding-left: 15px;
     background: var(--main-background-color);
     color: var(--main-blue-color);
@@ -221,15 +221,41 @@
 }
 
 .button:nth-child(1) {
-    border-radius: 20px 20px 10px 10px;
+    border-radius: 17px 17px 10px 10px;
 }
 
 .button:nth-last-child(1) {
-    border-radius: 10px 10px 20px 20px;
+    border-radius: 10px 10px 17px 17px;
 }
 
 .header a {
     text-decoration: none;
+}
+
+.button img {
+    height: 16px;
+    width: 16px;
+    opacity: 0.3;
+    filter: var(--main-filter);
+    object-fit: contain;
+    margin-right: 5px;
+}
+
+.back {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 5px;
+    display: flex;
+    align-items: center;
+    grid-gap: 7px;
+    font-weight: 600;
+    color: var(--main-font-color);
+}
+
+.back img {
+    height: 16px;
+    width: 16px;
+    filter: var(--main-filter);
 }
 
 .menuWrapper {

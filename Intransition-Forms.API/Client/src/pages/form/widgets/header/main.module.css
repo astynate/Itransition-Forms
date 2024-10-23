@@ -64,6 +64,7 @@
     height: 20px;
     width: 20px;
     opacity: 0.4;
+    filter: var(--main-filter);
 }
 
 .logo img {

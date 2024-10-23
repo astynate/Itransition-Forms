@@ -11,6 +11,7 @@ import FormPage from './pages/form/layout/Form';
 import FillingPage from './pages/filling/layout/Filling';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './pages/home/layout/main.css';
+import './i18n';
 import ApplicationState from './state/ApplicationState';
 
 const App = observer(() => {

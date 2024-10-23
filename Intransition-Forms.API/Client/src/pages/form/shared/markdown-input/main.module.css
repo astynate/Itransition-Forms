@@ -7,6 +7,7 @@
     overflow-y: scroll;
     overflow-x: hidden;
     padding: 10px 0px;
+    color: var(--main-font-color);
     border-bottom: 2px solid var(--main-border-color);
     transition: 0.25s ease;
     font-family: 'Open Sans', sans-serif;

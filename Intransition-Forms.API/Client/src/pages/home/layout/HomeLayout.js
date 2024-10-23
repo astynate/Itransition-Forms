@@ -26,7 +26,12 @@ const HomeLayout = observer(() => {
             <Routes>
                 <Route 
                     path='/' 
-                    element={<HomePage headerState={headerState} headerRef={headerRef} />} 
+                    element={
+                        <HomePage 
+                            headerState={headerState} 
+                            headerRef={headerRef} 
+                        />
+                    } 
                 />
                 <Route 
                     path='/users' 

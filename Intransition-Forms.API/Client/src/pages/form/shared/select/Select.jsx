@@ -3,7 +3,11 @@ import Form from 'react-bootstrap/Form';
 
 const Select = ({ items = [], value = "", onChange = () => {} }) => {
     return (
-        <Form.Select className={styles.select} value={value} onChange={onChange}>
+        <Form.Select 
+            className={`${styles.select} dark-select`} 
+            value={value} 
+            onChange={onChange}
+        >
             {items.map((item, index) => (
                 <option key={index} value={item}>{item}</option>
             ))}

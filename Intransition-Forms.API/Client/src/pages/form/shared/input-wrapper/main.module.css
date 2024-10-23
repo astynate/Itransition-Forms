@@ -28,6 +28,7 @@
 .button img {
     height: 15px;
     width: 15px;
+    filter: var(--main-filter);
 }
 
 .drag {

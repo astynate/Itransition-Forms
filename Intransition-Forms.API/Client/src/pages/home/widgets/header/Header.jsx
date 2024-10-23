@@ -1,3 +1,11 @@
+import { useEffect, useRef, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
+import { instance } from '../../../../state/Interceptors';
+import { MDBSwitch } from 'mdb-react-ui-kit';
+import { Form } from 'react-bootstrap';
+import back from './images/back.png';
+import right from './images/right.png';
 import styles from './main.module.css';
 import logo from './images/itransition_logo.svg';
 import Wrapper from '../../elemets/wrapper/Wrapper';
@@ -5,20 +13,18 @@ import Avatar from '../../elemets/avatar/Avatar';
 import userState from '../../../../state/UserState';
 import search from './images/search.png';
 import form from './images/itransition-form.png';
-import { useEffect, useRef, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { observer } from 'mobx-react-lite';
 import UserState from '../../../../state/UserState';
-import { instance } from '../../../../state/Interceptors';
 import DateHandler from '../../../../utils/DateHandler';
-import { MDBSwitch } from 'mdb-react-ui-kit';
 import ApplicationState from '../../../../state/ApplicationState';
+import { useTranslation } from 'react-i18next';
 
 const Header = observer(({isSearch = true}) => {
     const [isUserPopUpOpen, setPopUpOpenState] = useState(false);
     const [currentPath, setCurrentPath] = useState(0);
     const [timeoutId, setTimeoutId] = useState(undefined);
     const [searchResults, setSearchResults] = useState([]);
+    const [openPanel, setOpenPanelState] = useState(0);
+    const { t, i18n } = useTranslation();
     
     const paths = ['', 'users'];
 
@@ -86,7 +92,7 @@ const Header = observer(({isSearch = true}) => {
                     <Link className={styles.left} to={'/'}>
                         <img src={logo} draggable="false" className={styles.logo} />
                         <h1 className={styles.company}>Itransition 
-                            <div className={styles.product}>Forms</div>
+                            <div className={styles.product}>{t('applicationName')}</div>
                         </h1>
                     </Link>
                     {isSearch && <div className={styles.search} state={searchResults.length > 0 ? "opened" : null}>
@@ -95,13 +101,13 @@ const Header = observer(({isSearch = true}) => {
                             className={styles.searchImage}
                         />
                         <input 
-                            placeholder='Search' 
+                            placeholder={t('search')}
                             onInput={HandlerInput}
                         />
                         <div className={styles.searchResults}>
                             {searchResults.map((template) => {
                                 const isUserOwner = UserState.user && template.owner.id === UserState.user.id;
-                                const isUserAdmin = UserState.user.admin;
+                                const isUserAdmin = UserState.user && UserState.user.admin;
 
                                 return (
                                     <Link 
@@ -137,22 +143,68 @@ const Header = observer(({isSearch = true}) => {
                             />
                         </div>
                         {isUserPopUpOpen && <div className={styles.userPopUp}>
-                            <Link to={"/login"} className={styles.button}>
-                                <span>Login</span>
-                            </Link>
-                            <div 
-                                className={styles.button} 
-                                onClick={() => ApplicationState.SetDarkModeState(!ApplicationState.isDarkMode)}
-                            >
-                                <span>Dark mode</span>
-                                <MDBSwitch
-                                    checked={ApplicationState.isDarkMode}
-                                    onChange={() => {}}
-                                />
-                            </div>
-                            <Link to={"/register"} className={styles.button}>
-                                <span>Register</span>
-                            </Link>
+                            {openPanel === 0 && 
+                                <>
+                                    <Link to={"/login"} className={styles.button}>
+                                        <span>{t('login')}</span>
+                                    </Link>
+                                    <div 
+                                        className={styles.button} 
+                                        onClick={() => ApplicationState.SetDarkModeState(!ApplicationState.isDarkMode)}
+                                    >
+                                        <span>{t('dark-theme')}</span>
+                                        <MDBSwitch
+                                            checked={ApplicationState.isDarkMode}
+                                            onChange={() => {}}
+                                        />
+                                    </div>
+                                    <div 
+                                        className={styles.button} 
+                                        onClick={(e) => {
+                                            setOpenPanelState(1);
+                                            e.stopPropagation();
+                                        }}
+                                    >
+                                        <span>{t('language')} (EN)</span>
+                                        <img src={right} draggable="false" />
+                                    </div>
+                                    <Link to={"/register"} className={styles.button}>
+                                        <span>{t('register')}</span>
+                                    </Link>
+                                </>}
+                            {openPanel === 1 && 
+                                <>
+                                    <div 
+                                        className={styles.back} 
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setOpenPanelState(0);
+                                        }}
+                                    >
+                                        <img src={back} draggable={false} />
+                                        <span>Back</span>
+                                    </div>
+                                    <div className={styles.button} onClick={() => i18n.changeLanguage('en')}>
+                                        <span>English (UK)</span>
+                                        <Form.Check
+                                            checked={i18n.language === 'en'}
+                                            type={'radio'}
+                                            onChange={() => {
+                                                i18n.changeLanguage('en');
+                                            }}
+                                        />
+                                    </div>
+                                    <div className={styles.button} onClick={() => i18n.changeLanguage('be')}>
+                                        <span>Беларускі (BE)</span>
+                                        <Form.Check
+                                            checked={i18n.language === 'be'}
+                                            type={'radio'}
+                                            onChange={() => {
+                                                i18n.changeLanguage('be');
+                                            }}
+                                        />
+                                    </div>
+                                </>}
                         </div>}
                     </div>
                 </div>

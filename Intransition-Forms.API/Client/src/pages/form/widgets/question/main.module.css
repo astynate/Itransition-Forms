@@ -62,4 +62,5 @@
     width: 85%;
     opacity: 0.4;
     object-fit: contain;
+    filter: var(--main-filter);
 }

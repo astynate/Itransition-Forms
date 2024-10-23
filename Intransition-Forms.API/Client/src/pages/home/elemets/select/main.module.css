@@ -23,11 +23,12 @@
     padding: 3px;
     background: var(--main-background-color);
     position: absolute;
-    box-shadow: 0px 0px 100px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0px 0px 100px rgba(0, 0, 0, 0.1); */
     border-radius: 5px;
     display: flex;
     flex-direction: column;
     grid-gap: 0px;
+    border: 1px solid var(--main-border-color);
 }
 
 .popUpItem {
@@ -51,6 +52,7 @@
     height: 16px;
     width: 16px;
     object-fit: contain;
+    filter: var(--main-filter);
 }
 
 .arrow[state="open"] {
