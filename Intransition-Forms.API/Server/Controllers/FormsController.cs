@@ -30,8 +30,8 @@ namespace Instend.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPopularTemplates() 
-            => Ok(await _formsRepository.GetPopularTemplates(5));
+        public async Task<IActionResult> GetPopularTemplates(string? tag) 
+            => Ok(await _formsRepository.GetPopularTemplates(5, tag));
 
         [HttpGet]
         [Route("/api/forms/{id}")]

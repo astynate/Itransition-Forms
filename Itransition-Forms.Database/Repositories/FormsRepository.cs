@@ -93,8 +93,25 @@ namespace Itransition_Forms.Database.Repositories
         public async Task<Result<FormModel[]>> GetUsersTemplates(Guid userId, int skip = 0, int count = 5) 
             => await GetFormByExpression((x) => x.UserModelId == userId, (x) => x.Date, skip, count);
 
-        public async Task<FormModel[]> GetPopularTemplates(int count)
-            => await GetFormByExpression((x) => true, (x) => x.NumberOfFills, 0, count);
+        public async Task<FormModel[]> GetPopularTemplates(int count, string? tag)
+        {
+            if (string.IsNullOrEmpty(tag) || string.IsNullOrWhiteSpace(tag))
+                return await GetFormByExpression((x) => true, (x) => x.NumberOfFills, 0, count);
+
+            var result = await _context.Tags
+                .Where(x => x.Tag == tag)
+                .Include(x => x.Form)
+                    .ThenInclude(form => form.Owner)
+                .Include(x => x.Form)
+                    .ThenInclude(form => form.Questions)
+                        .ThenInclude(question => question.Answers)
+                .AsSplitQuery()
+                .Select(x => x.Form)
+                .Where(x => x != null)
+                .ToArrayAsync();
+
+            return result ?? [];
+        }
 
         public async Task<FormModel?> GetFormModelById(Guid id)
         {

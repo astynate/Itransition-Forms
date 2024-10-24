@@ -1,16 +1,19 @@
 import React from 'react';
 import RegistrationForm from '../../form/Form';
 import AccountLayout from '../../layout/AccountLayout';
+import { useTranslation } from 'react-i18next';
 
 const Register = () => {
+    const { t } = useTranslation();
+
     return (
         <AccountLayout>
             <RegistrationForm
-                name='Registration'
-                button={"Sign up"}
+                name={t('register')}
+                button={t('sign-up')}
                 inputs={[
-                    {placeholder: 'Email', name: "email"},
-                    {placeholder: 'Password', name: "password", type: "password"},
+                    {placeholder: t('email'), name: "email"},
+                    {placeholder: t('password'), name: "password", type: "password"},
                 ]}
                 isColorPicker={true}
                 action='/api/users/register'

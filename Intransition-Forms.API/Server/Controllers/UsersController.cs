@@ -23,18 +23,18 @@ namespace Instend.Server.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        //[Authorize] Deleted cause hosting error
         public async Task<IActionResult> GetUser()
         {
             var userId = _tokenService.GetClaimFromRequest(Request, "sub");
                 
             if (userId == null)
-                return Unauthorized();
+                return Conflict();
 
             var user = await _userRepository.GetUserById(Guid.Parse(userId));
 
             if (user == null)
-                return Unauthorized();
+                return Conflict();
 
             Response.Headers["Access-Token"] = _tokenService
                 .GenerateAccessToken(user);
@@ -51,10 +51,10 @@ namespace Instend.Server.Controllers
             var role = _tokenService.GetClaimFromRequest(Request, "role");
 
             if (userId == null)
-                return Unauthorized();
+                return Conflict();
 
             if (role == null || role != "Admin")
-                return Unauthorized();
+                return Conflict();
 
             var users = await _userRepository.GetUsers(from, count);
 
@@ -108,10 +108,10 @@ namespace Instend.Server.Controllers
             var role = _tokenService.GetClaimFromRequest(Request, "role");
 
             if (userId == null)
-                return Unauthorized();
+                return Conflict();
 
             if (role == null || role != "Admin")
-                return Unauthorized();
+                return Conflict();
 
             var operations = new Dictionary<UpdateUserOperations, UpdateUsersDelegate>()
             {

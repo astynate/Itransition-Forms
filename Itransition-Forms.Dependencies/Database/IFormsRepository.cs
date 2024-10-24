@@ -9,7 +9,7 @@ namespace Itransition_Forms.Dependencies.Database
         Task<bool> Delete(Guid id, Guid userId, bool checkOwner);
         Task<FormModel?> GetFormModelById(Guid id);
         Task<FormModel[]> GetFormModelsByPrefix(string prefix);
-        Task<FormModel[]> GetPopularTemplates(int count);
+        Task<FormModel[]> GetPopularTemplates(int count, string? tag);
         Task<Result<FormModel[]>> GetUsersTemplates(Guid userId, int skip = 0, int count = 5);
         Task<Result> UpdateForm(FormModel form, FormModel updatedForm);
         Task<Result> UpdateFormTitle(FormModel form, string title);

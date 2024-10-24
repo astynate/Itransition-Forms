@@ -1,4 +1,5 @@
 import { makeAutoObservable } from "mobx";
+import { instance } from "./Interceptors";
 
 class FormsState {
     popularForms = [];
@@ -10,16 +11,30 @@ class FormsState {
         makeAutoObservable(this);
     }
 
+    getPopularForms = async (tag) => {
+        this.popularForms = [];
+        this.setLoadingState(true);
+
+        await instance
+            .get(`/api/forms?tag=${tag}`)
+            .then(response => {
+                if (response.data) {
+                    this.popularForms = response.data;
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+        this.setLoadingState(false);
+    }
+
     setHasMoreState(state) {
         this.isHasMore = state;
     }
 
     setLoadingState(state) {
         this.isPopularTemplatesLoading = state;
-    }
-
-    SetPopularForms(forms) {
-        this.popularForms = forms;
     }
 
     setLatestForms(forms) {

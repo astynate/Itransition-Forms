@@ -105,10 +105,12 @@ const RegistrationForm = ({name, button, inputs=[], action='/api/login', isColor
             </div>}
             <br />
             <br />
-            <SimpleButton 
-                title={button}
-                callback={SendRequest} 
-            />
+            <div className={styles.bottom}>
+                <SimpleButton 
+                    title={button}
+                    callback={SendRequest} 
+                />
+            </div>
         </div>
     );
 }

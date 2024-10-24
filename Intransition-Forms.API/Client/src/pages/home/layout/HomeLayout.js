@@ -29,7 +29,7 @@ const HomeLayout = observer(() => {
                     element={
                         <HomePage 
                             headerState={headerState} 
-                            headerRef={headerRef} 
+                            headerRef={headerRef}
                         />
                     } 
                 />

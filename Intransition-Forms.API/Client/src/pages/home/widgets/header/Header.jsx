@@ -4,6 +4,8 @@ import { observer } from 'mobx-react-lite';
 import { instance } from '../../../../state/Interceptors';
 import { MDBSwitch } from 'mdb-react-ui-kit';
 import { Form } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+import { changeLanguage } from '../../../../i18n';
 import back from './images/back.png';
 import right from './images/right.png';
 import styles from './main.module.css';
@@ -16,7 +18,6 @@ import form from './images/itransition-form.png';
 import UserState from '../../../../state/UserState';
 import DateHandler from '../../../../utils/DateHandler';
 import ApplicationState from '../../../../state/ApplicationState';
-import { useTranslation } from 'react-i18next';
 
 const Header = observer(({isSearch = true}) => {
     const [isUserPopUpOpen, setPopUpOpenState] = useState(false);
@@ -24,6 +25,8 @@ const Header = observer(({isSearch = true}) => {
     const [timeoutId, setTimeoutId] = useState(undefined);
     const [searchResults, setSearchResults] = useState([]);
     const [openPanel, setOpenPanelState] = useState(0);
+    const [isSearchOpen, SetSearchOpenState] = useState(false);
+    const [width, setWidth] = useState(0);
     const { t, i18n } = useTranslation();
     
     const paths = ['', 'users'];
@@ -62,6 +65,20 @@ const Header = observer(({isSearch = true}) => {
         setCurrentPath(path);
     }, [params]);
 
+    useEffect(() => {
+        const handleResize = () => {
+            setWidth(window.innerWidth);
+        };
+
+        handleResize();
+
+        window.addEventListener('resize', handleResize);
+        
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        }
+    }, []);
+
     const HandlerInput = (event) => {
         clearTimeout(timeoutId);
 
@@ -95,43 +112,57 @@ const Header = observer(({isSearch = true}) => {
                             <div className={styles.product}>{t('applicationName')}</div>
                         </h1>
                     </Link>
-                    {isSearch && <div className={styles.search} state={searchResults.length > 0 ? "opened" : null}>
-                        <img 
-                            src={search} draggable="false" 
-                            className={styles.searchImage}
-                        />
-                        <input 
-                            placeholder={t('search')}
-                            onInput={HandlerInput}
-                        />
-                        <div className={styles.searchResults}>
-                            {searchResults.map((template) => {
-                                const isUserOwner = UserState.user && template.owner.id === UserState.user.id;
-                                const isUserAdmin = UserState.user && UserState.user.admin;
+                    {isSearch && 
+                        <div className={styles.searchWrapper} active={isSearchOpen ? 'true' : null}>
+                            {isSearchOpen && width <= 700 && <img 
+                                src={back} 
+                                draggable="false" 
+                                className={styles.searchImage}
+                                onClick={() => SetSearchOpenState(false)}
+                            />}
+                            <div 
+                                className={styles.search} 
+                                state={searchResults.length > 0 ? "opened" : null}
+                                onClick={() => SetSearchOpenState(true)}
+                            >
+                                <img 
+                                    src={search} 
+                                    draggable="false" 
+                                    className={styles.searchImage}
+                                />
+                                <input 
+                                    placeholder={t('search')}
+                                    onInput={HandlerInput}
+                                />
+                                <div className={styles.searchResults}>
+                                    {searchResults.map((template) => {
+                                        const isUserOwner = UserState.user && template.owner.id === UserState.user.id;
+                                        const isUserAdmin = UserState.user && UserState.user.admin;
 
-                                return (
-                                    <Link 
-                                        to={`/${isUserOwner || isUserAdmin ? 'form' : 'filling'}/${template.id}`} 
-                                        className={styles.template} key={template.id}
-                                        onClick={() => setSearchResults([])}
-                                    >
-                                        <div className={styles.name}>
-                                            <img 
-                                                src={form} 
-                                                className={styles.form} 
-                                                draggable="false"
-                                            />
-                                            <div className={styles.information}>
-                                                <span>{template.title}</span>
-                                                <span>{template.owner.email}</span>
-                                            </div>
-                                        </div>
-                                        <span className={styles.date}>{DateHandler.Format(template.date)}</span>
-                                    </Link>
-                                );
-                            })}
-                        </div>
-                    </div>}
+                                        return (
+                                            <Link 
+                                                to={`/${isUserOwner || isUserAdmin ? 'form' : 'filling'}/${template.id}`} 
+                                                className={styles.template} key={template.id}
+                                                onClick={() => setSearchResults([])}
+                                            >
+                                                <div className={styles.name}>
+                                                    <img 
+                                                        src={form} 
+                                                        className={styles.form} 
+                                                        draggable="false"
+                                                    />
+                                                    <div className={styles.information}>
+                                                        <span>{template.title}</span>
+                                                        <span>{template.owner.email}</span>
+                                                    </div>
+                                                </div>
+                                                <span className={styles.date}>{DateHandler.Format(template.date)}</span>
+                                            </Link>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </div>}
                     <div 
                         className={styles.user} 
                         ref={ref}
@@ -184,7 +215,7 @@ const Header = observer(({isSearch = true}) => {
                                         <img src={back} draggable={false} />
                                         <span>Back</span>
                                     </div>
-                                    <div className={styles.button} onClick={() => i18n.changeLanguage('en')}>
+                                    <div className={styles.button} onClick={() => changeLanguage('en')}>
                                         <span>English (UK)</span>
                                         <Form.Check
                                             checked={i18n.language === 'en'}
@@ -194,7 +225,7 @@ const Header = observer(({isSearch = true}) => {
                                             }}
                                         />
                                     </div>
-                                    <div className={styles.button} onClick={() => i18n.changeLanguage('be')}>
+                                    <div className={styles.button} onClick={() => changeLanguage('be')}>
                                         <span>Беларускі (BE)</span>
                                         <Form.Check
                                             checked={i18n.language === 'be'}

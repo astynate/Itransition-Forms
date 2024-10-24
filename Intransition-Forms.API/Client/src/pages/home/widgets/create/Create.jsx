@@ -8,8 +8,13 @@ import { observer } from 'mobx-react-lite';
 import FormsState from '../../../../state/FormsState';
 import { instance } from '../../../../state/Interceptors';
 import Loading from '../../../../elements/loading/Loading';
+import { useTranslation } from 'react-i18next';
+import Tag from '../../features/tag/Tag';
+import { useEffect } from 'react';
 
-const Create = observer(({setForms, forms}) => {
+const Create = observer(({currentTag, forms, tags = [], setCurrentTag = () => {}}) => {
+    const { t } = useTranslation();
+
     const CreatePresentation = async (id) => {
         let form = new FormData();
 
@@ -27,9 +32,17 @@ const Create = observer(({setForms, forms}) => {
         });
     }
     
+    useEffect(() => {
+        const tag = currentTag >= 0 ? tags[currentTag] : "";
+        FormsState.getPopularForms(tag);
+    }, [currentTag]);
+
     return (
         <div className={styles.createWrapper}>
-            {FormsState.isPopularTemplatesLoading && <Loading />}
+            {FormsState.isPopularTemplatesLoading && 
+                <div className={styles.loadingWrapper}>
+                    <Loading />
+                </div>}
             {FormsState.isPopularTemplatesLoading === false && FormsState.popularForms.length === 0 && !userState.user ?
                 <img 
                     src={notFound} 
@@ -38,6 +51,24 @@ const Create = observer(({setForms, forms}) => {
                 />
             :
                 <Wrapper>
+                    <div className={styles.tagCloud}>
+                        <h1 className={styles.popularTemplates}>{t('popular-templates')}</h1>
+                        <div className={styles.tags}>
+                            <Tag 
+                                name='Without tag' 
+                                isActive={currentTag === -1}
+                                callback={() => setCurrentTag(-1)}
+                            />
+                            {tags.map((e, index) => {
+                                return <Tag 
+                                    name={e} 
+                                    key={index} 
+                                    isActive={index === currentTag}
+                                    callback={() => setCurrentTag(index)}
+                                />;
+                            })}
+                        </div>
+                    </div>
                     <List>
                         {!FormsState.isPopularTemplatesLoading && userState.user && <FormTemplate 
                             onClick={() => CreatePresentation(null)}
@@ -47,8 +78,8 @@ const Create = observer(({setForms, forms}) => {
                                 <FormTemplate 
                                     key={index}
                                     image={null}
+                                    isCreate={false}
                                     name='Loading...'
-                                    isCreate={!!userState.user}
                                 />
                             );
                         })}

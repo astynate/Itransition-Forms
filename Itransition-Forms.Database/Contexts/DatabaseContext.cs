@@ -30,6 +30,7 @@ namespace Itransition_Forms.Database.Contexts
             modelBuilder.Entity<FormModel>().HasOne(s => s.Owner);
 
             modelBuilder.Entity<QuestionModel>().HasMany(s => s.Answers);
+            modelBuilder.Entity<TagModel>().HasOne(s => s.Form);
 
             modelBuilder.Entity<FormLinkModel>().HasMany(x => x.Answers);
             modelBuilder.Entity<FormLinkModel>().HasOne(x => x.User);

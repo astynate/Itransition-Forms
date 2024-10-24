@@ -63,6 +63,7 @@ builder.Services.AddScoped<IFormsRepository, FormsRepository>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<IFillingsRepository, FillingsRepository>();
 builder.Services.AddScoped<ISerializationHelper, SerializationHelper>();
+builder.Services.AddScoped<ITagsRepository, TagsRepository>();
 builder.Services.AddSingleton<ITokenService, TokenService>();
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -81,6 +82,16 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<LoggingMiddleware>();
+
+app.Use(async (context, next) =>
+{
+    if (context.Request.Headers.TryGetValue("ItransitionAuthorization", out var iTransitionAuthValue))
+    {
+        context.Request.Headers["Authorization"] = iTransitionAuthValue;
+    }
+
+    await next.Invoke();
+});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
