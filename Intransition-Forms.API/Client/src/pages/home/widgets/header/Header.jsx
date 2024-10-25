@@ -1,38 +1,28 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { instance } from '../../../../state/Interceptors';
-import { MDBSwitch } from 'mdb-react-ui-kit';
-import { Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { changeLanguage } from '../../../../i18n';
 import back from './images/back.png';
-import right from './images/right.png';
 import styles from './main.module.css';
 import logo from './images/itransition_logo.svg';
 import Wrapper from '../../elemets/wrapper/Wrapper';
-import Avatar from '../../elemets/avatar/Avatar';
-import userState from '../../../../state/UserState';
 import search from './images/search.png';
 import form from './images/itransition-form.png';
 import UserState from '../../../../state/UserState';
 import DateHandler from '../../../../utils/DateHandler';
-import ApplicationState from '../../../../state/ApplicationState';
+import AvatarWithPopup from '../../features/avatar-with-popup/AvatarWithPopup';
 
 const Header = observer(({isSearch = true}) => {
-    const [isUserPopUpOpen, setPopUpOpenState] = useState(false);
     const [currentPath, setCurrentPath] = useState(0);
     const [timeoutId, setTimeoutId] = useState(undefined);
     const [searchResults, setSearchResults] = useState([]);
-    const [openPanel, setOpenPanelState] = useState(0);
     const [isSearchOpen, SetSearchOpenState] = useState(false);
     const [width, setWidth] = useState(0);
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     
     const paths = ['', 'users'];
-
-    let params = useParams();
-    let ref = useRef();
+    const params = useParams();
 
     useEffect(() => {
         const SetSearchResultsAsDefault = () => {
@@ -44,20 +34,6 @@ const Header = observer(({isSearch = true}) => {
         return () => {
             document.removeEventListener('click', SetSearchResultsAsDefault);
         }
-    }, []);
-
-    useEffect(() => {
-        const clickHandler = (event) => {
-            if (ref.current && !ref.current.contains(event.target)) {
-                setPopUpOpenState(false);
-            }
-        };
-
-        document.addEventListener('click', clickHandler);
-
-        return () => {
-            document.removeEventListener('click', clickHandler);
-        };
     }, []);
 
     useEffect(() => {
@@ -163,81 +139,7 @@ const Header = observer(({isSearch = true}) => {
                                 </div>
                             </div>
                         </div>}
-                    <div 
-                        className={styles.user} 
-                        ref={ref}
-                    >
-                        <div onClick={() => setPopUpOpenState(prev => !prev)}>
-                            <Avatar 
-                                name={userState.user ? userState.user.email : undefined}
-                                color={userState.user ? userState.user.color : undefined}
-                            />
-                        </div>
-                        {isUserPopUpOpen && <div className={styles.userPopUp}>
-                            {openPanel === 0 && 
-                                <>
-                                    <Link to={"/login"} className={styles.button}>
-                                        <span>{t('login')}</span>
-                                    </Link>
-                                    <div 
-                                        className={styles.button} 
-                                        onClick={() => ApplicationState.SetDarkModeState(!ApplicationState.isDarkMode)}
-                                    >
-                                        <span>{t('dark-theme')}</span>
-                                        <MDBSwitch
-                                            checked={ApplicationState.isDarkMode}
-                                            onChange={() => {}}
-                                        />
-                                    </div>
-                                    <div 
-                                        className={styles.button} 
-                                        onClick={(e) => {
-                                            setOpenPanelState(1);
-                                            e.stopPropagation();
-                                        }}
-                                    >
-                                        <span>{t('language')} (EN)</span>
-                                        <img src={right} draggable="false" />
-                                    </div>
-                                    <Link to={"/register"} className={styles.button}>
-                                        <span>{t('register')}</span>
-                                    </Link>
-                                </>}
-                            {openPanel === 1 && 
-                                <>
-                                    <div 
-                                        className={styles.back} 
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setOpenPanelState(0);
-                                        }}
-                                    >
-                                        <img src={back} draggable={false} />
-                                        <span>Back</span>
-                                    </div>
-                                    <div className={styles.button} onClick={() => changeLanguage('en')}>
-                                        <span>English (UK)</span>
-                                        <Form.Check
-                                            checked={i18n.language === 'en'}
-                                            type={'radio'}
-                                            onChange={() => {
-                                                i18n.changeLanguage('en');
-                                            }}
-                                        />
-                                    </div>
-                                    <div className={styles.button} onClick={() => changeLanguage('be')}>
-                                        <span>Беларускі (BE)</span>
-                                        <Form.Check
-                                            checked={i18n.language === 'be'}
-                                            type={'radio'}
-                                            onChange={() => {
-                                                i18n.changeLanguage('be');
-                                            }}
-                                        />
-                                    </div>
-                                </>}
-                        </div>}
-                    </div>
+                    <AvatarWithPopup />
                 </div>
             </Wrapper>
             {UserState.user && UserState.user.isAdmin && <div className={styles.menuWrapper}>

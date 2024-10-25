@@ -100,6 +100,8 @@ namespace Itransition_Forms.Database.Repositories
 
             var result = await _context.Tags
                 .Where(x => x.Tag == tag)
+                .OrderBy(x => x.Id)
+                .Take(5)
                 .Include(x => x.Form)
                     .ThenInclude(form => form.Owner)
                 .Include(x => x.Form)

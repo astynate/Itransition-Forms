@@ -15,6 +15,10 @@
     border-bottom: 1px solid var(--main-border-color);
 }
 
+.headerWrapper a {
+    text-decoration: none;
+}
+
 .headerWrapper[type="searchless"] {
     background: none;
     border: none;
@@ -180,92 +184,6 @@
     border-left: 1px solid var(--main-border-color);
     border-right: 1px solid var(--main-border-color);
     border-radius: 20px 20px 0px 0px;
-}
-
-.user {
-    position: relative;
-    cursor: pointer;
-}
-
-.userPopUp {
-    top: 45px;
-    right: 0px;
-    position: absolute;
-    background: var(--main-accent-color);
-    border-radius: 20px;
-    padding: 4px;
-    display: flex;
-    flex-direction: column;
-    grid-gap: 2px;
-    z-index: 9999;
-    border: 1px solid var(--main-border-color);
-    box-shadow: 0px 0px 100px rgba(0, 0, 0, 0.05);
-}
-
-.button {
-    height: 50px;
-    width: 300px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-right: 8px;
-    padding-left: 15px;
-    background: var(--main-background-color);
-    color: var(--main-blue-color);
-}
-
-.button:hover {
-    outline: 3px solid var(--main-blue-color);
-}
-
-.button:active {
-    outline: 2px solid var(--main-blue-color);
-}
-
-.button span {
-    font-weight: 600;
-}
-
-.button {
-    border-radius: 10px;
-}
-
-.button:nth-child(1) {
-    border-radius: 17px 17px 10px 10px;
-}
-
-.button:nth-last-child(1) {
-    border-radius: 10px 10px 17px 17px;
-}
-
-.header a {
-    text-decoration: none;
-}
-
-.button img {
-    height: 16px;
-    width: 16px;
-    opacity: 0.3;
-    filter: var(--main-filter);
-    object-fit: contain;
-    margin-right: 5px;
-}
-
-.back {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 5px;
-    display: flex;
-    align-items: center;
-    grid-gap: 7px;
-    font-weight: 600;
-    color: var(--main-font-color);
-}
-
-.back img {
-    height: 16px;
-    width: 16px;
-    filter: var(--main-filter);
 }
 
 .menuWrapper {

@@ -4,21 +4,23 @@ import { observer } from 'mobx-react-lite';
 import eye from './images/eye.png';
 import styles from './main.module.css';
 import logo from './images/itransition_logo.svg';
-import Avatar from '../../../home/elemets/avatar/Avatar';
 import Menu from '../../features/menu/Menu';
 import Wrapper from '../../../home/elemets/wrapper/Wrapper';
-import UserState from '../../../../state/UserState';
 import SaveChanges from '../../../../elements/save-changes/SaveChanges';
 import FormsAPI from '../../api/FormsAPI';
+import AvatarWithPopup from '../../../home/features/avatar-with-popup/AvatarWithPopup';
+import { useTranslation } from 'react-i18next';
 
 const Header = observer(({form, isSavingChanges = false, setSavingChanges = () => {}, setForm = () => {}}) => {
     const [currentItem, SetCurrentItem] = useState(0);
     const [previousName, setPreviousName] = useState(form ? form.title : null);
     const [timeoutId, setTimeoutId] = useState(undefined);
+    
     const routes = ['', 'answers'];
+    const { t } = useTranslation();
 
-    let params = useParams();
-    let navigate = useNavigate();
+    const params = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         SetCurrentItem(routes
@@ -34,6 +36,7 @@ const Header = observer(({form, isSavingChanges = false, setSavingChanges = () =
                             <img src={logo} draggable="false" />
                         </Link>
                         <input 
+                            maxLength={25}
                             value={form ? form.title : 'Loading...'}
                             onChange={(event) => {
                                 if (form) {
@@ -56,7 +59,7 @@ const Header = observer(({form, isSavingChanges = false, setSavingChanges = () =
                                 setPreviousName(form ? form.title : undefined);
                             }}
                             onBlur={async () => {
-                                if (!form.title || form.title === '') {
+                                if (form && (!form.title || form.title === '')) {
                                     setForm(prev => {
                                         return { ...prev, title: previousName };
                                     });
@@ -68,20 +71,17 @@ const Header = observer(({form, isSavingChanges = false, setSavingChanges = () =
                     <div className={styles.right}>
                         {isSavingChanges && <SaveChanges />}
                         <Link to={`/filling/${params.id}`} className={styles.show}>
-                            <img src={eye} />
+                            <img src={eye} draggable="false" />
                         </Link>
-                        <Avatar 
-                            name={UserState.user ? UserState.user.email : null} 
-                            color={UserState.user ? UserState.user.color : null} 
-                        />
+                        <AvatarWithPopup />
                     </div>
                 </div>
             </Wrapper>
             <div className={styles.bottom}>
                 <Menu 
                     items={[
-                        { title: 'Questions', callback: () => { navigate(`/form/${params.id}`) } },
-                        { title: 'Answers', callback: () => { navigate(`/form/${params.id}/answers`) } },
+                        { title: t('questions'), callback: () => { navigate(`/form/${params.id}`) } },
+                        { title: t('answers'), callback: () => { navigate(`/form/${params.id}/answers`) } },
                     ]}
                     currentItem={currentItem}
                 />

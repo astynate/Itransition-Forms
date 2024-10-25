@@ -10,6 +10,10 @@
     border-bottom: 1px solid var(--main-border-color);
 }
 
+.header a {
+    text-decoration: none;
+}
+
 .top {
     height: 60px;
     display: flex;
@@ -78,6 +82,8 @@
     border: none;
     outline: none;
     background: none;
+    max-width: 300px;
+    width: 100%;
     font-size: 20px;
     font-weight: 600;
     font-family: 'Open Sans', sans-serif;

@@ -118,7 +118,7 @@ namespace Itransition_Forms.Core.Form
                 NumberOfFills = NumberOfFills,
                 Questions = Questions.Select(e => e.Clone()).ToList(),
                 Owner = Owner,
-                Date = Date
+                Date = DateTime.Now
             };
         }
     }

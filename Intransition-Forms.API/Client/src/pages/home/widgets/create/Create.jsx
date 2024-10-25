@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 import Tag from '../../features/tag/Tag';
 import { useEffect } from 'react';
 
-const Create = observer(({currentTag, forms, tags = [], setCurrentTag = () => {}}) => {
+const Create = observer(({currentTag, tags = [], setCurrentTag = () => {}}) => {
     const { t } = useTranslation();
 
     const CreatePresentation = async (id) => {
@@ -23,7 +23,7 @@ const Create = observer(({currentTag, forms, tags = [], setCurrentTag = () => {}
             body: form
         })
         .then(response => {
-            FormsState.setLatestForms([response.data, ...forms]);
+            FormsState.setLatestForms([response.data, ...FormsState.latestForms]);
             window.open(`/form/${response.data.id}`, '_blank');
         })
         .catch(error => {

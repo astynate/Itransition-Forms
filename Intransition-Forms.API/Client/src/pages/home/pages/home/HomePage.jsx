@@ -55,11 +55,16 @@ const HomePage = observer(({headerState, headerRef}) => {
                     const fillingOuts = response.data.fillingOuts;
                     const templates = response.data.templates;
 
+                    const existingIds = new Set(FormsState.latestForms.map(form => form.id));
+
+                    const uniqueTemplates = templates.filter(template => !existingIds.has(template.id));
+                    const uniqueFillingOuts = fillingOuts.filter(fillingOut => !existingIds.has(fillingOut.id));
+
                     const isHasMoreTemplates = templates.length >= 5;
                     const isHasFillingOuts = fillingOuts.length >= 5;
 
                     FormsState.setHasMoreState(isHasMoreTemplates || isHasFillingOuts);
-                    FormsState.setLatestForms([...templates, ...fillingOuts, ...FormsState.latestForms]);
+                    FormsState.setLatestForms([...uniqueTemplates, ...uniqueFillingOuts, ...FormsState.latestForms]);
                 } else {
                     FormsState.setHasMoreState(false);
                 }
