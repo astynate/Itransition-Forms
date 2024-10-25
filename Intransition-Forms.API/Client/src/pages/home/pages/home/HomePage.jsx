@@ -11,8 +11,11 @@ import Wrapper from '../../elemets/wrapper/Wrapper';
 import Select from '../../elemets/select/Select';
 import List from '../../features/list/List';
 import FormModel from '../../features/form-model/FormModel';
+import { useTranslation } from 'react-i18next';
 
 const HomePage = observer(({headerState, headerRef}) => {
+    const [currentTag, setCurrentTag] = useState(-1);
+    const [tags, setTags] = useState([]);
     const [displayProperty, SetDisplayProperty] = useState([0, 1]);
     const [sortProperty, SetSortProperty] = useState([0]);
     const [isRenameWindowOpen, SetRenameOpenState] = useState(false);
@@ -20,6 +23,7 @@ const HomePage = observer(({headerState, headerRef}) => {
     const [isViewingTemplates, setIsViewigTemplatesState] = useState(true);
     const [isViewingFillingOusts, setIsViewigFillingOustsState] = useState(true);
     const [sortingType, setSortingType] = useState(0);
+    const { t } = useTranslation();
 
     const sortingTypes = [
         SortTemplates.SortByDateAscending,
@@ -51,11 +55,16 @@ const HomePage = observer(({headerState, headerRef}) => {
                     const fillingOuts = response.data.fillingOuts;
                     const templates = response.data.templates;
 
+                    const existingIds = new Set(FormsState.latestForms.map(form => form.id));
+
+                    const uniqueTemplates = templates.filter(template => !existingIds.has(template.id));
+                    const uniqueFillingOuts = fillingOuts.filter(fillingOut => !existingIds.has(fillingOut.id));
+
                     const isHasMoreTemplates = templates.length >= 5;
                     const isHasFillingOuts = fillingOuts.length >= 5;
 
                     FormsState.setHasMoreState(isHasMoreTemplates || isHasFillingOuts);
-                    FormsState.setLatestForms([...templates, ...fillingOuts, ...FormsState.latestForms]);
+                    FormsState.setLatestForms([...uniqueTemplates, ...uniqueFillingOuts, ...FormsState.latestForms]);
                 } else {
                     FormsState.setHasMoreState(false);
                 }
@@ -64,6 +73,23 @@ const HomePage = observer(({headerState, headerRef}) => {
                 console.error(error);
             });
     }
+
+    useEffect(() => {
+        const GetTags = async () => {
+            await instance
+                .get('/api/tags')
+                .then(response => {
+                    if (response.data) {
+                        setTags(response.data);
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+
+        GetTags();
+    }, []);
 
     useEffect(() => {
         if (UserState.user) {
@@ -81,19 +107,20 @@ const HomePage = observer(({headerState, headerRef}) => {
                 />
             }
             <Create
-                setForm={FormsState.setLatestForms} 
-                forms={FormsState.latestForms} 
+                tags={tags}
+                currentTag={currentTag}
+                setCurrentTag={setCurrentTag}
             />
             <div className={styles.headerWrapper} ref={headerRef} state={headerState}>
                 <Wrapper>
                     <div className={styles.header}>
-                        <h3>Latest templates</h3>
+                        <h3>{t('latest-templates')}</h3>
                         <div className={styles.control}>
                             <Select
-                                title={'Display'}
+                                title={t('my-templates')}
                                 items={[
-                                    { title: "My templates", callback: () => setIsViewigTemplatesState(prev => !prev) },
-                                    { title: "Completed forms", callback: () => setIsViewigFillingOustsState(prev => !prev) },
+                                    { title: t('my-templates'), callback: () => setIsViewigTemplatesState(prev => !prev) },
+                                    { title: t('completed-forms'), callback: () => setIsViewigFillingOustsState(prev => !prev) },
                                 ]}
                                 selected={displayProperty}
                                 setSelected={SetDisplayProperty}
@@ -102,10 +129,10 @@ const HomePage = observer(({headerState, headerRef}) => {
                             <Select 
                                 title={'A-Z'}
                                 items={[
-                                    { title: "New first", callback: () => setSortingType(0) },
-                                    { title: "Old first", callback: () => setSortingType(1) },
-                                    { title: "Popular first", callback: () => setSortingType(2) },
-                                    { title: "Popular last", callback: () => setSortingType(3) },
+                                    { title: t('new-first'), callback: () => setSortingType(0) },
+                                    { title: t('old-first'), callback: () => setSortingType(1) },
+                                    { title: t('popular-first'), callback: () => setSortingType(2) },
+                                    { title: t('popular-last'), callback: () => setSortingType(3) },
                                 ]}
                                 selected={sortProperty}
                                 setSelected={SetSortProperty}

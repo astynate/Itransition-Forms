@@ -12,7 +12,7 @@ export const instance = axios.create({
 
 instance.interceptors.request.use(
   (config) => {
-    config.headers.Authorization = `Bearer ${localStorage.getItem("Access-Token")}`
+    config.headers.ItransitionAuthorization = `Bearer ${localStorage.getItem("Access-Token")}`
     return config
   }
 );

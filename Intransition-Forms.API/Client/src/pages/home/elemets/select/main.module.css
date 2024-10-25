@@ -17,13 +17,12 @@
 
 .list {
     top: 30px;
-    left: -50px;
+    left: -90px;
     height: auto;
     width: auto;
     padding: 3px;
     background: var(--main-background-color);
     position: absolute;
-    /* box-shadow: 0px 0px 100px rgba(0, 0, 0, 0.1); */
     border-radius: 5px;
     display: flex;
     flex-direction: column;

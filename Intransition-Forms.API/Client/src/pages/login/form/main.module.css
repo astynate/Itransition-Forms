@@ -9,6 +9,10 @@
     flex-direction: column;
 }
 
+.form h1 {
+    font-size: 32px;
+}
+
 .form input {
     background: none;
 }
@@ -37,4 +41,19 @@
 
 .color[state="selected"] {
     border: 3px solid var(--main-blue-color);
+}
+
+.bottom {
+    width: 100%;
+    margin-top: auto;
+}
+
+@media (max-width: 500px) {
+    .form {
+        background: none;
+    }
+
+    .br {
+        margin-top: 150%;
+    }
 }

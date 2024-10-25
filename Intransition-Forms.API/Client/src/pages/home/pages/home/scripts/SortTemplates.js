@@ -10,7 +10,7 @@ class SortTemplates {
         const firstDate = new Date(firstForm.date);
         const secondDate = new Date(secondForm.date);
     
-        return firstDate - secondDate;
+        return secondDate - firstDate;
     }
     
     static SortByDateDescending = (a, b) => {
@@ -20,7 +20,7 @@ class SortTemplates {
         const firstDate = new Date(firstForm.date);
         const secondDate = new Date(secondForm.date);
     
-        return secondDate - firstDate;
+        return firstDate - secondDate;
     }
 
     static SortByPopularityAscending = (a, b) => {

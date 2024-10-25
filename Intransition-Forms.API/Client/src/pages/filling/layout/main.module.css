@@ -14,15 +14,46 @@
     grid-gap: 0px;
 }
 
+.information {
+    display: flex;
+    justify-content: space-between;
+}
+
 .title {
     margin: 0;
     padding: 0;
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 700;
 }
 
+.topic {
+    padding: 7px 17px;
+    background: var(--main-accent-color);
+    color: var(--main-blue-color);
+    user-select: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.tags {
+    display: flex;
+    grid-gap: 10px;
+    padding-top: 10px;
+}
+
+.tag {
+    border: 1px solid var(--main-border-color);
+    border-radius: 5px;
+    font-size: 14px;
+    user-select: none;
+    flex-wrap: wrap;
+    color: var(--main-blue-color);
+    padding: 5px 14px;
+}
+
 .header span {
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 500;
     color: var(--main-font-color);
 }

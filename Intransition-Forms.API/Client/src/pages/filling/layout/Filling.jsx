@@ -69,8 +69,26 @@ const FillingPage = () => {
             {form && <div className={styles.form}>
                 <Block>
                     <div className={styles.header}>
-                        <h1 className={styles.title}>{form.title}</h1>
-                        <span ref={descriptionRef}></span>
+                        <div className={styles.information}>
+                            <div className={styles.left}>
+                                <h1 className={styles.title}>{form.title}</h1>
+                                <span ref={descriptionRef}></span>
+                            </div>
+                            <div className={styles.right}>
+                                <div className={styles.topic}>
+                                    {form.topic}
+                                </div>
+                            </div>
+                        </div>
+                        {form.tags.length > 0 && <div className={styles.tags}>
+                            {form.tags.map(tag => {
+                                return (
+                                    <div className={styles.tag} key={tag.id}>
+                                        {tag.tag}
+                                    </div>
+                                );
+                            })}
+                        </div>}
                     </div>
                 </Block>
                 {form.questions.sort((a, b) => a.index - b.index).map(question => {

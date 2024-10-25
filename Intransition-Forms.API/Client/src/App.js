@@ -6,13 +6,13 @@ import HomePage from '../src/pages/home/layout/HomeLayout';
 import Register from './pages/login/pages/register/Register';
 import LoginPage from './pages/login/pages/login/LoginPage';
 import userState from './state/UserState';
-import FormsState from './state/FormsState';
 import FormPage from './pages/form/layout/Form';
 import FillingPage from './pages/filling/layout/Filling';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './pages/home/layout/main.css';
 import './i18n';
 import ApplicationState from './state/ApplicationState';
+import { changeLanguage } from './i18n';
 
 const App = observer(() => {
     const GetUserData = async () => {
@@ -28,23 +28,6 @@ const App = observer(() => {
             });
     }
 
-    const GetPopularTemplates = async () => {
-        FormsState.setLoadingState(true);
-
-        await instance
-            .get('/api/forms')
-            .then(response => {
-                if (response.data) {
-                    FormsState.SetPopularForms(response.data);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
-
-        FormsState.setLoadingState(false);
-    }
-
     useEffect(() => {
         const token = localStorage.getItem('Access-Token');
 
@@ -54,16 +37,16 @@ const App = observer(() => {
     }, [userState.user]);
 
     useEffect(() => {
-        GetPopularTemplates();
-    }, []);
-
-    useEffect(() => {
         const root = document.querySelector('#root');
 
         if (!!root === true) {
             root.setAttribute('theme', ApplicationState.isDarkMode ? 'dark' : 'light');
         }
     }, [ApplicationState.isDarkMode]);
+
+    useEffect(() => {
+        changeLanguage(localStorage.getItem('language'));
+    }, []);
 
     return (
         <Routes>

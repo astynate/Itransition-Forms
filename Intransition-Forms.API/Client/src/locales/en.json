@@ -4,5 +4,22 @@
     "login": "Login",
     "register": "Register",
     "language": "Language",
-    "dark-theme": "Dark mode"
+    "dark-theme": "Dark mode",
+    "popular-templates": "Popular templates",
+    "latest-templates": "Latest templates",
+    "my-templates": "My Templates",
+    "completed-forms": "Completed Forms",
+    "new-first": "New First",
+    "old-first": "Old First",
+    "popular-first": "Popular First",
+    "popular-last": "Popular Last",
+    "email": "Email",
+    "password": "Password",
+    "sign-up": "Sign up",
+    "questions": "Questions",
+    "answers": "Answers",
+    "checkbox": "Checkbox",
+    "range": "Range", 
+    "string": "String", 
+    "text": "Text"
 }

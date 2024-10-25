@@ -23,3 +23,9 @@
     display: flex;
     grid-gap: 100px;
 }
+
+@media (max-width: 600px) {
+    .control {
+        grid-gap: 30px;
+    }
+}

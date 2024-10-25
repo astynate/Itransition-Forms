@@ -11,6 +11,8 @@ namespace Itransition_Forms.Core.Form
         [Column("form_id")] public Guid FormModelId { get; init; } = Guid.NewGuid();
         [Column("tag")] public string Tag { get; init; } = string.Empty;
 
+        [JsonIgnore] public FormModel? Form { get; init; }
+
         private TagModel() { }
 
         [JsonConstructor]

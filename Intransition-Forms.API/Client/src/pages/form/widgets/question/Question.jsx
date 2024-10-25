@@ -9,6 +9,7 @@ import styles from './main.module.css';
 import trash from './trash.png';
 import AnswersAPI from '../../api/AnswersAPI';
 import Guid from '../../../../utils/Guid';
+import { useTranslation } from 'react-i18next';
 
 const Question = ({
         question, 
@@ -19,18 +20,20 @@ const Question = ({
         setDraggingQuestionState
     }) => {
 
-    const items = [
-        'Checkbox', 
-        'Range', 
-        'String', 
-        'Text'
-    ];
+    const { t } = useTranslation();
 
+    const items = [
+        t('checkbox'), 
+        t('range'), 
+        t('string'), 
+        t('text')
+    ];
+    
     const itemHandlers = {
-        'Checkbox': AnswersAPI.CheckboxDefaultValue,
-        'Range': AnswersAPI.RangeboxDefaultValue,
-        'String': AnswersAPI.StringDefaultValue,
-        'Text': AnswersAPI.TextDefaultValue
+        [t('checkbox')]: AnswersAPI.CheckboxDefaultValue,
+        [t('range')]: AnswersAPI.RangeboxDefaultValue,
+        [t('string')]: AnswersAPI.StringDefaultValue,
+        [t('text')]: AnswersAPI.TextDefaultValue
     };
 
     const GetItemIndex = (objects) => {
