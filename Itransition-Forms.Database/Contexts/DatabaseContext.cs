@@ -1,4 +1,5 @@
-﻿using Itransition_Forms.Core.Answers;
+﻿using Itransition_Forms.Core.Account;
+using Itransition_Forms.Core.Answers;
 using Itransition_Forms.Core.Form;
 using Itransition_Forms.Core.Links.Base;
 using Itransition_Forms.Core.Links.Entities;
@@ -11,6 +12,7 @@ namespace Itransition_Forms.Database.Contexts
     {
         public DbSet<UserModel> Users { get; set; } = null!;
         public DbSet<FormModel> Forms { get; set; } = null!;
+        public DbSet<FormModelUserModel> FormUserLinks { get; set; } = null!;
         public DbSet<QuestionModel> Questions { get; set; } = null!;
         public DbSet<TagModel> Tags { get; set; } = null!;
         public DbSet<CheckBoxModel> Checkboxes { get; set; } = null!;
@@ -38,6 +40,11 @@ namespace Itransition_Forms.Database.Contexts
 
             modelBuilder.Entity<AnswerBase>().UseTpcMappingStrategy();
             modelBuilder.Entity<AnswerLinkBase>().UseTpcMappingStrategy();
+
+            modelBuilder.Entity<FormModel>()
+                .HasMany(e => e.UsersWithFillingOutAccess)
+                .WithMany(m => m.Forms)
+                .UsingEntity<FormModelUserModel>("form_user_access");
         }
     }
 }

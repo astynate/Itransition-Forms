@@ -21,5 +21,7 @@
     "checkbox": "Checkbox",
     "range": "Range", 
     "string": "String", 
-    "text": "Text"
+    "text": "Text",
+    "public": "Public",
+    "selected-users": "Selected users"
 }

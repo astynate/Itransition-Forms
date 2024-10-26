@@ -39,8 +39,9 @@ namespace Instend.Server.Controllers
         public async Task<IActionResult> Get(Guid id, int from)
         {
             var userId = _tokenService.GetClaimFromRequest(Request, "sub");
+            var role = _tokenService.GetClaimFromRequest(Request, "role");
 
-            if (userId == null)
+            if (userId == null || role == null)
                 return Conflict();
 
             var form = await _formsRepository.GetFormModelById(id);
@@ -48,7 +49,7 @@ namespace Instend.Server.Controllers
             if (form == null) 
                 return Conflict("Form not found");
 
-            if (form.UserModelId != Guid.Parse(userId))
+            if (form.UserModelId != Guid.Parse(userId) && role != "Admin")
                 return Conflict("You don't have access to filling outs.");
 
             var result = await _fillingRepository
@@ -63,9 +64,23 @@ namespace Instend.Server.Controllers
         public async Task<IActionResult> FillOutForm(Guid id, [FromBody] FilledAnswerBase[] answers)
         {
             var userId = _tokenService.GetClaimFromRequest(Request, "sub");
+            var role = _tokenService.GetClaimFromRequest(Request, "role");
 
-            if (userId == null)
+            if (userId == null || role == null)
                 return Conflict();
+
+            var form = await _formsRepository.GetFormModelById(id);
+
+            if (form == null)
+                return Conflict("Form not found");
+
+            var isSelectedUsers = form.AccessType == Itransition_Forms.Core.Form.AccessTypes.SelectedUsers;
+            var isOwner = form.UserModelId == Guid.Parse(userId);
+            var isAdmin = role == "Admin";
+            var isSelectedUser = form.UsersWithFillingOutAccess.FirstOrDefault(x => x.Id == Guid.Parse(userId));
+
+            if (isSelectedUsers && !(isOwner || isAdmin || isSelectedUser != null))
+                return Conflict("You don't have access to filling outs.");
 
             var result = await _fillingRepository.Create(Guid.Parse(userId), id, answers);
 

@@ -141,7 +141,7 @@ namespace Itransition_Forms.Database.Migrations
                         .HasColumnType("char(36)")
                         .HasColumnName("id");
 
-                    b.Property<Guid>("FormModelId")
+                    b.Property<Guid>("FormsId")
                         .HasColumnType("char(36)")
                         .HasColumnName("form_id");
 
@@ -186,7 +186,7 @@ namespace Itransition_Forms.Database.Migrations
                         .HasColumnType("char(36)")
                         .HasColumnName("id");
 
-                    b.Property<Guid>("FormModelId")
+                    b.Property<Guid>("FormsId")
                         .HasColumnType("char(36)")
                         .HasColumnName("form_id");
 

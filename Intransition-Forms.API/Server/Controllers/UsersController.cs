@@ -23,7 +23,13 @@ namespace Instend.Server.Controllers
         }
 
         [HttpGet]
-        //[Authorize] Deleted cause hosting error
+        [Authorize]
+        [Route("/api/users/prefix")]
+        public async Task<IActionResult> GetUsers(string prefix) 
+            => Ok(await _userRepository.GetUserByPrefix(prefix));
+
+        [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetUser()
         {
             var userId = _tokenService.GetClaimFromRequest(Request, "sub");

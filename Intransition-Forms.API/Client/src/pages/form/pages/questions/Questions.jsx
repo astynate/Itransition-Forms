@@ -4,6 +4,8 @@ import AnswersAPI from '../../api/AnswersAPI';
 import Question from '../../widgets/question/Question';
 import Title from '../../widgets/title/Title';
 import styles from './main.module.css';
+import AccessManager from '../../widgets/access/AccessManager';
+import Tags from '../../widgets/tags/Tags';
 
 const Questions = ({form, setForm}) => {
     const [draggedQuestionIndex, setDraggedQuestionIndex] = useState(0);
@@ -61,6 +63,14 @@ const Questions = ({form, setForm}) => {
     return (
         <div className={styles.questions}>
             <Title 
+                form={form}
+                setForm={setForm}
+            />
+            <Tags 
+                form={form}
+                setForm={setForm}
+            />
+            <AccessManager 
                 form={form}
                 setForm={setForm}
             />

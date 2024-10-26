@@ -11,6 +11,11 @@ namespace Itransition_Forms.Core.Answers
         [Column("index")][JsonPropertyName("index")] public int Index { get; private set; } = 0;
         [Column("question_id")][JsonPropertyName("questionModelId")] public Guid QuestionModelId { get; private set; }
 
+        [NotMapped]
+        [JsonIgnore]
+        [ConcurrencyCheck]
+        public Guid RowVersion { get; set; } = Guid.NewGuid();
+
         protected AnswerBase() { }
 
         public AnswerBase(Guid id, Guid questionModelId, int index) 

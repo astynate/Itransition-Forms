@@ -14,13 +14,20 @@ namespace Itransition_Forms.Core.Form
         [Column("description")] public string Description { get; private set; } = string.Empty;
         [Column("image_link")] public string? ImageLink { get; private set; } = null;
         [Column("topics")] public Topics Topic { get; private set; } = Topics.Other;
+        [Column("access_type")] public AccessTypes AccessType { get; private set; } = AccessTypes.Public;
         [Column("owner")] public Guid UserModelId { get; private set; } = Guid.Empty;
         [Column("number_of_fills")] public int NumberOfFills { get; private set; } = 0;
         [Column("date")] public DateTime Date { get; private set; } = DateTime.Now;
 
         public List<QuestionModel> Questions { get; set; } = [];
+        public List<UserModel> UsersWithFillingOutAccess { get; set; } = [];
         public List<TagModel> Tags { get; set; } = [];
         public UserModel? Owner { get; set; }
+
+        [NotMapped]
+        [JsonIgnore]
+        [ConcurrencyCheck]
+        public Guid RowVersion { get; set; } = Guid.NewGuid();
 
         private FormModel() { }
 
@@ -32,9 +39,12 @@ namespace Itransition_Forms.Core.Form
             string description,
             string? imageLink,
             Topics topic,
+            AccessTypes accessType,
             Guid userModelId,
             int numberOfFills,
             List<QuestionModel> questions,
+            List<TagModel> tags,
+            List<UserModel> usersWithFillingOutAccess,
             UserModel? owner,
             DateTime date
         )
@@ -44,11 +54,16 @@ namespace Itransition_Forms.Core.Form
             Description = description;
             ImageLink = imageLink;
             Topic = topic;
+            AccessType = accessType;
             UserModelId = userModelId;
             NumberOfFills = numberOfFills;
             Questions = questions;
             Owner = owner;
             Date = date;
+            Tags = tags;
+
+            UsersWithFillingOutAccess = accessType == AccessTypes.SelectedUsers ?
+                usersWithFillingOutAccess.Take(7).ToList() : [];
         }
 
         public static Result<FormModel> Create(string title, string description, Topics topic, Guid ownerId)
@@ -90,6 +105,8 @@ namespace Itransition_Forms.Core.Form
             Description = form.Description;
             ImageLink = form.ImageLink;
             Topic = form.Topic;
+            AccessType = form.AccessType;
+            RowVersion = Guid.NewGuid();
 
             return Result.Success();
         }

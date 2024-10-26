@@ -1,0 +1,23 @@
+.accessWrapper {
+    font-size: 21px;
+    font-weight: 600;
+    user-select: none;
+}
+
+.bottom {
+    height: auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 100%;
+    margin-top: 10px;
+    border-top: 1px solid var(--main-border-color);
+}
+
+.select {
+    max-width: 45%;
+}
+
+.users {
+    display: flex;
+    grid-gap: 5px;
+}

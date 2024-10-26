@@ -15,7 +15,6 @@
             {
                 await next(context);
             }
-
             catch (Exception exception)
             {
                 _logger.LogError(exception, "Something went wrong");

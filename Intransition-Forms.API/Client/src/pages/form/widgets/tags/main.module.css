@@ -1,0 +1,35 @@
+.title {
+    font-size: 21px;
+    font-weight: 600;
+}
+
+.select {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.tags {
+    margin-top: 10px;
+    border-top: 1px solid var(--main-border-color);
+    padding-top: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    grid-gap: 5px;
+}
+
+.select button {
+    background: var(--main-accent-color);
+    border: none;
+    outline: none;
+    font-weight: 700;
+    border-radius: 5px;
+    font-family: 'Open Sans', sans-serif;
+    padding: 7px 20px;
+    cursor: pointer;
+}
+
+.selectWrapper {
+    margin-left: auto;
+}

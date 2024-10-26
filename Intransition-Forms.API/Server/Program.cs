@@ -55,6 +55,8 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseMySql(builder.Configuration.GetValue<string>("ConnectionString"),
         new MySqlServerVersion(new Version(8, 3, 0)),
         mySqlOptions => mySqlOptions.EnableRetryOnFailure());
+
+    options.EnableSensitiveDataLogging();
 });
 
 builder.Services.AddTransient<LoggingMiddleware>();
@@ -100,7 +102,7 @@ app.UseCors("CorsPolicy");
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller}/{action=Index}/{FormModelId?}");
+    pattern: "{controller}/{action=Index}/{FormsId?}");
 
 app.MapFallbackToFile("index.html");
 

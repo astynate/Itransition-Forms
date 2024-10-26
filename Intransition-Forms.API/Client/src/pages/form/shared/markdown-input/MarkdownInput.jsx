@@ -1,14 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import styles from './main.module.css';
 import list from './images/list.png';
-import Markdown from 'react-markdown';
 
-const MarkdownInput = ({text, setText, isMultiple = false}) => {
+const MarkdownInput = ({text, setText, isMultiple = false, placeholder = ""}) => {
     const [formattedText, setFormattedText] = useState(text);
     const [isBold, setBoldState] = useState(false);
     const [isItalic, setItalicState] = useState(false);
     const [isUnderlined, setUnderlinedState] = useState(false);
-    const [isPreview, setPreviewState] = useState(false);
     const [parentTags, setParentTags] = useState([]);
 
     let ref = useRef();
@@ -113,17 +111,12 @@ const MarkdownInput = ({text, setText, isMultiple = false}) => {
             setActiveButtons(range.startContainer.parentElement);
         }
     }
-
-    useEffect(() => {
-        setFormattedText(text);
-    }, [isPreview]);
-
+    
     return (
         <div>
-            {isPreview === false && <div
+            <div
                 id='input'
                 ref={ref}
-                key={isPreview}
                 className={styles.input}
                 contentEditable
                 dangerouslySetInnerHTML={{ __html: formattedText }}
@@ -136,11 +129,7 @@ const MarkdownInput = ({text, setText, isMultiple = false}) => {
                 onInput={(event) => setText(event.target.innerHTML)}
                 onDragOver={(event) => event.preventDefault()}
                 onDrop={(event) => event.preventDefault()}
-            ></div>}
-            {isPreview === true &&
-                <div className={styles.markwdownWrapper}>
-                    <Markdown>{text}</Markdown>
-                </div>}
+            ></div>
             <div className={styles.control}>
                 <div className={styles.buttons}>
                     <button onClick={() => addMarkdown('B')} state={isBold ? 'active' : null}>B</button>

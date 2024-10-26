@@ -1,9 +1,12 @@
 ﻿using CSharpFunctionalExtensions;
 using Itransition_Forms.Core.Form;
+using Itransition_Forms.Core.User;
 using Itransition_Forms.Database.Contexts;
 using Itransition_Forms.Dependencies.Database;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
+using System.Net.Mail;
 
 namespace Itransition_Forms.Database.Repositories
 {
@@ -13,10 +16,13 @@ namespace Itransition_Forms.Database.Repositories
 
         private readonly IUsersRepository _usersRepository;
 
-        public FormsRepository(DatabaseContext context, IUsersRepository usersRepository)
+        private readonly ILogger<FormsRepository> _logger;
+
+        public FormsRepository(DatabaseContext context, IUsersRepository usersRepository, ILogger<FormsRepository> logger)
         {
             _context = context;
             _usersRepository = usersRepository;
+            _logger = logger;
         }
 
         public async Task<FormModel[]> GetFormModelsByPrefix(string prefix)
@@ -84,6 +90,7 @@ namespace Itransition_Forms.Database.Repositories
                 .Take(count)
                 .Include(x => x.Owner)
                 .Include(x => x.Tags)
+                .Include(x => x.UsersWithFillingOutAccess)
                 .Include(x => x.Questions)
                     .ThenInclude(x => x.Answers)
                     .AsSplitQuery()
@@ -194,21 +201,80 @@ namespace Itransition_Forms.Database.Repositories
             await _context.SaveChangesAsync();
         }
 
+        private async Task UpdateUsers(FormModel form, FormModel updatedForm)
+        {
+            var usersToAdd = updatedForm
+                .UsersWithFillingOutAccess
+                .Except(form.UsersWithFillingOutAccess);
+
+            var usersToRemove = form
+                .UsersWithFillingOutAccess
+                .Except(updatedForm.UsersWithFillingOutAccess);
+
+            var usersToRemoveList = new List<UserModel>();
+
+            foreach (var user in usersToRemove)
+            {
+                var specificUser = form.UsersWithFillingOutAccess
+                    .FirstOrDefault(x => x.Id == user.Id);
+
+                if (specificUser != null)
+                {
+                    _context.Attach(specificUser);
+                    usersToRemoveList.Add(specificUser); 
+                }
+            }
+
+            foreach (var userToRemove in usersToRemoveList)
+            {
+                form.UsersWithFillingOutAccess.Remove(userToRemove);
+            }
+
+            foreach (var user in usersToAdd)
+            {
+                if (user.Id != form.UserModelId && form.UsersWithFillingOutAccess.Contains(user) == false)
+                {
+                    _context.Attach(user);
+                    form.UsersWithFillingOutAccess.Add(user);
+                }
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<Result> UpdateForm(FormModel form, FormModel updatedForm)
         {
             var result = form.CopyParams(updatedForm);
 
-            if (result.IsFailure) 
+            if (result.IsFailure)
                 return result;
 
-            _context.Forms.Update(form);
+            var executionStrategy = _context.Database.CreateExecutionStrategy();
 
-            await UpdateTags(form, updatedForm);
-            await UpdateQuestions(form, updatedForm);
+            return await executionStrategy.ExecuteAsync(async () =>
+            {
+                using (var transaction = await _context.Database.BeginTransactionAsync())
+                {
+                    try
+                    {
+                        _context.Forms.Update(form);
 
-            await _context.SaveChangesAsync();
+                        await UpdateTags(form, updatedForm);
+                        await UpdateUsers(form, updatedForm);
+                        await UpdateQuestions(form, updatedForm);
 
-            return Result.Success();
+                        await _context.SaveChangesAsync();
+                        await transaction.CommitAsync();
+
+                        return Result.Success();
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex.Message);
+                        return Result.Failure("Form has not be saved");
+                    }
+                }
+            });
         }
 
         public async Task<Result> UpdateFormTitle(FormModel form, string title)

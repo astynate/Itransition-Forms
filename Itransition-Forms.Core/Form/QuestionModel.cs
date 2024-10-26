@@ -16,6 +16,11 @@ namespace Itransition_Forms.Core.Form
 
         public List<AnswerBase> Answers { get; set; } = [];
 
+        [NotMapped]
+        [JsonIgnore]
+        [ConcurrencyCheck]
+        public Guid RowVersion { get; set; } = Guid.NewGuid();
+
         private QuestionModel() { }
 
         [JsonConstructor]

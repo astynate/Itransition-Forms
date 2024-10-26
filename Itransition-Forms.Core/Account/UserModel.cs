@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Itransition_Forms.Core.Form;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -7,7 +8,7 @@ using System.Text.RegularExpressions;
 namespace Itransition_Forms.Core.User
 {
     [Table("users")]
-    public class UserModel
+    public class UserModel : IEquatable<UserModel>
     {
         [Column("id")][Key] public Guid Id { get; private set; } = Guid.Empty;
         [Column("email")] public string Email { get; private set; } = string.Empty;
@@ -15,6 +16,8 @@ namespace Itransition_Forms.Core.User
         [Column("color")] public int Color { get; private set; } = 0;
         [Column("is_admin")] public bool IsAdmin { get; set; } = false;
         [Column("is_blocked")] public bool IsBlocked { get; set; } = false;
+
+        [JsonIgnore] public List<FormModel> Forms { get; set; } = [];
 
         private UserModel() { }
 
@@ -58,6 +61,16 @@ namespace Itransition_Forms.Core.User
         {
             string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
             return Regex.IsMatch(email, emailPattern);
+        }
+
+        public bool Equals(UserModel? other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+
+            return other.Id == Id;
         }
     }
 }

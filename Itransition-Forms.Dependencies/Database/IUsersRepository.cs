@@ -13,5 +13,6 @@ namespace Itransition_Forms.Dependencies.Database
         Task<Result> UnblockUsers(Guid[] users);
         Task<Result> DeleteUsers(Guid[] users);
         Task<Result> UpdateAdminState(Guid[] users, bool isAdmin);
+        Task<UserModel[]> GetUserByPrefix(string prefix);
     }
 }
