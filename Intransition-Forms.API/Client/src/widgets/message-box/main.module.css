@@ -1,0 +1,38 @@
+.messageBox {
+    width: 300px;
+    overflow: hidden;
+}
+
+.messageBox h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.messageBox span {
+    font-size: 16px;
+}
+
+.top {
+    padding: 20px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.bottom {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    display: flex;
+    font-size: 16px;
+    font-weight: 600;
+    justify-content: center;
+    color: var(--main-blue-color);
+    cursor: pointer;
+    border-top: 1px solid var(--main-border-color);
+}
+
+.bottom:hover {
+    background: var(--main-accent-color);
+}

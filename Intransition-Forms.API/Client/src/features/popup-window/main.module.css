@@ -1,7 +1,7 @@
 .popupWindowWrapper {
     height: 100svh;
     width: 100vw;
-    background: rgba(0, 0, 0, 0.195);
+    background: rgba(14, 15, 16, 0.195);
     position: fixed;
     top: 0;
     left: 0;
@@ -12,7 +12,7 @@
 }
 
 .popupWindow {
-    padding: 10px;
     border-radius: 5px;
+    overflow: hidden;
     background: var(--main-background-color);
 }

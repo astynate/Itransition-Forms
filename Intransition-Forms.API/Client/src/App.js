@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { instance } from './state/Interceptors';
@@ -13,8 +13,13 @@ import './pages/home/layout/main.css';
 import './i18n';
 import ApplicationState from './state/ApplicationState';
 import { changeLanguage } from './i18n';
+import MessageBox from './widgets/message-box/MessageBox';
 
 const App = observer(() => {
+    const [title, setErrorTitle] = useState('');
+    const [message, setErrorMessage] = useState('');
+    const [isError, setErrorState] = useState(false);
+
     const GetUserData = async () => {
         await instance
             .get('/api/users')
@@ -48,15 +53,35 @@ const App = observer(() => {
         changeLanguage(localStorage.getItem('language'));
     }, []);
 
+    useEffect(() => {
+        const setError = (title, message) => {
+            setErrorTitle(title);
+            setErrorMessage(message);
+            setErrorState(true);
+        }
+
+        if (isError === false && ApplicationState.GetCountErrors() > 0) {
+            const [title, message] = ApplicationState.GetErrorFromQueue();
+            setError(title, message);
+            ApplicationState.RemoveErrorFromQueue();
+        }
+    }, [isError, ApplicationState, ApplicationState.errorQueue, ApplicationState.errorQueue.length]);
+
     return (
-        <Routes>
-            <Route path="/*" element={<HomePage />} />
-            <Route path="/form/:id/*" element={<FormPage />} />
-            <Route path="/filling/:id/*" element={<FillingPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="*" element={<h1 style={{margin: 'auto'}}>{'Page is not found :)'}</h1>} />
-        </Routes>
+        <>
+            {isError && <MessageBox 
+                title={title} 
+                message={message} 
+            />}
+            <Routes>
+                <Route path="/*" element={<HomePage />} />
+                <Route path="/form/:id/*" element={<FormPage />} />
+                <Route path="/filling/:id/*" element={<FillingPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="*" element={<h1 style={{margin: 'auto'}}>{'Page is not found :)'}</h1>} />
+            </Routes>
+        </>
     );
 });
 

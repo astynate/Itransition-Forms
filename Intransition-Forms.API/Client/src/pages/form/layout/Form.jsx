@@ -28,11 +28,10 @@ const FormPage = () => {
     }, [params.id]);
 
     useEffect(() => {
-        if (form && !UserState.user) {
-            navigate('/');
-        }
+        const isAuthor = form && UserState.user && form.userModelId !== UserState.user.id;
+        const isAdmin = UserState.user && UserState.isAdmin;
 
-        if (form && UserState.user && form.userModelId !== UserState.user.id) {
+        if (form && isAuthor === false && isAdmin === false) {
             navigate('/');
         }
     }, [UserState.user, form]);
@@ -92,6 +91,7 @@ const FormPage = () => {
                         element={
                             <Questions 
                                 form={form} 
+                                isEditting={isEditting}
                                 setForm={setForm} 
                             />
                         }

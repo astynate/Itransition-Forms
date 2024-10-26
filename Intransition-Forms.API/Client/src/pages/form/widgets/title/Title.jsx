@@ -14,7 +14,8 @@ const Title = ({form, setForm}) => {
                         return { ...prev, title: newText };
                     })
                 }}
-                fontWeight={600}
+                fontSize={26}
+                fontWeight={700}
                 isMultiple={false}
             />
             <MarkdownInput

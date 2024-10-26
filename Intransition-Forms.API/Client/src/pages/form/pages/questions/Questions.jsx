@@ -7,7 +7,7 @@ import styles from './main.module.css';
 import AccessManager from '../../widgets/access/AccessManager';
 import Tags from '../../widgets/tags/Tags';
 
-const Questions = ({form, setForm}) => {
+const Questions = ({form, setForm, isEditting}) => {
     const [draggedQuestionIndex, setDraggedQuestionIndex] = useState(0);
     const [isDraggingQuestion, setDraggingQuestionState] = useState(false);
 
@@ -72,6 +72,7 @@ const Questions = ({form, setForm}) => {
             />
             <AccessManager 
                 form={form}
+                isEditting={isEditting}
                 setForm={setForm}
             />
             {form.questions && form.questions.sort && form.questions

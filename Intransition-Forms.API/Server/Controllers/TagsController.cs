@@ -14,7 +14,13 @@ namespace Instend.Server.Controllers
             _tagsRepository = tagsRepository;
         }
 
+        [HttpGet] 
+        public async Task<IActionResult> Get() 
+            => Ok(await _tagsRepository.GetLastTags());
+
         [HttpGet]
-        public async Task<IActionResult> Get() => Ok(await _tagsRepository.GetLastTags());
+        [Route("/api/tags/prefix")] 
+        public async Task<IActionResult> Get(string prefix) 
+            => Ok(await _tagsRepository.GetTagsByPrefix(prefix));
     }
 }

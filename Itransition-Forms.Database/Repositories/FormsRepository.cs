@@ -161,9 +161,6 @@ namespace Itransition_Forms.Database.Repositories
 
         private async Task UpdateQuestions(FormModel form, FormModel updatedForm)
         {
-            form.SortQuestionsByIndex();
-            updatedForm.SortQuestionsByIndex();
-
             var questionsToAdd = updatedForm.Questions.Except(form.Questions);
             var questionsToRemove = form.Questions.Except(updatedForm.Questions);
 
@@ -192,7 +189,9 @@ namespace Itransition_Forms.Database.Repositories
 
         private async Task UpdateTags(FormModel form, FormModel updatedForm)
         {
-            var tagsToAdd = updatedForm.Tags.Except(form.Tags);
+            var formTags = form.Tags.Select(x => x.Tag);
+
+            var tagsToAdd = updatedForm.Tags.Except(form.Tags).Where(x => formTags.Contains(x.Tag) == false);
             var tagsToRemove = form.Tags.Except(updatedForm.Tags);
 
             _context.RemoveRange(tagsToRemove);

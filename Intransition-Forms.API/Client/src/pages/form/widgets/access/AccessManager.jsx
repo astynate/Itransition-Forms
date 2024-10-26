@@ -7,7 +7,7 @@ import styles from './main.module.css';
 import InputWithAutocomplition from '../../shared/input-with-autocomplition/InputWithAutocomplition';
 import TagModel from '../../shared/tag-model/TagModel';
 
-const AccessManager = ({form, setForm}) => {
+const AccessManager = ({form, setForm, isEditting={isEditting}}) => {
     const { t } = useTranslation();
     const [userEmail, setUserEmail] = useState('');
     const [searchResult, setSearchResult] = useState([]);
@@ -18,7 +18,7 @@ const AccessManager = ({form, setForm}) => {
     }
 
     useEffect(() => {
-        if (form?.accessType && form.accessType === "Public") {
+        if (form?.accessType && form.accessType === "Public" && isEditting) {
             setForm(prev => {
                 return { ...prev, usersWithFillingOutAccess: [] };
             })
@@ -27,7 +27,7 @@ const AccessManager = ({form, setForm}) => {
 
     return (
         <Block>
-            <h2 className={styles.accessWrapper}>Manage access</h2>
+            <h2 className={styles.title}>Manage access</h2>
             {form.accessType === "SelectedUsers" && <div className={styles.users}>
                 {form.usersWithFillingOutAccess.map(user => {
                     return (
