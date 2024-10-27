@@ -10,12 +10,12 @@ namespace Itransition_Forms.Core.Links.Entities
     {
         [Column("value")] public string Value { get; set; } = string.Empty;
 
-        protected TextBoxLinkModel(string value, Guid answerId, Guid formLinkModelId) : base(answerId, formLinkModelId) 
+        protected TextBoxLinkModel(string value, Guid answerId, Guid formLinkModelId, Guid questionId) : base(answerId, formLinkModelId, questionId) 
         {
             Value = value;
         }
 
-        public static Result<TextBoxLinkModel> Create(Guid answerId, Guid formLinkModelId, TextBoxModel? validationModel, string? text)
+        public static Result<TextBoxLinkModel> Create(Guid answerId, Guid formLinkModelId, TextBoxModel? validationModel, string? text, Guid questionId)
         {
             if (validationModel == null)
                 return Result.Failure<TextBoxLinkModel>("Validation model is not found");
@@ -28,7 +28,7 @@ namespace Itransition_Forms.Core.Links.Entities
             if (text.Length > maxLength)
                 return Result.Failure<TextBoxLinkModel>($"The max length of value is {maxLength}");
 
-            return new TextBoxLinkModel(text, answerId, formLinkModelId);
+            return new TextBoxLinkModel(text, answerId, formLinkModelId, questionId);
         }
     }
 }

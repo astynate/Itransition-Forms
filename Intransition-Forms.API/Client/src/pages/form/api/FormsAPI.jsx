@@ -1,3 +1,4 @@
+import ApplicationState from "../../../state/ApplicationState";
 import FormsState from "../../../state/FormsState";
 import { instance } from "../../../state/Interceptors";
 
@@ -17,8 +18,8 @@ class FormsAPI {
                 }
             })
             .catch(error => {
+                // ApplicationState.AddErrorInQueueByError("Attention!", error);
                 console.error(error);
-                alert("Something went wrong");
             })
     }
 
@@ -33,8 +34,8 @@ class FormsAPI {
                 }
             })
             .catch(error => {
+                // ApplicationState.AddErrorInQueueByError("Attention!", error);
                 console.error(error);
-                alert('Something went wrong');
             })
 
         setLoadingState(false);

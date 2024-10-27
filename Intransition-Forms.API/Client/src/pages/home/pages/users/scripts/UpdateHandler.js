@@ -12,15 +12,15 @@ class UpdateHandler {
     }
 
     static UpdateAdminRights = (users, setUsers, state) => {
-        UpdateHandler.UpdateUsers(users, setUsers, user => user.isAdmin = state);
+        UpdateHandler.UpdateUsers(users, setUsers, u => {return {...u, isAdmin: state}});
     }
 
     static BlockUser = (users, setUsers) => {
-        UpdateHandler.UpdateUsers(users, setUsers, u => u.isBlocked = true);
+        UpdateHandler.UpdateUsers(users, setUsers, u => {return {...u, isBlocked: true}});
     }
 
     static UnblockUser = (users, setUsers) => {
-        UpdateHandler.UpdateUsers(users, setUsers, u => u.isBlocked = true);
+        UpdateHandler.UpdateUsers(users, setUsers, u => {return {...u, isBlocked: false}});
     }
 
     static DeleteUser = (users, setUsers) => {

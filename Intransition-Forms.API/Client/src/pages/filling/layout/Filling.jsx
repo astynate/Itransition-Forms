@@ -55,7 +55,6 @@ const FillingPage = () => {
             SetDefaultAnswers();
         }
     }, [form]);
-
     
     useEffect(() => {
         if (!form && !isLoading) {
@@ -110,7 +109,11 @@ const FillingPage = () => {
                                 <SimpleButton 
                                     title="Send" 
                                     callback={() => {
-                                        FillingAPI.SendFillRequest(params.id, answers);
+                                        FillingAPI.SendFillRequest(
+                                            params.id, 
+                                            answers, 
+                                            () => navigate(`/filling-out-result/${params.id}`)
+                                        );
                                     }}
                                 />
                                 <SimpleButton 

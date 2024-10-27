@@ -1,6 +1,12 @@
+.inputWrapper {
+    width: 100%;
+    position: relative;
+}
+
 .simpleInput {
     outline: none;
     border: none;
+    width: 100%;
     padding: 15px 0px;
     font-size: 16px;
     font-family: 'Open Sans', sans-serif;
@@ -10,4 +16,15 @@
 
 .simpleInput:focus {
     border-bottom: 2px solid var(--main-blue-color);
+}
+
+.message {
+    width: 100%;
+    padding: 10px;
+    z-index: 1;
+    font-weight: 600;
+    color: red;
+    border-top: 2px solid red;
+    background: var(--main-accent-color);
+    position: absolute;
 }

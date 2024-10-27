@@ -11,11 +11,19 @@ class ApplicationState {
         makeAutoObservable(this);
     }
 
+    AddErrorInQueue(title, message) {
+        if (!message) {
+            message = 'Something went wrong';
+        }
+        
+        this.errorQueue = [...this.errorQueue, [title, message]];
+    }
+
     AddErrorInQueueByError(title, error) {
         if (error && error.response && error.response.data) {
             this.AddErrorInQueue(title, error.response.data);
         } else {
-            this.AddErrorInQueue(title, null);
+            this.AddErrorInQueue(title, "Something went wrong");
         }
     }
 

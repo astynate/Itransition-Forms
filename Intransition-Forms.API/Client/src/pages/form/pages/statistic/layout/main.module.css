@@ -1,0 +1,20 @@
+.wrapper {
+    padding-top: 30px;
+    display: flex;
+    flex-direction: column;
+    grid-gap: 5px;
+    padding-bottom: 30px;
+}
+
+.wrapper h2 {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.question {
+    padding-top: 5px;
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    grid-gap: 15px;
+}

@@ -68,5 +68,7 @@
 
 .footer {
     display: flex;
-    justify-content: space-between;
+    grid-gap: 10px;
+    justify-content: center;
+    /* justify-content: space-between; */
 }

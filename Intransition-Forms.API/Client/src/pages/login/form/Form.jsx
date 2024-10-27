@@ -1,27 +1,55 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Avatar from '../../home/elemets/avatar/Avatar';
 import styles from './main.module.css';
 import userState from '../../../state/UserState';
 import { useNavigate } from 'react-router-dom';
 import SimpleInput from '../../../elements/input/SimpleInput';
 import SimpleButton from '../../../elements/button/SimpleButton';
+import ApplicationState from '../../../state/ApplicationState';
+import { instance } from '../../../state/Interceptors';
+import FormsState from '../../../state/FormsState';
 
 const RegistrationForm = ({name, button, inputs=[], action='/api/login', isColorPicker = false}) => {
     const [selectedColor, setSelectedColorState] = useState(0);
     const [fields, setFields] = useState([]);
+    const [inputsValue, setInputsValue] = useState(inputs);
+
+    let ref = useRef();
     let navigate = useNavigate();
+
+    const SetInputByIndex = (index, func) => {
+        setInputsValue(prev => {
+            return prev.map((item, i) => {
+                if (index === i) {
+                    return func(item);
+                }
+
+                return item;
+            });
+        })
+    }
 
     const SendRequest = async () => {
         let form = new FormData();
 
-        if (fields.length !== inputs.length && inputs.length > 0) {
-            alert(`${inputs[0].placeholder} is required`);
+        if (fields.length !== inputsValue.length && inputsValue.length > 0) {
+            SetInputByIndex(0, (item) => {
+                item.errorMessage = "This field is required";
+                return item;
+            });
+
             return;
         }
 
         for (let i = 0; i < fields.length; i++) {
-            if (!fields[i] || !fields[i].name || !fields[i].value) {
-                alert(`${inputs[i].name} is required`);
+            const validationResult = inputsValue[i].validator(fields[i].value);
+
+            if (validationResult.isValid === false) {
+                SetInputByIndex(i, (item) => {
+                    item.errorMessage = validationResult.error;
+                    return item;
+                });
+
                 return;
             }
 
@@ -32,43 +60,62 @@ const RegistrationForm = ({name, button, inputs=[], action='/api/login', isColor
             form.append('color', selectedColor);
         }
 
-        await fetch(action, {
-            method: "POST",
-            body: form
-        })
-        .then(response => {
-            if (response.ok) {
-                const accessToken = response.headers.get('Access-Token');
-                
-                if (accessToken) {
-                    localStorage.setItem('Access-Token', accessToken);
+        await instance.post(action, form)
+            .then(response => {
+                if (response.status === 200) {
+                    const accessToken = response.headers['access-token'];
+                    
+                    if (accessToken) {
+                        localStorage.setItem('Access-Token', accessToken);
+                        FormsState.setLatestForms([]);
+                    }
                 }
-            }
-
-            return response.json();
-        })
-        .then(response => {
-            if (response) {
-                userState.SetUser(response);
-                navigate('/');
-            }
-        })
-        .catch(error => {
-            console.log(error);
-        });
+        
+                return response.data;
+            })
+            .then(data => {
+                if (data) {
+                    userState.SetUser(data);
+                    navigate('/');
+                }
+            })
+            .catch(error => {
+                ApplicationState.AddErrorInQueueByError("Attention!", error);
+                console.error(error);
+            });
     }
+
+    useEffect(() => {
+        const clearInputs = (event) => {
+            if (ref.current && !ref.current.contains(event.target)) {
+                setInputsValue(prev => {
+                    return prev.map(item => {
+                        return { ...item, errorMessage: undefined };
+                    });
+                });
+            }
+        }
+
+        document.addEventListener("click", clearInputs);
+        setInputsValue(inputs);
+
+        return () => {
+            document.removeEventListener("click", clearInputs);
+        }
+    }, [inputs]);
 
     return (
         <div className={styles.form}>
             <h1>{name}</h1>
             <br />
-            {inputs.map((input, index) => {
+            {inputsValue.map((input, index) => {
                 return (
                     <SimpleInput
                         key={index}
                         type={input.type}
                         placeholder={input.placeholder}
                         autoFocus={index === 0}
+                        errorMessage={inputsValue[index].errorMessage}
                         onChange={(event) => {setFields(prev => {
                             prev[index] = {
                                 ...inputs[index],
@@ -107,6 +154,7 @@ const RegistrationForm = ({name, button, inputs=[], action='/api/login', isColor
             <br />
             <div className={styles.bottom}>
                 <SimpleButton 
+                    forwardRef={ref}
                     title={button}
                     callback={SendRequest} 
                 />

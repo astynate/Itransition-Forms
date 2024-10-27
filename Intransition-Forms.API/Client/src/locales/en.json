@@ -23,5 +23,6 @@
     "string": "String", 
     "text": "Text",
     "public": "Public",
-    "selected-users": "Selected users"
+    "selected-users": "Selected users",
+    "statistic": "Statistic"
 }

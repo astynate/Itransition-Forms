@@ -16,7 +16,7 @@ const Header = observer(({form, isSavingChanges = false, setSavingChanges = () =
     const [previousName, setPreviousName] = useState(form ? form.title : null);
     const [timeoutId, setTimeoutId] = useState(undefined);
     
-    const routes = ['', 'answers'];
+    const routes = ['', 'answers', 'statistic'];
     const { t } = useTranslation();
 
     const params = useParams();
@@ -80,8 +80,9 @@ const Header = observer(({form, isSavingChanges = false, setSavingChanges = () =
             <div className={styles.bottom}>
                 <Menu 
                     items={[
-                        { title: t('questions'), callback: () => { navigate(`/form/${params.id}`) } },
-                        { title: t('answers'), callback: () => { navigate(`/form/${params.id}/answers`) } },
+                        { title: t('questions'), callback: () => navigate(`/form/${params.id}`) },
+                        { title: t('answers'), callback: () => navigate(`/form/${params.id}/answers`) },
+                        { title: t('statistic'), callback: () => navigate(`/form/${params.id}/statistic`) }
                     ]}
                     currentItem={currentItem}
                 />

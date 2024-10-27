@@ -1,3 +1,4 @@
+import ApplicationState from "../../../state/ApplicationState";
 import { instance } from "../../../state/Interceptors";
 
 class FillingAPI {
@@ -21,7 +22,7 @@ class FillingAPI {
             })
             .catch(error => {
                 console.error(error);
-                alert('Someting went wrong')
+                ApplicationState.AddErrorInQueueByError("Attention!", error);
             });
     }
 }

@@ -65,6 +65,7 @@ builder.Services.AddScoped<IFormsRepository, FormsRepository>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<IFillingsRepository, FillingsRepository>();
 builder.Services.AddScoped<ISerializationHelper, SerializationHelper>();
+builder.Services.AddScoped<IStatisticRepository, StatisticRepository>();
 builder.Services.AddScoped<ITagsRepository, TagsRepository>();
 builder.Services.AddSingleton<ITokenService, TokenService>();
 builder.Services.AddControllers()

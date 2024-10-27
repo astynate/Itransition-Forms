@@ -6,7 +6,6 @@ using Itransition_Forms.Dependencies.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
-using System.Net.Mail;
 
 namespace Itransition_Forms.Database.Repositories
 {

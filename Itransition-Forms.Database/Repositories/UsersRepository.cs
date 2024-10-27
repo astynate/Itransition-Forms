@@ -49,7 +49,7 @@ namespace Itransition_Forms.Database.Repositories
             }
             catch (DbUpdateException)
             {
-                return Result.Failure<UserModel>("Owner with the same email is already exist");
+                return Result.Failure<UserModel>("A user with this email address is already registered.");
             }
 
             return user;
@@ -63,7 +63,7 @@ namespace Itransition_Forms.Database.Repositories
                     x.Email == email);
 
             if (user == null)
-                return Result.Failure<UserModel>("Owner not found");
+                return Result.Failure<UserModel>("User is not found.");
 
             return user;
         }
@@ -76,7 +76,7 @@ namespace Itransition_Forms.Database.Repositories
 
             await _context.SaveChangesAsync();
 
-            return result > 0 ? Result.Success() : Result.Failure("Users not found");
+            return result > 0 ? Result.Success() : Result.Failure("Users is not found.");
         }
 
         public async Task<Result> BlockUsers(Guid[] users)
@@ -93,7 +93,7 @@ namespace Itransition_Forms.Database.Repositories
 
             await _context.SaveChangesAsync();
 
-            return result > 0 ? Result.Success() : Result.Failure("Users not found");
+            return result > 0 ? Result.Success() : Result.Failure("Users is not found.");
         }
 
         public async Task<Result> DeleteUsers(Guid[] users)
@@ -104,7 +104,7 @@ namespace Itransition_Forms.Database.Repositories
 
             await _context.SaveChangesAsync();
 
-            return result > 0 ? Result.Success() : Result.Failure("Users not found");
+            return result > 0 ? Result.Success() : Result.Failure("Users is not found.");
         }
     }
 }

@@ -17,6 +17,13 @@
     text-wrap: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+    width: auto;
+}
+
+.user span {
+    max-width: 7ic;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
 }
 
 .numberOfFills {
@@ -74,6 +81,7 @@
     align-items: center;
     font-weight: 600;
     grid-gap: 10px;
+    flex-shrink: 1;
     color: var(--main-paragraph-color);
 }
 
@@ -83,4 +91,15 @@
 
 .input {
     width: 20px;
+    flex-shrink: 1;
+}
+
+@media (max-width: 500px) {
+    .user {
+        max-width: 8ic;
+    }
+
+    .date {
+        display: none;
+    }
 }

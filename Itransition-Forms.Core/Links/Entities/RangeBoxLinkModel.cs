@@ -10,12 +10,12 @@ namespace Itransition_Forms.Core.Links.Entities
     {
         [Column("value")] public uint Value { get; private set; } = 0;
 
-        protected RangeBoxLinkModel(Guid answerId, Guid formLinkModelId, uint value) : base(answerId, formLinkModelId) 
+        protected RangeBoxLinkModel(Guid answerId, Guid formLinkModelId, uint value, Guid questionId) : base(answerId, formLinkModelId, questionId) 
         {
             Value = value;
         }
 
-        public static Result<RangeBoxLinkModel> Create(RangeBoxModel? validationModel, Guid answerId, Guid formLinkModelId, uint value)
+        public static Result<RangeBoxLinkModel> Create(RangeBoxModel? validationModel, Guid answerId, Guid formLinkModelId, uint value, Guid questionId)
         {
             if (validationModel == null)
                 return Result.Failure<RangeBoxLinkModel>("Validation model not found");
@@ -23,7 +23,7 @@ namespace Itransition_Forms.Core.Links.Entities
             value = Math.Max(Math.Min(value, validationModel.MaxValue), 
                 validationModel.MinValue);
 
-            return new RangeBoxLinkModel(answerId, formLinkModelId, value);
+            return new RangeBoxLinkModel(answerId, formLinkModelId, value, questionId);
         }
     }
 }

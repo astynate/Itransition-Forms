@@ -8,6 +8,8 @@ import Answers from '../pages/answers/layout/Answers';
 import Loading from '../../../elements/loading/Loading';
 import FormsAPI from '../api/FormsAPI';
 import UserState from '../../../state/UserState';
+import ApplicationState from '../../../state/ApplicationState';
+import Statistic from '../pages/statistic/layout/Statistic';
 
 const FormPage = () => {
     const [form, setForm] = useState(undefined);
@@ -50,8 +52,8 @@ const FormPage = () => {
                     setSavingChangesState(false);
                 })
                 .catch(error => {
+                    ApplicationState.AddErrorInQueueByError("Attention!", error);
                     console.error(error);
-                    setSavingChangesState(false);
                 });
         }
 
@@ -103,6 +105,15 @@ const FormPage = () => {
                                 form={form} 
                                 setForm={setForm} 
                                 setLoadingState={setLoadingState}
+                            />
+                        } 
+                    />
+                    <Route 
+                        path="/statistic" 
+                        element={
+                            <Statistic 
+                                form={form} 
+                                setForm={setForm} 
                             />
                         } 
                     />

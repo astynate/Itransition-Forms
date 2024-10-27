@@ -9,6 +9,7 @@ import unblockImage from './images/unblock.png';
 import UserState from '../../../../state/UserState';
 import { useNavigate } from 'react-router-dom';
 import UpdateHandler from './scripts/UpdateHandler';
+import ApplicationState from '../../../../state/ApplicationState';
 
 const Users = () => {
     const [users, setUsers] = useState([]);
@@ -43,8 +44,8 @@ const Users = () => {
                     }
                 })
                 .catch(error => {
+                    ApplicationState.AddErrorInQueueByError("Attention!", error);
                     console.error(error);
-                    alert("Something went wrong");
                 })
         }
 
@@ -90,6 +91,8 @@ const Users = () => {
 
                 if (usersToUpdate.includes(UserState.user.id) && leaveOperation.includes(operation)) {
                     UserState.SetUser(undefined);
+                    localStorage.removeItem('Access-Token');
+                    
                     navigate('/login');
                     return;
                 }
@@ -101,7 +104,8 @@ const Users = () => {
                 setSelectedUsers([]);
             })
             .catch(error => {
-                console.log(error);
+                ApplicationState.AddErrorInQueueByError("Attention!", error);
+                console.error(error);
             });
     }
 

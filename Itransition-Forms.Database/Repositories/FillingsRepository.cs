@@ -103,14 +103,15 @@ namespace Itransition_Forms.Database.Repositories
             return result.result;
         }
 
-        private (AnswerLinkBase? result, string? error) GetRangeAnswer(Guid fillingId, FilledAnswerBase answer, AnswerBase? baseAnswer)
+        private (AnswerLinkBase? result, string? error) GetRangeAnswer(Guid fillingId, FilledAnswerBase answer, AnswerBase baseAnswer)
         {
             var result = RangeBoxLinkModel.Create
             (
                 baseAnswer as RangeBoxModel,
                 answer.AnswerId,
                 fillingId,
-                answer.Value.GetUInt32()
+                answer.Value.GetUInt32(),
+                baseAnswer.QuestionModelId
             );
 
             if (result.IsFailure)
@@ -119,14 +120,15 @@ namespace Itransition_Forms.Database.Repositories
             return (result.Value, null);
         }
 
-        private (AnswerLinkBase? result, string? error) GetTextboxAnswer(Guid fillingId, FilledAnswerBase answer, AnswerBase? baseAnswer)
+        private (AnswerLinkBase? result, string? error) GetTextboxAnswer(Guid fillingId, FilledAnswerBase answer, AnswerBase baseAnswer)
         {
             var result = TextBoxLinkModel.Create
             (
                 answer.AnswerId,
                 fillingId,
                 baseAnswer as TextBoxModel,
-                answer.Value.GetString()
+                answer.Value.GetString(),
+                baseAnswer.QuestionModelId
             );
 
             if (result.IsFailure)
@@ -135,13 +137,14 @@ namespace Itransition_Forms.Database.Repositories
             return (result.Value, null);
         }
 
-        private (AnswerLinkBase? result, string? error) GetCheckboxAnswer(Guid fillingId, FilledAnswerBase answer, AnswerBase? baseAnswer)
+        private (AnswerLinkBase? result, string? error) GetCheckboxAnswer(Guid fillingId, FilledAnswerBase answer, AnswerBase baseAnswer)
         {
             var result = CheckBoxLinkModel.Create
             (
                 answer.AnswerId,
                 fillingId,
-                answer.Value.GetBoolean()
+                answer.Value.GetBoolean(),
+                baseAnswer.QuestionModelId
             );
 
             if (result.IsFailure)
