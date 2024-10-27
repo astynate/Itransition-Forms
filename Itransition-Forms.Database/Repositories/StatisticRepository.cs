@@ -1,4 +1,5 @@
-﻿using Itransition_Forms.Core.Answers;
+﻿using CSharpFunctionalExtensions;
+using Itransition_Forms.Core.Answers;
 using Itransition_Forms.Core.Form;
 using Itransition_Forms.Core.Links.Base;
 using Itransition_Forms.Core.Links.Entities;
@@ -17,12 +18,12 @@ namespace Itransition_Forms.Database.Repositories
         }
 
         private object GetSpecificValue(AnswerLinkBase answer)
-            => answer is CheckBoxLinkModel checkBoxAnswer ? checkBoxAnswer.Value :
+            => answer is CheckBoxLinkModel checkBoxAnswer ? checkBoxAnswer.Id :
                answer is RangeBoxLinkModel rangeBoxAnswer ? rangeBoxAnswer.Value :
                answer is TextBoxLinkModel textBoxAnswer ? textBoxAnswer.Value :
                answer.Id;
 
-        public async Task<QuestionStatistic[]> GetQuestionStatistic(Guid formId)
+        public async Task<object[]> GetQuestionStatistic(Guid formId)
         {
             var answers = _context.FormLinks
                 .Where(x => x.FormModelId == formId)
@@ -31,17 +32,22 @@ namespace Itransition_Forms.Database.Repositories
                 .ToList();
 
             return answers
-                .GroupBy(answer => new
+                .GroupBy(answer => answer.QuestionId)
+                .Select(group => new
                 {
-                    answer.QuestionId,
-                    Value = GetSpecificValue(answer)
+                    QuestionId = group.Key,
+                    Answers = group
+                        .GroupBy(answer => GetSpecificValue(answer))
+                        .OrderByDescending(g => g.Count())
+                        .Take(5)
+                        .Select(g => new
+                        { 
+                            Value = g.Key,
+                            Count = g.Count(),
+                            Answer = g.FirstOrDefault()
+                        })
+                        .ToArray()
                 })
-                .Select(group => new QuestionStatistic(
-                    group.Key.QuestionId,
-                    group.Select(x => new AnswerStatistic(group.Key.Value, group.Count())).ToArray()
-                ))
-                .OrderByDescending(x => x.Answers.Length)
-                .Take(5)
                 .ToArray();
         }
     }

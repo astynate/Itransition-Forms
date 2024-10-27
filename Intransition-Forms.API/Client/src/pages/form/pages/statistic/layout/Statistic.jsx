@@ -35,7 +35,7 @@ const Statistic = ({form, setForm, setLoadingState = () => {}}) => {
                 form={form} 
             />
             {form.questions.sort((a, b) => a.index - b.index).map(question => {
-                const questionStatistic = statistic.find(e => e.questionId == question.id);
+                const questionStatistic = statistic.find(q => q.questionId === question.id);
 
                 if (!!questionStatistic === true) {
                     return (
@@ -45,8 +45,15 @@ const Statistic = ({form, setForm, setLoadingState = () => {}}) => {
                                 <PieChart
                                     series={[{
                                         data: questionStatistic.answers.map((element, index) => {
-                                            return { id: index, value: element.count, label: element.value.toString() }
-                                        }),
+                                            const answer = question.answers.find(e => e.id === element.answer.answerId);
+                                            let label = element.value.toString();
+
+                                            if (answer && answer.title) {
+                                                label = answer.title;
+                                            }
+
+                                            return { id: index, value: element.count, label: label }
+                                        }).slice(0, 5),
                                     }]}
                                     width={450}
                                     height={200}

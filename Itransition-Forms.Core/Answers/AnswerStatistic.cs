@@ -4,6 +4,7 @@
     {
         public object Value { get; set; } = null!;
         public int Count { get; set; } = 0;
+        //public Guid AnswerId { get; set; }
 
         private AnswerStatistic() { }
 
@@ -11,6 +12,7 @@
         { 
             Value = value;
             Count = count;
+            //AnswerId = answerId;
         }
     }
 }
