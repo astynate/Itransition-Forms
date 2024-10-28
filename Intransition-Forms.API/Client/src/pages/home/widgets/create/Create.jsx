@@ -3,7 +3,7 @@ import List from '../../features/list/List';
 import FormTemplate from '../../features/form-template/FormTemplate';
 import styles from './main.module.css';
 import notFound from './images/not-found.png';
-import userState from '../../../../state/UserState';
+import userState from '../../../../state/userState';
 import { observer } from 'mobx-react-lite';
 import FormsState from '../../../../state/FormsState';
 import { instance } from '../../../../state/Interceptors';
@@ -16,6 +16,8 @@ const Create = observer(({currentTag, tags = [], setCurrentTag = () => {}}) => {
     const { t } = useTranslation();
 
     const CreatePresentation = async (id) => {
+        if (!userState.user) return;
+
         let form = new FormData();
 
         await instance.post(`/api/forms?templateReference=${id ? id : ''}`, {

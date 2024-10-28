@@ -7,7 +7,7 @@ import Questions from '../pages/questions/Questions';
 import Answers from '../pages/answers/layout/Answers';
 import Loading from '../../../elements/loading/Loading';
 import FormsAPI from '../api/FormsAPI';
-import UserState from '../../../state/UserState';
+import UserState from '../../../state/userState';
 import ApplicationState from '../../../state/ApplicationState';
 import Statistic from '../pages/statistic/layout/Statistic';
 
