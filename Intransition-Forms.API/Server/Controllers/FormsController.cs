@@ -2,6 +2,7 @@
 using Itransition_Forms.Database.Repositories;
 using Itransition_Forms.Dependencies.Database;
 using Itransition_Forms.Dependencies.Services;
+using Itransition_Forms.PreviewService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,21 +18,32 @@ namespace Instend.Server.Controllers
 
         private readonly ITokenService _tokenService = null!;
 
+        private readonly IPreviewService _previewService = null!;
+
         public FormsController
         (
             IFormsRepository formsRepository, 
             ITokenService tokenService, 
-            IFillingsRepository fillingsRepository
+            IFillingsRepository fillingsRepository,
+            IPreviewService previewService
         ) 
         { 
             _formsRepository = formsRepository;
             _tokenService = tokenService;
             _fillingsRepository = fillingsRepository;
+            _previewService = previewService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPopularTemplates(string? tag) 
-            => Ok(await _formsRepository.GetPopularTemplates(5, tag));
+        public async Task<IActionResult> GetPopularTemplates(string? tag)
+        {
+            var templates = await _formsRepository.GetPopularTemplates(5, tag);
+
+            foreach (var template in templates)
+                _previewService.DrawPreviewImage(template);
+
+            return Ok(templates);
+        }
 
         [HttpGet]
         [Route("/api/forms/{id}")]
@@ -60,6 +72,9 @@ namespace Instend.Server.Controllers
 
             if (templates.IsFailure)
                 return Conflict(templates.Error);
+
+            foreach(var template in templates.Value)
+                _previewService.DrawPreviewImage(template);
 
             return Ok(new { templates = templates.Value, fillingOuts });
         }

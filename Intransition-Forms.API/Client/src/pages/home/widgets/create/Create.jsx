@@ -87,9 +87,9 @@ const Create = observer(({currentTag, tags = [], setCurrentTag = () => {}}) => {
                             return (
                                 <FormTemplate 
                                     key={form.id}
-                                    image={null}
                                     id={form.id}
                                     name={form.title}
+                                    image={form.preview}
                                     isCreate={false}
                                     onClick={() => CreatePresentation(form.id)}
                                 />
