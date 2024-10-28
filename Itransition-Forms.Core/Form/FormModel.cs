@@ -24,6 +24,8 @@ namespace Itransition_Forms.Core.Form
         public List<TagModel> Tags { get; set; } = [];
         public UserModel? Owner { get; set; }
 
+        [NotMapped] public string Preview { get; set; } = "";
+
         [NotMapped]
         [JsonIgnore]
         [ConcurrencyCheck]

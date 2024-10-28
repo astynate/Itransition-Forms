@@ -29,6 +29,8 @@ const FormPage = () => {
         );
     }, [params.id]);
 
+    console.log(form);
+
     useEffect(() => {
         const isAuthor = form && UserState.user && form.userModelId !== UserState.user.id;
         const isAdmin = UserState.user && UserState.isAdmin;

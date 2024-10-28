@@ -28,6 +28,12 @@
     border-bottom: 1px solid var(--main-border-color);
 }
 
+.image img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover; 
+}
+
 .left {
     display: flex;
     flex-direction: column;

@@ -17,7 +17,7 @@ const FormTemplate = ({name = 'Empty', image, onClick = () => {}, isCreate = tru
                         <div className={styles.line} />
                         <div className={styles.line} />
                     </div>}
-                {image && <img src={image} draggable="false" />}
+                {image && <img src={`data:image/png;base64,${image}`} draggable="false" />}
             </div>
             <span className={styles.name}>{name}</span>
         </div>

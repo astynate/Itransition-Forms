@@ -44,10 +44,6 @@
     border: 1px solid black;
 }
 
-.presentationTemplate:hover img {
-    opacity: 0.3;
-}
-
 .create {
     display: flex;
     justify-content: center;

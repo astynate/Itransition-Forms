@@ -1,10 +1,11 @@
 import { useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { instance } from '../../../../state/Interceptors';
 import PopupList from '../../elemets/popup-list/PopupList';
 import styles from './main.module.css';
 import menu from './menu.png';
-import { instance } from '../../../../state/Interceptors';
 import FormsState from '../../../../state/FormsState';
-import { Link } from 'react-router-dom';
+
 
 const FormModel = ({form = { title: "Form", owner: "Unknown" }, openRenameForm = () => {}, isFilligOut = false}) => {
     const [isPropertiesListOpen, SetListOpenState] = useState(false);
@@ -34,7 +35,7 @@ const FormModel = ({form = { title: "Form", owner: "Unknown" }, openRenameForm =
         <Link to={`/${isFilligOut ? 'filling' : 'form'}/${form.id}`} className={styles.formWrapper}>
             <div className={styles.form}>
                 <div className={styles.image}>
-
+                {form.preview && <img src={`data:image/png;base64,${form.preview}`}/>}
                 </div>
                 <div className={styles.information}>
                     <div className={styles.left}>
