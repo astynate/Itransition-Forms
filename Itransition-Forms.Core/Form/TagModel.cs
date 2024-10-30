@@ -1,13 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Itransition_Forms.Core.Abstract;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace Itransition_Forms.Core.Form
 {
     [Table("tags")]
-    public class TagModel : IEquatable<TagModel>
+    public class TagModel : DatabaseModel, IEquatable<TagModel>
     {
-        [Column("id")][Key] public Guid Id { get; init; } = Guid.NewGuid();
         [Column("form_id")] public Guid FormModelId { get; init; } = Guid.NewGuid();
         [Column("tag")] public string Tag { get; init; } = string.Empty;
 
