@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
+using Itransition_Forms.Core.Abstract;
 using Itransition_Forms.Core.Form;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
@@ -8,9 +8,8 @@ using System.Text.RegularExpressions;
 namespace Itransition_Forms.Core.User
 {
     [Table("users")]
-    public class UserModel : IEquatable<UserModel>
+    public class UserModel : DatabaseModel, IEquatable<UserModel>
     {
-        [Column("id")][Key] public Guid Id { get; private set; } = Guid.Empty;
         [Column("email")] public string Email { get; private set; } = string.Empty;
         [Column("password")] public string Password { get; private set; } = string.Empty;
         [Column("color")] public int Color { get; private set; } = 0;

@@ -9,7 +9,7 @@ import logo from './images/itransition_logo.svg';
 import Wrapper from '../../elemets/wrapper/Wrapper';
 import search from './images/search.png';
 import form from './images/itransition-form.png';
-import UserState from '../../../../state/UserState';
+import UserState from '../../../../state/userState';
 import DateHandler from '../../../../utils/DateHandler';
 import AvatarWithPopup from '../../features/avatar-with-popup/AvatarWithPopup';
 

@@ -27,7 +27,7 @@ const Title = ({form, fillingOuts = [], current, setCurrent, fillingOut}) => {
                     <span className={styles.date}>{DateHandler.Format(fillingOut.date)}</span>
                     <div className={styles.control}>
                         <button className={styles.button} onClick={() => ChangeCurrent(-1)}>
-                            <img src={arrow} className={styles.left} />
+                            <img src={arrow} className={styles.left} draggable="false" />
                         </button>
                         <div className={styles.input}>
                             <TextInput 
@@ -56,7 +56,7 @@ const Title = ({form, fillingOuts = [], current, setCurrent, fillingOut}) => {
                         </div>
                         <span>of {fillingOuts.length}</span>
                         <button className={styles.button} onClick={() => ChangeCurrent(1)}>
-                            <img src={arrow} className={styles.right} />
+                            <img src={arrow} className={styles.right} draggable="false" />
                         </button>
                     </div>
                 </div>}

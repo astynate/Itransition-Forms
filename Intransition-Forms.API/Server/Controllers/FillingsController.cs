@@ -55,7 +55,15 @@ namespace Instend.Server.Controllers
             var result = await _fillingRepository
                 .GetByFormId(form.Id, from, 5);
 
-            return Ok(_serializationHelper.SerializeWithCamelCase(result));
+            return Ok(_serializationHelper.SerializeWithCamelCase(result.Select(x => 
+            {
+                if (x.Form != null)
+                {
+                    x.Form.Tags = [];
+                }
+
+                return x;
+            })));
         }
 
         [HttpPost]

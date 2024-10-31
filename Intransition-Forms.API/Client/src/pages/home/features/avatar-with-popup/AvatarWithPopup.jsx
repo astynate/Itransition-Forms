@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { MDBSwitch } from 'mdb-react-ui-kit';
 import { changeLanguage } from '../../../../i18n';
 import { Form } from 'react-bootstrap';
-import UserState from '../../../../state/UserState';
+import UserState from '../../../../state/userState';
 import Avatar from '../../elemets/avatar/Avatar';
 import styles from './main.module.css';
 import back from './images/back.png';

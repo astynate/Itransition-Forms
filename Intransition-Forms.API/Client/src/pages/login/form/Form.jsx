@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Avatar from '../../home/elemets/avatar/Avatar';
 import styles from './main.module.css';
-import userState from '../../../state/UserState';
+import userState from '../../../state/userState';
 import { useNavigate } from 'react-router-dom';
 import SimpleInput from '../../../elements/input/SimpleInput';
 import SimpleButton from '../../../elements/button/SimpleButton';

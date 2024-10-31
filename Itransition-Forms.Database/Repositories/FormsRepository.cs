@@ -1,4 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
+using Itransition_Forms.Core.Abstract;
+using Itransition_Forms.Core.Account;
+using Itransition_Forms.Core.Answers;
 using Itransition_Forms.Core.Form;
 using Itransition_Forms.Core.User;
 using Itransition_Forms.Database.Contexts;
@@ -133,17 +136,17 @@ namespace Itransition_Forms.Database.Repositories
 
         private async Task UpdateAnswers(QuestionModel prev, QuestionModel current)
         {
-            var answersToAdd = current.Answers.Except(prev.Answers).ToArray();
-            var answersToRemove = prev.Answers.Except(current.Answers).ToArray();
+            var answersToAdd = current.Answers.Except<AnswerBase>(prev.Answers, new DatabaseModelComparrer()).ToArray();
+            var answersToRemove = prev.Answers.Except<AnswerBase>(current.Answers, new DatabaseModelComparrer()).ToArray();
 
             var previousAnswersToUpdate = prev.Answers
-                .Intersect(current.Answers)
-                .OrderBy(x => x.Index)
+                .Intersect<AnswerBase>(current.Answers, new DatabaseModelComparrer())
+                .OrderBy(x => x.Id)
                 .ToArray();
 
             var newAnswersToUpdate = current.Answers
-                .Intersect(prev.Answers)
-                .OrderBy(x => x.Index)
+                .Intersect<AnswerBase>(prev.Answers, new DatabaseModelComparrer())
+                .OrderBy(x => x.Id)
                 .ToArray();
 
             for (int i = 0; i < previousAnswersToUpdate.Length; i++)
@@ -160,17 +163,17 @@ namespace Itransition_Forms.Database.Repositories
 
         private async Task UpdateQuestions(FormModel form, FormModel updatedForm)
         {
-            var questionsToAdd = updatedForm.Questions.Except(form.Questions);
-            var questionsToRemove = form.Questions.Except(updatedForm.Questions);
+            var questionsToAdd = updatedForm.Questions.Except<QuestionModel>(form.Questions, new DatabaseModelComparrer());
+            var questionsToRemove = form.Questions.Except<QuestionModel>(updatedForm.Questions, new DatabaseModelComparrer());
 
             var previousQuestionsToUpdate = form.Questions
-                .Intersect(updatedForm.Questions)
-                .OrderBy(x => x.Index)
+                .Intersect<QuestionModel>(updatedForm.Questions, new DatabaseModelComparrer())
+                .OrderBy(x => x.Id)
                 .ToArray();
 
             var newQuestionsToUpdate = updatedForm.Questions
-                .Intersect(form.Questions)
-                .OrderBy(x => x.Index)
+                .Intersect<QuestionModel>(form.Questions, new DatabaseModelComparrer())
+                .OrderBy(x => x.Id)
                 .ToArray();
 
             for (int i = 0; i < previousQuestionsToUpdate.Count(); i++)
@@ -190,8 +193,12 @@ namespace Itransition_Forms.Database.Repositories
         {
             var formTags = form.Tags.Select(x => x.Tag);
 
-            var tagsToAdd = updatedForm.Tags.Except(form.Tags).Where(x => formTags.Contains(x.Tag) == false);
-            var tagsToRemove = form.Tags.Except(updatedForm.Tags);
+            var tagsToAdd = updatedForm.Tags
+                .Except<TagModel>(form.Tags, new DatabaseModelComparrer())
+                .Where(x => formTags.Contains(x.Tag) == false);
+
+            var tagsToRemove = form.Tags
+                .Except<TagModel>(updatedForm.Tags, new DatabaseModelComparrer());
 
             _context.RemoveRange(tagsToRemove);
 
@@ -203,11 +210,11 @@ namespace Itransition_Forms.Database.Repositories
         {
             var usersToAdd = updatedForm
                 .UsersWithFillingOutAccess
-                .Except(form.UsersWithFillingOutAccess);
+                .Except<UserModel>(form.UsersWithFillingOutAccess, new DatabaseModelComparrer());
 
             var usersToRemove = form
                 .UsersWithFillingOutAccess
-                .Except(updatedForm.UsersWithFillingOutAccess);
+                .Except<UserModel>(updatedForm.UsersWithFillingOutAccess, new DatabaseModelComparrer());
 
             var usersToRemoveList = new List<UserModel>();
 

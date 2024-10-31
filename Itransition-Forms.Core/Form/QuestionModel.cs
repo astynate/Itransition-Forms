@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Itransition_Forms.Core.Abstract;
 using Itransition_Forms.Core.Answers;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -7,9 +8,8 @@ using System.Text.Json.Serialization;
 namespace Itransition_Forms.Core.Form
 {
     [Table("questions")]
-    public class QuestionModel : IEquatable<QuestionModel>
+    public class QuestionModel : DatabaseModel, IEquatable<QuestionModel>
     {
-        [Column("id")][Key] public Guid Id { get; private set; } = Guid.NewGuid();
         [Column("question")] public string Question { get; private set; } = string.Empty;
         [Column("index")] public int Index { get; private set; } = 0;
         [Column("form_id")] public Guid FormModelId { get; private set; } = Guid.NewGuid();
