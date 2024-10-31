@@ -71,6 +71,9 @@ const AvatarWithPopup = () => {
                         <Link to={"/register"} className={styles.button}>
                             <span>{t('register')}</span>
                         </Link>
+                        <div className={styles.button}>
+                            
+                        </div>
                     </>}
                 {openPanel === 1 && 
                     <>
