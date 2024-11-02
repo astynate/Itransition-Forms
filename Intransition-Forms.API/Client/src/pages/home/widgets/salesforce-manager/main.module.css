@@ -1,0 +1,36 @@
+.fields {
+    display: flex;
+    flex-direction: column;
+    grid-gap: 7px;
+}
+
+.fields input {
+    padding: 7px;
+    outline: none;
+    border: 1px solid var(--main-border-color);
+}
+
+.fields input:focus {
+    outline: 2px solid var(--main-blue-color);
+}
+
+.wrapper {
+    height: auto;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: space-between;
+    padding: 15px;
+    grid-gap: 30px;
+}
+
+.data {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    grid-gap: 10px;
+    padding: 20px;
+    font-size: 16px;
+    font-weight: 600;
+}

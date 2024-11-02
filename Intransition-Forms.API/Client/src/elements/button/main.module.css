@@ -3,6 +3,7 @@
     border: none;
     outline: none;
     color: white;
+    height: fit-content;
     font-size: 16px;
     font-weight: 500;
     padding: 9px 35px;

@@ -6,7 +6,7 @@ import styles from './main.module.css';
 import blockImage from './images/block.png';
 import deleteImage from './images/delete.png';
 import unblockImage from './images/unblock.png';
-import UserState from '../../../../state/userState';
+import UserState from '../../../../state/UserState';
 import { useNavigate } from 'react-router-dom';
 import UpdateHandler from './scripts/UpdateHandler';
 import ApplicationState from '../../../../state/ApplicationState';

@@ -8,20 +8,32 @@ using System.Text.RegularExpressions;
 namespace Itransition_Forms.Core.User
 {
     [Table("users")]
-    public class UserModel : DatabaseModel, IEquatable<UserModel>
+    public class UserModel : DatabaseModel
     {
         [Column("email")] public string Email { get; private set; } = string.Empty;
         [Column("password")] public string Password { get; private set; } = string.Empty;
         [Column("color")] public int Color { get; private set; } = 0;
+        [Column("salesforce_account_id")] public string? SalesforceAccountId { get; private set; } = null;
         [Column("is_admin")] public bool IsAdmin { get; set; } = false;
         [Column("is_blocked")] public bool IsBlocked { get; set; } = false;
 
         [JsonIgnore] public List<FormModel> Forms { get; set; } = [];
+        [NotMapped] public Account.Account? Account { get; set; } = null;
+        [NotMapped] public Account.Contact? Contact { get; set; } = null;
 
         private UserModel() { }
 
         [JsonConstructor]
-        protected UserModel(Guid id, string email, string password, int color, bool isAdmin, bool isBlocked) 
+        protected UserModel
+        (
+            Guid id, 
+            string email, 
+            string password, 
+            int color,
+            bool isAdmin, 
+            bool isBlocked, 
+            string salesforceAccountId
+        ) 
         { 
             Id = id;
             Email = email;
@@ -29,6 +41,7 @@ namespace Itransition_Forms.Core.User
             Color = color;
             IsAdmin = isAdmin;
             IsBlocked = isBlocked;
+            SalesforceAccountId = salesforceAccountId;
         }
 
         public static Result<UserModel> Create(string email, string password, int color)
@@ -70,6 +83,17 @@ namespace Itransition_Forms.Core.User
             }
 
             return other.Id == Id;
+        }
+
+        public void SetSalesforceAccountId(string id)
+        {
+            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
+                return;
+
+            if (id == "null")
+                return;
+
+            SalesforceAccountId = id;
         }
     }
 }

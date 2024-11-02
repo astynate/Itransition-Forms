@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { observer } from 'mobx-react-lite';
 import { instance } from '../../../../state/Interceptors';
 import { useTranslation } from 'react-i18next';
 import back from './images/back.png';
@@ -9,11 +8,11 @@ import logo from './images/itransition_logo.svg';
 import Wrapper from '../../elemets/wrapper/Wrapper';
 import search from './images/search.png';
 import form from './images/itransition-form.png';
-import UserState from '../../../../state/userState';
+import UserState from '../../../../state/UserState';
 import DateHandler from '../../../../utils/DateHandler';
 import AvatarWithPopup from '../../features/avatar-with-popup/AvatarWithPopup';
 
-const Header = observer(({isSearch = true}) => {
+const Header = ({isSearch = true}) => {
     const [currentPath, setCurrentPath] = useState(0);
     const [timeoutId, setTimeoutId] = useState(undefined);
     const [searchResults, setSearchResults] = useState([]);
@@ -152,6 +151,6 @@ const Header = observer(({isSearch = true}) => {
             </div>}
         </div>
     );
-});
+}
 
 export default Header;

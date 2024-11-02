@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Instend.Server.External;
 using Itransition_Forms.Dependencies.Database;
 using Itransition_Forms.Dependencies.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -14,12 +15,20 @@ namespace Instend.Server.Controllers
 
         private readonly ITokenService _tokenService;
 
+        private readonly SalesforceAPI _salesforceAPI;
+
         private delegate Task<Result> UpdateUsersDelegate(Guid[] users);
 
-        public UsersController(IUsersRepository usersRepository, ITokenService tokenService)
+        public UsersController
+        (
+            IUsersRepository usersRepository,
+            ITokenService tokenService,
+            SalesforceAPI salesforceAPI
+        )
         {
             _userRepository = usersRepository;
             _tokenService = tokenService;
+            _salesforceAPI = salesforceAPI;
         }
 
         [HttpGet]
@@ -40,10 +49,18 @@ namespace Instend.Server.Controllers
             var user = await _userRepository.GetUserById(Guid.Parse(userId));
 
             if (user == null)
-                return Conflict();
+                return Conflict("User not found");
 
-            Response.Headers["Access-Token"] = _tokenService
-                .GenerateAccessToken(user);
+            Response.Headers["Access-Token"] = _tokenService.GenerateAccessToken(user);
+
+            if (string.IsNullOrEmpty(user.SalesforceAccountId) == false)
+            {
+                var accountAndContact = await _salesforceAPI
+                    .GetAccountAndContactById(user.SalesforceAccountId);
+
+                user.Account = accountAndContact.account;
+                user.Contact = accountAndContact.contact;
+            }
 
             return Ok(user);
         }

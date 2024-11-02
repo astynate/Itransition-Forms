@@ -20,7 +20,7 @@ namespace Itransition_Form.Services
         {
             _encryptionService = encryptionService;
             _configuration = configuration;
-            _secretKey = _configuration["SecretKey"] ?? "";
+            _secretKey = _configuration["SECRET_KEY"] ?? "";
         }
 
         public string GenerateAccessToken(UserModel user)

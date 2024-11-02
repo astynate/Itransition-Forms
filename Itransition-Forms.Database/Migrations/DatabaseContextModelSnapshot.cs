@@ -270,7 +270,7 @@ namespace Itransition_Forms.Database.Migrations
                         .HasColumnType("int")
                         .HasColumnName("color");
 
-                    b.Property<string>("Email")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("email");

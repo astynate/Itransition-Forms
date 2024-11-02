@@ -6,7 +6,7 @@ import { changeLanguage } from './i18n';
 import HomePage from '../src/pages/home/layout/HomeLayout';
 import Register from './pages/login/pages/register/Register';
 import LoginPage from './pages/login/pages/login/LoginPage';
-import userState from './state/userState';
+import userState from './state/UserState';
 import FormPage from './pages/form/layout/Form';
 import FillingPage from './pages/filling/layout/Filling';
 import ApplicationState from './state/ApplicationState';
@@ -15,30 +15,18 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './pages/home/layout/main.css';
 import './i18n';
 import FillingOutResult from './pages/filling-out-result/FillingOutResult';
+import UserState from './state/UserState';
 
 const App = observer(() => {
     const [title, setErrorTitle] = useState('');
     const [message, setErrorMessage] = useState('');
     const [isError, setErrorState] = useState(false);
 
-    const GetUserData = async () => {
-        await instance
-            .get('/api/users')
-            .then(response => {
-                if (response.data) {
-                    userState.SetUser(response.data);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }
-
     useEffect(() => {
         const token = localStorage.getItem('Access-Token');
 
         if (!userState.user && token) {
-            GetUserData();
+            UserState.GetUserData();
         }
     }, [userState.user]);
 

@@ -14,5 +14,6 @@ namespace Itransition_Forms.Dependencies.Database
         Task<Result> DeleteUsers(Guid[] users);
         Task<Result> UpdateAdminState(Guid[] users, bool isAdmin);
         Task<UserModel[]> GetUserByPrefix(string prefix);
+        Task UpdateSalesforceAccountId(UserModel user, string id);
     }
 }

@@ -3,7 +3,7 @@ import List from '../../features/list/List';
 import FormTemplate from '../../features/form-template/FormTemplate';
 import styles from './main.module.css';
 import notFound from './images/not-found.png';
-import userState from '../../../../state/userState';
+import UserState from '../../../../state/UserState';
 import { observer } from 'mobx-react-lite';
 import FormsState from '../../../../state/FormsState';
 import { instance } from '../../../../state/Interceptors';
@@ -16,7 +16,7 @@ const Create = observer(({currentTag, tags = [], setCurrentTag = () => {}}) => {
     const { t } = useTranslation();
 
     const CreatePresentation = async (id) => {
-        if (!userState.user) return;
+        if (!UserState.user) return;
 
         let form = new FormData();
 
@@ -45,7 +45,7 @@ const Create = observer(({currentTag, tags = [], setCurrentTag = () => {}}) => {
                 <div className={styles.loadingWrapper}>
                     <Loading />
                 </div>}
-            {FormsState.isPopularTemplatesLoading === false && FormsState.popularForms.length === 0 && !userState.user ?
+            {FormsState.isPopularTemplatesLoading === false && FormsState.popularForms.length === 0 && !UserState.user ?
                 <img 
                     src={notFound} 
                     className={styles.notFound} 
@@ -72,7 +72,7 @@ const Create = observer(({currentTag, tags = [], setCurrentTag = () => {}}) => {
                         </div>
                     </div>
                     <List>
-                        {!FormsState.isPopularTemplatesLoading && userState.user && <FormTemplate 
+                        {!FormsState.isPopularTemplatesLoading && UserState.user && <FormTemplate 
                             onClick={() => CreatePresentation(null)}
                         />}
                         {FormsState.isPopularTemplatesLoading && Array.from({ length: 6 }).map((_, index) => {

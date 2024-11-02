@@ -1,3 +1,4 @@
+using Instend.Server.External;
 using Instend.Server.Middleware;
 using Itransition_Form.Services;
 using Itransition_Forms.Core.Answers;
@@ -29,7 +30,7 @@ builder.Configuration
     .Build();
 
 var encryptionService = new EncryptionService();
-var secretKey = builder.Configuration.GetValue<string>("SecretKey");
+var secretKey = builder.Configuration.GetValue<string>("SECRET_KEY");
 var issuer = builder.Configuration.GetValue<string>("Issuer");
 var audience = builder.Configuration.GetValue<string>("Audience");
 var symmetricKey = encryptionService.GetSymmetricKey(secretKey ?? "");
@@ -60,6 +61,7 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
     options.EnableSensitiveDataLogging();
 });
 
+builder.Services.AddHttpClient();
 builder.Services.AddTransient<LoggingMiddleware>();
 builder.Services.AddSingleton<IEncryptionService, EncryptionService>();
 builder.Services.AddScoped<IFormsRepository, FormsRepository>();
@@ -69,6 +71,7 @@ builder.Services.AddScoped<ISerializationHelper, SerializationHelper>();
 builder.Services.AddScoped<IPreviewService, PreviewService>();
 builder.Services.AddScoped<IStatisticRepository, StatisticRepository>();
 builder.Services.AddScoped<ITagsRepository, TagsRepository>();
+builder.Services.AddSingleton<SalesforceAPI>();
 builder.Services.AddSingleton<ITokenService, TokenService>();
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

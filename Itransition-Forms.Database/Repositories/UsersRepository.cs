@@ -106,5 +106,15 @@ namespace Itransition_Forms.Database.Repositories
 
             return result > 0 ? Result.Success() : Result.Failure("Users is not found.");
         }
+
+        public async Task UpdateSalesforceAccountId(UserModel user, string id)
+        {
+            user.SetSalesforceAccountId(id);
+
+            _context.Attach(user);
+            _context.Update(user);
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

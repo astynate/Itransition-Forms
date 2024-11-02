@@ -5,7 +5,7 @@ import styles from './main.module.css';
 import SortTemplates from './scripts/SortTemplates';
 import Create from '../../widgets/create/Create';
 import FormsState from '../../../../state/FormsState';
-import UserState from '../../../../state/userState';
+import UserState from '../../../../state/UserState';
 import RenamePopup from '../../widgets/rename/RenamePopup';
 import Wrapper from '../../elemets/wrapper/Wrapper';
 import Select from '../../elemets/select/Select';

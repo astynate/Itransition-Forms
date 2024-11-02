@@ -1,29 +1,33 @@
 import ApplicationState from "../state/ApplicationState";
 import { instance } from "../state/Interceptors";
+import UserState from "../state/UserState";
 
 class SalesforceAPI {
-    static consumerKey = '3MVG9k02hQhyUgQAoqFvSNtOcdCwuWiQt08z0ocb_3CAmU39.zPoiD76lKujrviDdpDbld420kLOQJ9zQGl41';
-    static consumerSecret = '2C312AC741BCA4FEC72AEED4A51281CC6ECD8A72FF582D03F6E29E88DDD97C65';
-    static domain = 'https://instend-dev-ed.develop.lightning.force.com';
+    static CreateUser = async (user, firstName, lastName, description, phone, date) => {
+        if (!user) return;
 
-    static CreateUser = async (user) => {
-        const data = {
-            grant_type: 'passport',
-            client_id: SalesforceAPI.consumerKey,
-            clinet_secret: SalesforceAPI.consumerSecret,
-            username: user.email,
-            password: user.password
-        };
+        let form = new FormData();
+        let result = false;
+
+        form.append('FirstName', firstName);
+        form.append('LastName', lastName);
+        form.append('Description', description);
+        form.append('Phone', phone);
+        form.append('Birthdate', date);
 
         await instance
-            .post(`${domain}/services/oauth2/token`, data)
-            .then(response => {
-                console.log(response.data);
+            .post('/api/salesforce', form)
+            .then(_ => {
+                UserState.GetUserData();
+                result = true;
             })
-            .catch(error =>{
-                ApplicationState.AddErrorInQueueByError(error);
+            .catch(error => {
+                ApplicationState.AddErrorInQueue("Attention!", "Error while trying to connect to Salesforce");
                 console.error(error);
             });
+
+
+        return result;
     }
 
     static GetUser = async (user) => {
