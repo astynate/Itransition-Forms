@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { instance } from '../../../../state/Interceptors';
 import { useTranslation } from 'react-i18next';
 import back from './images/back.png';
@@ -22,6 +22,7 @@ const Header = ({isSearch = true}) => {
     
     const paths = ['', 'users'];
     const params = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const SetSearchResultsAsDefault = () => {

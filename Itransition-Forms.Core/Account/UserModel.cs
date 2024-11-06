@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Itransition_Forms.Core.Abstract;
 using Itransition_Forms.Core.Form;
+using Itransition_Forms.Core.Jira;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
@@ -18,6 +19,7 @@ namespace Itransition_Forms.Core.User
         [Column("is_blocked")] public bool IsBlocked { get; set; } = false;
 
         [JsonIgnore] public List<FormModel> Forms { get; set; } = [];
+        [NotMapped] public List<IssueModel> Issues { get; set; } = [];
         [NotMapped] public Account.Account? Account { get; set; } = null;
         [NotMapped] public Account.Contact? Contact { get; set; } = null;
 
@@ -73,16 +75,6 @@ namespace Itransition_Forms.Core.User
         {
             string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
             return Regex.IsMatch(email, emailPattern);
-        }
-
-        public bool Equals(UserModel? other)
-        {
-            if (other == null)
-            {
-                return false;
-            }
-
-            return other.Id == Id;
         }
 
         public void SetSalesforceAccountId(string id)

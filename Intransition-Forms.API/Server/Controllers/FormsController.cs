@@ -46,7 +46,7 @@ namespace Instend.Server.Controllers
         }
 
         [HttpGet]
-        [Route("/api/forms/{id}")]
+        [Route("/api/forms/{Id}")]
         public async Task<IActionResult> GetTemplateById(Guid id)
             => Ok(await _formsRepository.GetFormModelById(id));
 

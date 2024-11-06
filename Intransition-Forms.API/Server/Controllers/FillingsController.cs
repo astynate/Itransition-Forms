@@ -68,7 +68,7 @@ namespace Instend.Server.Controllers
 
         [HttpPost]
         [Authorize]
-        [Route("/api/fillings/{id}")]
+        [Route("/api/fillings/{Id}")]
         public async Task<IActionResult> FillOutForm(Guid id, [FromBody] FilledAnswerBase[] answers)
         {
             var userId = _tokenService.GetClaimFromRequest(Request, "sub");

@@ -75,9 +75,15 @@ const AvatarWithPopup = () => {
                             <Link to={"/register"} className={styles.button}>
                                 <span>{t('register')}</span>
                             </Link>
-                            <div className={styles.button} onClick={() => setSalesforceManagerState(true)}>
-                                <span>Manage Salesforce</span>
-                            </div>
+                            {UserState.user &&
+                                <>
+                                    <div className={styles.button} onClick={() => setSalesforceManagerState(true)}>
+                                        <span>Salesforce Account</span>
+                                    </div>
+                                    <Link to={'/issues'} className={styles.button}>
+                                        <span>Show issues</span>
+                                    </Link>
+                                </>}
                         </>}
                     {openPanel === 1 && 
                         <>

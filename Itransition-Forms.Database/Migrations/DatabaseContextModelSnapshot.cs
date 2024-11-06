@@ -24,10 +24,10 @@ namespace Itransition_Forms.Database.Migrations
 
             modelBuilder.Entity("Itransition_Forms.Core.Answers.CheckBoxModel", b =>
                 {
-                    b.Property<Guid>("id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasColumnName("id");
+                        .HasColumnName("Id");
 
                     b.Property<bool>("DefaultValue")
                         .HasColumnType("tinyint(1)")
@@ -42,17 +42,17 @@ namespace Itransition_Forms.Database.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("Title");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("checkboxes");
                 });
 
             modelBuilder.Entity("Itransition_Forms.Core.Answers.RangeBoxModel", b =>
                 {
-                    b.Property<Guid>("id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasColumnName("id");
+                        .HasColumnName("Id");
 
                     b.Property<uint>("MaxValue")
                         .HasColumnType("int unsigned")
@@ -66,17 +66,17 @@ namespace Itransition_Forms.Database.Migrations
                         .HasColumnType("char(36)")
                         .HasColumnName("question_id");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("range");
                 });
 
             modelBuilder.Entity("Itransition_Forms.Core.Answers.TextBoxModel", b =>
                 {
-                    b.Property<Guid>("id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasColumnName("id");
+                        .HasColumnName("Id");
 
                     b.Property<bool>("IsMultiple")
                         .HasColumnType("tinyint(1)")
@@ -91,17 +91,17 @@ namespace Itransition_Forms.Database.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("text");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("textboxes");
                 });
 
             modelBuilder.Entity("Itransition_Forms.Core.Form.Form", b =>
                 {
-                    b.Property<Guid>("id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasColumnName("id");
+                        .HasColumnName("Id");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -126,17 +126,17 @@ namespace Itransition_Forms.Database.Migrations
                         .HasColumnType("int")
                         .HasColumnName("topics");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("forms");
                 });
 
             modelBuilder.Entity("Itransition_Forms.Core.Form.QuestionModel", b =>
                 {
-                    b.Property<Guid>("id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasColumnName("id");
+                        .HasColumnName("Id");
 
                     b.Property<Guid>("FormsId")
                         .HasColumnType("char(36)")
@@ -151,17 +151,17 @@ namespace Itransition_Forms.Database.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("question");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("questions");
                 });
 
             modelBuilder.Entity("Itransition_Forms.Core.Links.Entities.CheckBoxLinkModel", b =>
                 {
-                    b.Property<Guid>("id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasColumnName("id");
+                        .HasColumnName("Id");
 
                     b.Property<Guid>("AnswerId")
                         .HasColumnType("char(36)")
@@ -171,17 +171,17 @@ namespace Itransition_Forms.Database.Migrations
                         .HasColumnType("tinyint(1)")
                         .HasColumnName("is_checked");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("checkbox_links");
                 });
 
             modelBuilder.Entity("Itransition_Forms.Core.Links.Entities.FormLinkModel", b =>
                 {
-                    b.Property<Guid>("id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasColumnName("id");
+                        .HasColumnName("Id");
 
                     b.Property<Guid>("FormsId")
                         .HasColumnType("char(36)")
@@ -192,17 +192,17 @@ namespace Itransition_Forms.Database.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("user_email");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("form_links");
                 });
 
             modelBuilder.Entity("Itransition_Forms.Core.Links.Entities.QuestionLinkModel", b =>
                 {
-                    b.Property<Guid>("id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasColumnName("id");
+                        .HasColumnName("Id");
 
                     b.Property<Guid>("QuestionModelId")
                         .HasColumnType("char(36)")
@@ -213,17 +213,17 @@ namespace Itransition_Forms.Database.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("user_email");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("question_links");
                 });
 
             modelBuilder.Entity("Itransition_Forms.Core.Links.Entities.RangeBoxLinkModel", b =>
                 {
-                    b.Property<Guid>("id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasColumnName("id");
+                        .HasColumnName("Id");
 
                     b.Property<Guid>("AnswerId")
                         .HasColumnType("char(36)")
@@ -233,17 +233,17 @@ namespace Itransition_Forms.Database.Migrations
                         .HasColumnType("int unsigned")
                         .HasColumnName("value");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("rangebox_links");
                 });
 
             modelBuilder.Entity("Itransition_Forms.Core.Links.Entities.TextBoxLinkModel", b =>
                 {
-                    b.Property<Guid>("id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasColumnName("id");
+                        .HasColumnName("Id");
 
                     b.Property<Guid>("AnswerId")
                         .HasColumnType("char(36)")
@@ -254,17 +254,17 @@ namespace Itransition_Forms.Database.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("text");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("textbox_links");
                 });
 
             modelBuilder.Entity("Itransition_Forms.Core.Owner.UserModel", b =>
                 {
-                    b.Property<Guid>("id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasColumnName("id");
+                        .HasColumnName("Id");
 
                     b.Property<int>("Color")
                         .HasColumnType("int")
@@ -284,7 +284,7 @@ namespace Itransition_Forms.Database.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("password");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("users");
                 });

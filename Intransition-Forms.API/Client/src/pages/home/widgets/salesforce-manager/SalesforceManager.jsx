@@ -10,7 +10,7 @@ const SalesforceManager = observer(({close}) => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        SalesforceAPI.CreateUser(
+        const result = SalesforceAPI.CreateUser(
             UserState.user, 
             event.target.first_name.value,
             event.target.last_name.value,
@@ -18,6 +18,11 @@ const SalesforceManager = observer(({close}) => {
             event.target.phone.value,
             event.target.date.value
         );
+
+        if (result === true)
+            window.location.reload();
+            
+        ApplicationState.AddErrorInQueue("Attention!", "Something went wrong!");
     }
 
     if (!!UserState.user === false) return;

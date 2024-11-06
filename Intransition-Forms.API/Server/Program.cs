@@ -63,7 +63,6 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 
 builder.Services.AddHttpClient();
 builder.Services.AddTransient<LoggingMiddleware>();
-builder.Services.AddSingleton<IEncryptionService, EncryptionService>();
 builder.Services.AddScoped<IFormsRepository, FormsRepository>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<IFillingsRepository, FillingsRepository>();
@@ -71,8 +70,11 @@ builder.Services.AddScoped<ISerializationHelper, SerializationHelper>();
 builder.Services.AddScoped<IPreviewService, PreviewService>();
 builder.Services.AddScoped<IStatisticRepository, StatisticRepository>();
 builder.Services.AddScoped<ITagsRepository, TagsRepository>();
-builder.Services.AddSingleton<SalesforceAPI>();
+builder.Services.AddScoped<IIssuesRepository, IssuesRepository>();
+builder.Services.AddScoped<JiraAPI>();
 builder.Services.AddSingleton<ITokenService, TokenService>();
+builder.Services.AddSingleton<IEncryptionService, EncryptionService>();
+builder.Services.AddSingleton<SalesforceAPI>();
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {

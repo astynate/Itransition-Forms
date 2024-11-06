@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useParams } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
-import { instance } from './state/Interceptors';
 import { changeLanguage } from './i18n';
 import HomePage from '../src/pages/home/layout/HomeLayout';
 import Register from './pages/login/pages/register/Register';
@@ -16,6 +15,8 @@ import './pages/home/layout/main.css';
 import './i18n';
 import FillingOutResult from './pages/filling-out-result/FillingOutResult';
 import UserState from './state/UserState';
+import GetSupport from './features/get-support/GetSupport';
+import Issues from './pages/issues/layout/Issues';
 
 const App = observer(() => {
     const [title, setErrorTitle] = useState('');
@@ -63,9 +64,11 @@ const App = observer(() => {
                 message={message} 
                 action={() => setErrorState(false)}
             />}
+            <GetSupport />
             <Routes>
                 <Route path="/*" element={<HomePage />} />
                 <Route path="/form/:id/*" element={<FormPage />} />
+                <Route path="/issues" element={<Issues />} />
                 <Route path="/filling/:id/*" element={<FillingPage />} />
                 <Route path="/filling-out-result/:id?" element={<FillingOutResult />} />
                 <Route path="/login" element={<LoginPage />} />

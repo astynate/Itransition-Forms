@@ -9,7 +9,7 @@ namespace Itransition_Forms.Core.Links.Entities
     [Table("form_links")]
     public class FormLinkModel
     {
-        [Column("id")][Key] public Guid Id { get; private set; } = Guid.NewGuid();
+        [Column("Id")][Key] public Guid Id { get; private set; } = Guid.NewGuid();
         [Column("user_id")] public Guid UserModelId { get; private set; } = Guid.Empty;
         [Column("form_id")] public Guid FormModelId { get; private set; }
         [Column("date")] public DateTime Date { get; private set; } = DateTime.Now;

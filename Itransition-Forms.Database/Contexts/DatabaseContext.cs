@@ -1,6 +1,7 @@
 ﻿using Itransition_Forms.Core.Account;
 using Itransition_Forms.Core.Answers;
 using Itransition_Forms.Core.Form;
+using Itransition_Forms.Core.Jira;
 using Itransition_Forms.Core.Links.Base;
 using Itransition_Forms.Core.Links.Entities;
 using Itransition_Forms.Core.User;
@@ -22,6 +23,7 @@ namespace Itransition_Forms.Database.Contexts
         public DbSet<RangeBoxLinkModel> RangeLinks { get; set; } = null!;
         public DbSet<TextBoxLinkModel> TextboxLinks { get; set; } = null!;
         public DbSet<FormLinkModel> FormLinks { get; set; } = null!;
+        public DbSet<IssueModel> Issues { get; set; } = null!;
 
         public DatabaseContext(DbContextOptions options) : base(options) => Database.EnsureCreated();
 

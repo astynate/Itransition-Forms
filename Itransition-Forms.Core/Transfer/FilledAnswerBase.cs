@@ -5,7 +5,7 @@ namespace Itransition_Forms.Core.Transfer
 {
     public class FilledAnswerBase
     {
-        [JsonPropertyName("id")] public Guid Id { get; set; }
+        [JsonPropertyName("Id")] public Guid Id { get; set; }
         [JsonPropertyName("answerId")] public Guid AnswerId { get; set; }
         [JsonPropertyName("value")] public JsonElement Value { get; set; }
 

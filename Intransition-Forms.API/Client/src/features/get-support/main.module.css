@@ -1,0 +1,77 @@
+.getSupport {
+    height: 45px;
+    width: 45px;
+    border-radius: 100%;
+    position: fixed;
+    right: 40px;
+    bottom: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: var(--main-accent-color);
+    transition: 0.25s ease;
+    z-index: 9999;
+}
+
+.getSupport img {
+    height: 25px;
+    width: 25px;
+    transition: 0.25s ease;
+}
+
+.getSupport:hover {
+    background: var(--main-font-color);
+}
+
+.getSupport:active {
+    transform: scale(95%);
+}
+
+.getSupport:hover img{
+    filter: invert(1);
+}
+
+.wrapper {
+    width: 400px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    grid-gap: 10px;
+}
+
+.wrapper input {
+    padding: 10px;  
+    outline: 1px solid var(--main-border-color);
+    border: none;
+    border-radius: 5px;
+} 
+
+.wrapper input:focus {
+    outline: 2px solid var(--main-blue-color);
+}
+
+.textarea {
+    width: 100%;
+    min-height: 50px;
+    max-height: 200px;
+    resize: vertical;
+    height: 100px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    padding: 10px;
+    outline: 1px solid var(--main-border-color);
+}
+
+.textarea:focus {
+    outline: 2px solid var(--main-blue-color);
+}
+
+.item {
+    display: flex;
+    font-size: 16px;
+    font-weight: 600;
+    flex-direction: column;
+    grid-gap: 5px;
+}

@@ -9,7 +9,7 @@ namespace Itransition_Forms.Core.Form
     [Table("forms")]
     public class FormModel
     {
-        [Column("id")][Key] public Guid Id { get; private set; } = Guid.NewGuid();
+        [Column("Id")][Key] public Guid Id { get; private set; } = Guid.NewGuid();
         [Column("title")] public string Title { get; private set; } = string.Empty;
         [Column("description")] public string Description { get; private set; } = string.Empty;
         [Column("image_link")] public string? ImageLink { get; private set; } = null;
